@@ -21,10 +21,10 @@ class AuthController extends Controller{
         if($validator->fails()){
             return redirect()->route('login')->withErrors($validator)->withInput();
         }else{
-            $auth = auth()->attempt(['email' => $request->email, 'password' => $request->password]);
+            $auth = (auth()->attempt(['email' => $request->email, 'password' => $request->password]) || auth()->attempt(['phone' => $request->email, 'password' => $request->password]));
 
             if($auth != false){
-                $user = User::where(['email' => $request->email])->orderBy('id', 'desc')->first();
+                $user = auth()->user();
 
                 if($user->status == 'inactive'){
                     Auth::logout();
