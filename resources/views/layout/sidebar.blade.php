@@ -14,9 +14,14 @@
                     <span class="nav-label">Dashboard</span>
                 </a>
             </li>
-            <li class="{{ Request::is('admin/users*') ? 'active' : '' }}">
-                <a class="{{ Request::is('admin/users*') ? 'active' : '' }}" href="{{ route('users') }}"><i class="sidebar-item-icon fa fa-users"></i>
+            <li class="{{ Request::is('users*') ? 'active' : '' }}">
+                <a class="{{ Request::is('users*') ? 'active' : '' }}" href="{{ route('users') }}"><i class="sidebar-item-icon fa fa-users"></i>
                     <span class="nav-label">Users</span>
+                </a>
+            </li>
+            <li class="{{ Request::is('products*') ? 'active' : '' }}">
+                <a class="{{ Request::is('products*') ? 'active' : '' }}" href="{{ route('products') }}"><i class="sidebar-item-icon fa fa-bars"></i>
+                    <span class="nav-label">Products</span>
                 </a>
             </li>
         </ul>

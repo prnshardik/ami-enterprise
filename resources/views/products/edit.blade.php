@@ -4,7 +4,7 @@
 @endsection
 
 @section('title')
-    Edit User
+    Edit Product
 @endsection
 
 @section('styles')
@@ -16,41 +16,23 @@
             <div class="col-md-12">
                 <div class="ibox">
                     <div class="ibox-head">
-                        <div class="ibox-title">Edit User</div>
+                        <div class="ibox-title">Edit Product</div>
                     </div>
                     <div class="ibox-body">
-                        <form name="form" action="{{ route('users.update') }}" id="form" method="post"  autocomplete="off">
+                        <form name="form" action="{{ route('products.update') }}" id="form" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('PATCH')
-                            
-                             <input autocomplete="false" name="hidden" type="password" class="hidden">
                             <input type="hidden" name="id" value="{{ $data->id }}">
-
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label for="name">First Name</label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="Plese enter name" value="{{ $data->name ?? '' }}" />
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" id="name" class="form-control" value="{{ $data->name ?? '' }}" placeholder="Plese enter name" />
                                     <span class="kt-form__help error name"></span>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <label for="email">Email</label>
-                                    <input type="text" name="email" id="email" class="form-control" placeholder="Plese enter email address" value="{{ $data->email ?? '' }}" />
-                                    <span class="kt-form__help error email"></span>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <label for="phone">Phone Number</label>
-                                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Plese enter phone number" value="{{ $data->phone ?? '' }}" />
-                                    <span class="kt-form__help error phone"></span>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <label for="password">Password</label>
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="Plese enter password number"  autofill="off">
-                                    <span class="kt-form__help error password"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
-                                <a href="{{ route('users') }}" class="btn btn-default">Back</a>
+                                <a href="{{ route('products') }}" class="btn btn-default">Back</a>
                             </div>
                         </form>
                     </div>
@@ -61,13 +43,6 @@
 @endsection
 
 @section('scripts')
-    <script>
-        $(document).ready(function() {
-            $("#password").prop("autocomplete", "off");
-            $("#password").val('');
-        });
-    </script>
-
     <script>
         $(document).ready(function () {
             var form = $('#form');

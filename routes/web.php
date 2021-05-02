@@ -34,6 +34,15 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::patch('users/update', 'UsersController@update')->name('users.update');
             Route::post('users/change-status', 'UsersController@change_status')->name('users.change.status');
         /** Users */
+
+        /** Users */
+            Route::any('products', 'ProductsController@index')->name('products');
+            Route::get('products/create', 'ProductsController@create')->name('products.create');
+            Route::post('products/insert', 'ProductsController@insert')->name('products.insert');
+            Route::get('products/edit/{id?}', 'ProductsController@edit')->name('products.edit');
+            Route::patch('products/update', 'ProductsController@update')->name('products.update');
+            Route::get('products/delete/{id?}', 'ProductsController@delete')->name('products.delete');
+        /** Users */
     });
 
     Route::get("{path}", function(){ return redirect()->route('login'); })->where('path', '.+');

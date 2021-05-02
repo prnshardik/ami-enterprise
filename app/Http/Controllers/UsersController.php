@@ -127,7 +127,7 @@
 
                 $id = base64_decode($id);
 
-                $data = User::select('id', 'name', 'email', 'status', 'phone','password')
+                $data = User::select('id', 'name', 'email', 'status', 'phone')
                         ->where(['id' => $id])
                         ->first();
                 
