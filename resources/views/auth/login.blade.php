@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="brand">
-        <a class="link" href="index.html">AdminCAST</a>
+        <a class="link" href="{{ route('dashboard') }}">AMI Enterprise</a>
     </div>
     <form id="form" action="{{ route('signin') }}" method="post">
         @csrf
@@ -22,7 +22,7 @@
         <div class="form-group">
             <div class="input-group-icon right">
                 <div class="input-icon"><i class="fa fa-envelope"></i></div>
-                <input type="text" name="email" class="form-control" placeholder="Email" autocomplete="off">
+                <input type="text" name="email" class="form-control" placeholder="Email Or Phone">
                 @error('email')
                     <div class="invalid-feedback" style="display: block;">
                         <strong>{{ $message }}</strong>
@@ -48,26 +48,4 @@
 @endsection
 
 @section('scripts')
-    <script type="text/javascript">
-        $(function() {
-            $('#login-form').validate({
-                errorClass: "help-block",
-                rules: {
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    password: {
-                        required: true
-                    }
-                },
-                highlight: function(e) {
-                    $(e).closest(".form-group").addClass("has-error")
-                },
-                unhighlight: function(e) {
-                    $(e).closest(".form-group").removeClass("has-error")
-                },
-            });
-        });
-    </script>
 @endsection
