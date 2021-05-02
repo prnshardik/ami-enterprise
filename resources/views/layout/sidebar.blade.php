@@ -14,7 +14,6 @@
                     <span class="nav-label">Dashboard</span>
                 </a>
             </li>
-            <li class="heading">PAGES</li>
             <li class="{{ Request::is('admin/users*') ? 'active' : '' }}">
                 <a class="{{ Request::is('admin/users*') ? 'active' : '' }}" href="{{ route('users') }}"><i class="sidebar-item-icon fa fa-users"></i>
                     <span class="nav-label">Users</span>
