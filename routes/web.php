@@ -2,6 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('command', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('optimize:clear');
+    Artisan::call('config:cache');
+    return "Command Successfully";
+});
+
+Route::get('key-generate', function() {
+    Artisan::call('key:generate');
+    return "Key Generate Successfully";
+});
+
 Route::group(['middleware' => ['prevent-back-history']], function(){
     Route::group(['middleware' => ['guest']], function () {
         Route::get('/', 'AuthController@login')->name('login');
