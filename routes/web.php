@@ -35,14 +35,24 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('users/change-status', 'UsersController@change_status')->name('users.change.status');
         /** Users */
 
-        /** Users */
+        /** Products */
             Route::any('products', 'ProductsController@index')->name('products');
             Route::get('products/create', 'ProductsController@create')->name('products.create');
             Route::post('products/insert', 'ProductsController@insert')->name('products.insert');
             Route::get('products/edit/{id?}', 'ProductsController@edit')->name('products.edit');
             Route::patch('products/update', 'ProductsController@update')->name('products.update');
             Route::get('products/delete/{id?}', 'ProductsController@delete')->name('products.delete');
-        /** Users */
+        /** Products */
+
+        /** Task */
+            Route::any('task', 'TaskController@index')->name('task');
+            Route::get('task/create', 'TaskController@create')->name('task.create');
+            Route::post('task/insert', 'TaskController@insert')->name('task.insert');
+            Route::get('task/view/{id?}', 'TaskController@view')->name('task.view');
+            Route::get('task/edit/{id?}', 'TaskController@edit')->name('task.edit');
+            Route::patch('task/update', 'TaskController@update')->name('task.update');
+            Route::get('task/delete/{id?}', 'TaskController@delete')->name('task.delete');
+        /** Task */
     });
 
     Route::get("{path}", function(){ return redirect()->route('login'); })->where('path', '.+');

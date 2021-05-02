@@ -11,11 +11,6 @@ class Product extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $table = 'products';
     protected $fillable = [
         'name',
