@@ -8,5 +8,6 @@
 <script src="{{ asset('assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/vendors/jvectormap/jquery-jvectormap-us-aea-en.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/app.min.js') }}" type="text/javascript"></script>
-
+<script src="{{ asset('assets/vendors/toastr/toastr.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/vendors/DataTables/datatables.min.js') }}"></script>
 @yield('scripts')
