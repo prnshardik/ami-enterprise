@@ -1,6 +1,4 @@
-<?php
-
-    
+<?php    
     use Illuminate\Http\Request;
     use App\Models\User;
 
@@ -76,7 +74,7 @@
                 if($request->ajax()){ return true; }
 
                 if(!empty($request->all())){
-                    $password = $request->password ?? 'abcd234';
+                    $password = $request->password;
                     
                     $crud = [
                             'name' => $request->name,
@@ -154,7 +152,7 @@
                             'updated_at' => date('Y-m-d H:i:s'),
                             'updated_by' => auth()->user()->id
                     ];
-                    if($ext_user->password != $request->password){
+                    if(isset($request->password) && !empty($request->password)){
                         $crud['password'] = bcrypt($request->password);
                     }
                     

@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="password">Password</label>
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="Plese enter password number" value="{{ $data->password ?? '' }}" />
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Plese enter password number" value="" />
                                     <span class="kt-form__help error password"></span>
                                 </div>
                             </div>

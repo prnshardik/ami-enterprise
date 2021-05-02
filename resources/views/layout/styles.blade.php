@@ -5,5 +5,9 @@
 <link href="{{ asset('assets/css/main.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/vendors/DataTables/datatables.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/vendors/toastr/toastr.min.css') }}" rel="stylesheet" />
-
+<style>
+	.error{
+		color:red;
+	}
+</style>
 @yield('styles')

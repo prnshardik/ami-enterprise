@@ -14,8 +14,7 @@
                 return [
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email,'.$this->id,
-                    'phone' => 'required|numeric|unique:users,phone,'.$this->id,
-                    'password' => 'required|min:7'
+                    'phone' => 'required|numeric|unique:users,phone,'.$this->id
                 ];
             }else{
                 return [
