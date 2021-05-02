@@ -11,6 +11,8 @@
 <script src="{{ asset('assets/vendors/toastr/toastr.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/vendors/DataTables/datatables.min.js') }}"></script>
 
+@yield('scripts')
+
 <script>
     @php
         $success = '';
