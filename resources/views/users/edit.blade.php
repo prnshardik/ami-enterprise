@@ -19,7 +19,7 @@
                         <div class="ibox-title">Edit User</div>
                     </div>
                     <div class="ibox-body">
-                        <form name="form" action="{{ route('admin.users.update') }}" id="form" method="post" enctype="multipart/form-data">
+                        <form name="form" action="{{ route('users.update') }}" id="form" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('PATCH')
                             
@@ -49,7 +49,7 @@
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
-                                <a href="{{ route('admin.users') }}" class="btn btn-default">Back</a>
+                                <a href="{{ route('users') }}" class="btn btn-default">Back</a>
                             </div>
                         </form>
                     </div>

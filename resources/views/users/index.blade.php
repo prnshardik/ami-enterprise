@@ -18,7 +18,7 @@
                     <div class="ibox-head">
                         <h1 class="ibox-title">Users</h1>
                         <h1 class="pull-right">
-                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('admin.users.create') }}">Add New</a>
+                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('users.create') }}">Add New</a>
                         </h1>
                     </div>
 
@@ -72,7 +72,7 @@
                     // lengthChange: false,
 
                     "ajax":{
-                        "url": "{{ route('admin.users') }}",
+                        "url": "{{ route('users') }}",
                         "type": "POST",
                         "dataType": "json",
                         "data":{
@@ -123,7 +123,7 @@
 
             if (confirm(msg)) {
                 $.ajax({
-                    "url": "{!! route('admin.users.change.status') !!}",
+                    "url": "{!! route('users.change.status') !!}",
                     "dataType": "json",
                     "type": "POST",
                     "data":{

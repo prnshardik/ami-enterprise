@@ -8,15 +8,11 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
         Route::post('signin', 'AuthController@signin')->name('signin');
     });
 
-    Route::group(['middleware' => ['auth'] , 'namespace' => 'Admin', 'as' => 'admin.', 'prefix' => 'admin'], function () {
-
     Route::group(['middleware' => ['auth']], function () {
         Route::get('logout', 'AuthController@logout')->name('logout');
 
 
         Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
-        Route::get('/page', function () { return view('page'); })->name('page');
-        Route::get('/page', function () { return view('page'); })->name('page');
 
         /** Users */
             Route::any('users', 'UsersController@index')->name('users');
@@ -27,7 +23,6 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::patch('users/update', 'UsersController@update')->name('users.update');
             Route::post('users/change-status', 'UsersController@change_status')->name('users.change.status');
         /** Users */
-
     });
 
     Route::get("{path}", function(){ return redirect()->route('login'); })->where('path', '.+');

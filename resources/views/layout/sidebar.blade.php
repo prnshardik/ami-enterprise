@@ -10,13 +10,13 @@
         </div>
         <ul class="side-menu metismenu">
             <li class="{{ Request::is('dashboard*') ? 'active' : '' }}">
-                <a class="{{ Request::is('dashboard*') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="sidebar-item-icon fa fa-th-large"></i>
+                <a class="{{ Request::is('dashboard*') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="sidebar-item-icon fa fa-th-large"></i>
                     <span class="nav-label">Dashboard</span>
                 </a>
             </li>
             <li class="heading">PAGES</li>
             <li class="{{ Request::is('admin/users*') ? 'active' : '' }}">
-                <a class="{{ Request::is('admin/users*') ? 'active' : '' }}" href="{{ route('admin.users') }}"><i class="sidebar-item-icon fa fa-users"></i>
+                <a class="{{ Request::is('admin/users*') ? 'active' : '' }}" href="{{ route('users') }}"><i class="sidebar-item-icon fa fa-users"></i>
                     <span class="nav-label">Users</span>
                 </a>
             </li>

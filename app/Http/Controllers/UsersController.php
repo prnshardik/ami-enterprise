@@ -1,12 +1,17 @@
 <?php
 
-    namespace App\Http\Controllers\admin;
-
-    use App\Http\Controllers\Controller;
+    
     use Illuminate\Http\Request;
     use App\Models\User;
+
+
+    namespace App\Http\Controllers;
+
+    use Illuminate\Http\Request;
+    use App\Models\User;
+    use Illuminate\Support\Str;
     use App\Http\Requests\UsersRequest;
-    use DataTables, DB;
+    use Auth, Validator, DB, Mail, DataTables;
 
     class UsersController extends Controller{
 
@@ -22,11 +27,11 @@
                             ->addIndexColumn()
                             ->addColumn('action', function($data){
                                 return ' <div class="btn-group">
-                                                <a href="'.route('admin.users.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <a href="'.route('users.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-eye"></i>
                                                 </a> &nbsp;
 
-                                                <a href="'.route('admin.users.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <a href="'.route('users.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-edit"></i>
                                                 </a> &nbsp;
                                                 
@@ -89,12 +94,12 @@
                     $user_last_id = User::insertGetId($crud);
                     
                     if($user_last_id){
-                        return redirect()->route('admin.users')->with('success', 'User Created Successfully.');
+                        return redirect()->route('users')->with('success', 'User Created Successfully.');
                     }else{
-                        return redirect()->route('admin.users')->with('error', 'Faild To Create User!');
+                        return redirect()->route('users')->with('error', 'Faild To Create User!');
                     }
                 }else{
-                    return redirect()->back('admin.users')->with('error', 'Something went wrong');
+                    return redirect()->back('users')->with('error', 'Something went wrong');
                 }
             }
         /** insert */
@@ -102,7 +107,7 @@
         /** view */
             public function view(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('admin.users')->with('error', 'Something went wrong Found');
+                    return redirect()->route('users')->with('error', 'Something went wrong Found');
 
                 $id = base64_decode($id);
 
@@ -120,7 +125,7 @@
         /** edit */
             public function edit(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('admin.users')->with('error', 'Something went wrong Found');
+                    return redirect()->route('users')->with('error', 'Something went wrong Found');
 
                 $id = base64_decode($id);
 
@@ -156,12 +161,12 @@
                     $update = User::where(['id' => $request->id])->update($crud);
 
                     if($update){
-                        return redirect()->route('admin.users')->with('success', 'User Updated Successfully.');
+                        return redirect()->route('users')->with('success', 'User Updated Successfully.');
                     }else{
-                        return redirect()->route('admin.users')->with('error', 'Faild To Update User!');
+                        return redirect()->route('users')->with('error', 'Faild To Update User!');
                     }
                 }else{
-                    return redirect()->back('admin.users')->with('error', 'Something went wrong');
+                    return redirect()->back('users')->with('error', 'Something went wrong');
                 }
             }
         /** update */
