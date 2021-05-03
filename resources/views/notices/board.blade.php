@@ -144,9 +144,18 @@
                 </li>
             @endforeach
         @else
+        <div class="page-content fade-in-up">
             <div class="row">
-                <div class="col-sm-12">
-                    <h3>No Notices Found...!!!</h3>
+                <div class="col-md-12">
+                    <div class="ibox">
+                        <div class="ibox-body">
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <h3>No Notices Found...!!!</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         @endif

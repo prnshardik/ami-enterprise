@@ -76,6 +76,16 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::patch('mytasks/update', 'MyTasksController@update')->name('mytasks.update');
             Route::post('mytasks/change-status', 'MyTasksController@change_status')->name('mytasks.change.status');
         /** My-Tasks */
+
+        /** orders */
+            Route::any('orders', 'OrdersController@index')->name('orders');
+            Route::get('orders/create', 'OrdersController@create')->name('orders.create');
+            Route::post('orders/insert', 'OrdersController@insert')->name('orders.insert');
+            Route::get('orders/view/{id?}', 'OrdersController@view')->name('orders.view');
+            Route::get('orders/edit/{id?}', 'OrdersController@edit')->name('orders.edit');
+            Route::patch('orders/update', 'OrdersController@update')->name('orders.update');
+            Route::post('orders/change-status', 'OrdersController@change_status')->name('orders.change.status');
+        /** orders */
     });
 
     Route::get("{path}", function(){ return redirect()->route('login'); })->where('path', '.+');

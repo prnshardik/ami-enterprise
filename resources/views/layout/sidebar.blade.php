@@ -31,6 +31,11 @@
                     <span class="nav-label">Products</span>
                 </a>
             </li>
+            <li class="{{ Request::is('orders*') ? 'active' : '' }}">
+                <a class="{{ Request::is('orders*') ? 'active' : '' }}" href="{{ route('orders') }}"><i class="sidebar-item-icon fa fa-shopping-basket"></i>
+                    <span class="nav-label">Orders</span>
+                </a>
+            </li>
             <li class="{{ (Request::is('tasks*') || Request::is('mytasks*')) ? 'active' : '' }}">
                 <a href="javascript:;" aria-expanded="false">
                     <i class="sidebar-item-icon fa fa-tasks"></i>
