@@ -23,7 +23,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
     Route::group(['middleware' => ['auth']], function () {
         Route::get('logout', 'AuthController@logout')->name('logout');
 
-        Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
+        Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
         /** Users */
             Route::any('users', 'UsersController@index')->name('users');
