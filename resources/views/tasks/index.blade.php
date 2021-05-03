@@ -28,6 +28,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Allocated From</th>
+                                    <th>Allocated To</th>
                                     <th>Task</th>
                                     <th>Task Date</th>
                                     <th>Target Date</th>
@@ -93,6 +94,10 @@
                         {
                             data: 'allocate_from',
                             name: 'allocate_from'
+                        },
+                        {
+                            data: 'allocate_to',
+                            name: 'allocate_to'
                         },
                         {
                             data: 'title',
