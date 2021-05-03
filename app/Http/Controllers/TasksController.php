@@ -13,15 +13,23 @@
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    DB::enableQueryLog();
-                    $data = Task::
-                                select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status',
-                                   DB::raw("(SELECT(users.name) FROM users
-                                            WHERE FIND_IN_SET(users.id,task.user_id)) as allocate_to"),
-                                )
+
+                    $data = Task::select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status')
                                     ->leftjoin('users', 'task.user_id', 'users.id')
                                     ->leftjoin('users as u', 'task.created_by', 'u.id')
                                     ->get();
+
+                    if(isset($data) && $data->isNotEmpty()){
+                        foreach($data as $row){
+                            $u_data = DB::select("SELECT GROUP_CONCAT(u.name SEPARATOR ', ') as names
+                                                    FROM users as u
+                                                    WHERE u.id IN($row->user_id)
+                                                    GROUP BY 'All'");
+                            if(!empty($u_data[0])){
+                                $row->allocate_to = $u_data[0]->names;
+                            }                 
+                        }
+                    }
 
                     return Datatables::of($data)
                             ->addIndexColumn()

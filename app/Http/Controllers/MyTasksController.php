@@ -15,7 +15,6 @@
                 if($request->ajax()){
                     $data = Task::select('task.id', 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status')
                                     ->leftjoin('users as u', 'task.created_by', 'u.id')
-                                    ->whereRaw("FIND_IN_SET(?, task.user_id) > 0", [auth()->user()->id])
                                     ->get();
 
                     return Datatables::of($data)
