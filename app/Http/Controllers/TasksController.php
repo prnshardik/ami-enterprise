@@ -15,14 +15,11 @@
                 if($request->ajax()){
                     DB::enableQueryLog();
                     $data = Task::
-                                select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status',
-                                   DB::raw("(SELECT(users.name) FROM users
-                                            WHERE FIND_IN_SET(users.id,task.user_id)) as allocate_to"),
-                                )
-                                    ->leftjoin('users', 'task.user_id', 'users.id')
+                                select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status')
                                     ->leftjoin('users as u', 'task.created_by', 'u.id')
                                     ->get();
-
+                    dd($data);
+                    $user_id = User::select('name AS allocate_to')->whereRaw("FIND_IN_SET(`id`,$data->user_id)")->get();
                     return Datatables::of($data)
                             ->addIndexColumn()
                             ->addColumn('action', function($data){
