@@ -155,7 +155,8 @@
 
         /** board */
             public function notices_board(){
-                $data = Notice::where(['status' => 'active'])->get();
+                $data = Notice::where(['status' => 'active'])->where(['created_by' => auth()->user()->id])->get();
+                
                 return view('notices.board', ['data' => $data]);
             } 
         /** board */

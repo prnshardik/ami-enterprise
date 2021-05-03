@@ -38,6 +38,13 @@
             font-size: 10px;
         }
 
+        ul.pinboards li div span {
+            position: absolute;
+            font-size: 10px;
+            bottom: 5px;
+            right: 5px;
+        }
+
         ul.pinboards li div a {
             position: absolute;
             right: 10px;
@@ -140,6 +147,7 @@
                         <small>{{ $row->created_at }}</small>
                         <h4>{{ $row->title }}</h4>
                         {{ $row->description }}
+                        <span>{{ auth()->user()->name }}</span>
                     </div>
                 </li>
             @endforeach
