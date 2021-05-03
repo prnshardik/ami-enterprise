@@ -24,7 +24,7 @@
                             
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label for="name">Name</label>
+                                    <label for="name">Name <span class="text-danger">*</span></label>
                                     <input type="text" name="name" id="name" class="form-control" placeholder="Plese enter name" />
                                     <span class="kt-form__help error name"></span>
                                 </div>

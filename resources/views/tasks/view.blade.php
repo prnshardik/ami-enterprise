@@ -24,12 +24,12 @@
                     <div class="ibox-body">
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <label for="title">Title</label>
+                                <label for="title">Title <span class="text-danger">*</span></label>
                                 <input type="text" name="title" id="title" value="{{ $data->title ?? '' }}" class="form-control" placeholder="Plese enter title" disabled />
                                 <span class="kt-form__help error title"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="users">Allocate To</label>
+                                <label for="users">Allocate To <span class="text-danger">*</span></label>
                                 <select name="users[]" class="form-control select2" placeholder="Plese Select Users" id="users" multiple disabled>
                                     @if(isset($users) && !empty($users))
                                         @foreach($users as $row)
@@ -40,7 +40,7 @@
                                 <span class="kt-form__help error users"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="description">Instruction</label>
+                                <label for="description">Instruction <span class="text-danger">*</span></label>
                                 <textarea name="description" id="description" class="form-control" placeholder="Plese enter Instruction" disabled> {{ $data->description ?? '' }} </textarea>
                                 <span class="kt-form__help error description"></span>
                             </div>
@@ -50,7 +50,7 @@
                                 <span class="kt-form__help error t_date"></span>
                             </div>
                             <div class="form-group col-sm-12">
-                                <label for="file">Attechment</label>
+                                <label for="file">Attechment <span class="text-danger">*</span></label>
                                 @if(isset($data->attechment) && !empty($data->attechment))
                                     @php $file = url('/uploads/task/').'/'.$data->attechment; @endphp
                                 @else

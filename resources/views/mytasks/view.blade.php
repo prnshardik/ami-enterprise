@@ -24,12 +24,12 @@
                     <div class="ibox-body">
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <label for="title">Title</label>
-                                <input type="text" name="title" id="title" value="{{ $data->title ?? '' }}" class="form-control" placeholder="Plese enter title" disabled />
+                                <label for="title">Title <span class="text-danger">*</span></label>
+                                <input type="text" name="title" id="title" value="{{ $data->title ?? '' }}" class="form-control" disabled />
                                 <span class="kt-form__help error title"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="users">Allocate To</label>
+                                <label for="users">Allocate To <span class="text-danger">*</span></label>
                                 <select name="users[]" class="form-control select2" placeholder="Plese Select Users" id="users" multiple disabled>
                                     @if(isset($users) && !empty($users))
                                         @foreach($users as $row)
@@ -40,13 +40,13 @@
                                 <span class="kt-form__help error users"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="description">Instruction</label>
-                                <textarea name="description" id="description" class="form-control" placeholder="Plese enter Instruction" disabled> {{ $data->description ?? '' }} </textarea>
+                                <label for="description">Instruction <span class="text-danger">*</span></label>
+                                <textarea name="description" id="description" class="form-control" disabled> {{ $data->description ?? '' }} </textarea>
                                 <span class="kt-form__help error description"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="t_date">Taget Date</label>
-                                <input type="date" name="t_date" id="t_date" value="{{ $data->target_date ??'' }}" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" disabled/>
+                                <label for="t_date">Taget Date <span class="text-danger">*</span></label>
+                                <input type="date" name="t_date" id="t_date" value="{{ $data->target_date ??'' }}" class="form-control" min="{{ Date('Y-m-d') }}" disabled/>
                                 <span class="kt-form__help error t_date"></span>
                             </div>
                             <div class="form-group col-sm-12">
