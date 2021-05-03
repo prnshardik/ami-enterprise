@@ -31,10 +31,24 @@
                     <span class="nav-label">Products</span>
                 </a>
             </li>
-            <li class="{{ Request::is('task*') ? 'active' : '' }}">
-                <a class="{{ Request::is('task*') ? 'active' : '' }}" href="{{ route('task') }}"><i class="sidebar-item-icon fa fa-tasks"></i>
+            <li class="{{ (Request::is('tasks*') || Request::is('mytasks*')) ? 'active' : '' }}">
+                <a href="javascript:;" aria-expanded="false">
+                    <i class="sidebar-item-icon fa fa-tasks"></i>
                     <span class="nav-label">Tasks</span>
+                    <i class="fa fa-angle-left arrow"></i>
                 </a>
+                <ul class="nav-2-level collapse" aria-expanded="false">
+                    <li class="{{ Request::is('tasks*') ? 'active' : '' }}">
+                        <a class="{{ Request::is('tasks*') ? 'active' : '' }}" href="{{ route('tasks') }}"><i class="sidebar-item-icon fa fa-tasks"></i>
+                            <span class="nav-label">Tasks</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="{{ Request::is('mytasks*') ? 'active' : '' }}" href="{{ route('mytasks') }}"><i class="sidebar-item-icon fa fa-tasks"></i>
+                            <span class="nav-label">My Tasks</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="{{ (Request::is('notices*') || Request::is('notice-board')) ? 'active' : '' }}">
                 <a href="javascript:;" aria-expanded="false">
@@ -55,7 +69,6 @@
                     </li>
                 </ul>
             </li>
-
         </ul>
     </div>
 </nav>

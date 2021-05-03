@@ -74,7 +74,7 @@
                     else
                         return redirect()->route('products')->with('error', 'Faild To Create Product!');
                 }else{
-                    return redirect()->back('products')->with('error', 'Something went wrong');
+                    return redirect()->route('products')->with('error', 'Something went wrong');
                 }
             }
         /** insert */
@@ -113,7 +113,7 @@
                     else
                         return redirect()->route('products')->with('error', 'Faild To Update Product!');
                 }else{
-                    return redirect()->back('products')->with('error', 'Something went wrong');
+                    return redirect()->route('products')->with('error', 'Something went wrong');
                 }
             }
         /** update */

@@ -8,7 +8,7 @@
     use App\Http\Requests\TaskRequest;
     use Auth, Validator, DB, Mail, DataTables, File;
 
-    class TaskController extends Controller{
+    class TasksController extends Controller{
 
         /** index */
             public function index(Request $request){
@@ -21,10 +21,10 @@
                             ->addIndexColumn()
                             ->addColumn('action', function($data){
                                 return ' <div class="btn-group">
-                                                <a href="'.route('task.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <a href="'.route('tasks.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-eye"></i>
                                                 </a> &nbsp;
-                                                <a href="'.route('task.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                <a href="'.route('tasks.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-edit"></i>
                                                 </a> &nbsp;
                                                 <a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -62,7 +62,7 @@
                             ->make(true);
                 }
 
-                return view('task.index');
+                return view('tasks.index');
             }
         /** index */
 
@@ -70,7 +70,7 @@
             public function create(Request $request){
                 $users = User::select('id', 'name')->where(['status' => 'active', 'is_admin' => 'n'])->get();
 
-                return view('task.create')->with('data', $users);
+                return view('tasks.create')->with('data', $users);
             }
         /** create */
 
@@ -112,12 +112,12 @@
                         if(!empty($request->file('file')))
                             $file->move($folder_to_upload, $filenameToStore);
 
-                        return redirect()->route('task')->with('success', 'Task Created Successfully.');
+                        return redirect()->route('tasks')->with('success', 'Task Created Successfully.');
                     }else{
-                        return redirect()->route('task')->with('error', 'Faild To Create Task!');
+                        return redirect()->route('tasks')->with('error', 'Faild To Create Task!');
                     }
                 }else{
-                    return redirect()->back('task')->with('error', 'Something went wrong');
+                    return redirect()->route('tasks')->with('error', 'Something went wrong');
                 }
             }
         /** insert */
@@ -125,7 +125,7 @@
         /** view */
             public function view(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('task')->with('error', 'Something went wrong Found');
+                    return redirect()->route('tasks')->with('error', 'Something went wrong Found');
 
                 $id = base64_decode($id);
 
@@ -133,16 +133,16 @@
                 $users = User::select('id', 'name')->where(['status' => 'active', 'is_admin' => 'n'])->get();
                 
                 if($data)
-                    return view('task.view')->with(['users' => $users, 'data' => $data]);
+                    return view('tasks.view')->with(['users' => $users, 'data' => $data]);
                 else
-                    return redirect()->route('task')->with('error', 'No Task Found');
+                    return redirect()->route('tasks')->with('error', 'No Task Found');
             }
         /** view */
 
         /** edit */
             public function edit(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('task')->with('error', 'Something went wrong Found');
+                    return redirect()->route('tasks')->with('error', 'Something went wrong Found');
 
                 $id = base64_decode($id);
 
@@ -150,9 +150,9 @@
                 $users = User::select('id', 'name')->where(['status' => 'active', 'is_admin' => 'n'])->get();
                 
                 if($data)
-                    return view('task.edit')->with(['data' => $data, 'users' => $users]);
+                    return view('tasks.edit')->with(['data' => $data, 'users' => $users]);
                 else
-                    return redirect()->route('task')->with('error', 'No Task Found');
+                    return redirect()->route('tasks')->with('error', 'No Task Found');
             }
         /** edit */ 
 
@@ -201,12 +201,12 @@
                             }
                         }
 
-                        return redirect()->route('task')->with('success', 'Task Updated Successfully.');
+                        return redirect()->route('tasks')->with('success', 'Task Updated Successfully.');
                     }else{
-                        return redirect()->route('task')->with('error', 'Faild To Update Task!');
+                        return redirect()->route('tasks')->with('error', 'Faild To Update Task!');
                     }
                 }else{
-                    return redirect()->back('task')->with('error', 'Something went wrong');
+                    return redirect()->route('tasks')->with('error', 'Something went wrong');
                 }
             }
         /** update */

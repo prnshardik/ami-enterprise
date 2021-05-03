@@ -4,7 +4,7 @@
 @endsection
 
 @section('title')
-    Task
+    My Tasks
 @endsection
 
 @section('styles')
@@ -16,9 +16,9 @@
             <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-head">
-                        <h1 class="ibox-title">Task</h1>
+                        <h1 class="ibox-title">My Tasks</h1>
                         <h1 class="pull-right">
-                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('task.create') }}">Add New</a>
+                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('mytasks.create') }}">Add New</a>
                         </h1>
                     </div>
 
@@ -73,7 +73,7 @@
                     // lengthChange: false,
 
                     "ajax":{
-                        "url": "{{ route('task') }}",
+                        "url": "{{ route('mytasks') }}",
                         "type": "POST",
                         "dataType": "json",
                         "data":{
@@ -128,7 +128,7 @@
 
             if (confirm(msg)) {
                 $.ajax({
-                    "url": "{!! route('task.change.status') !!}",
+                    "url": "{!! route('mytasks.change.status') !!}",
                     "dataType": "json",
                     "type": "POST",
                     "data":{

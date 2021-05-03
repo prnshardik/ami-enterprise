@@ -4,7 +4,7 @@
 @endsection
 
 @section('title')
-    Create Task
+    Edit My Task
 @endsection
 
 @section('styles')
@@ -19,48 +19,45 @@
             <div class="col-md-12">
                 <div class="ibox">
                     <div class="ibox-head">
-                        <div class="ibox-title">Create Task</div>
+                        <div class="ibox-title">Edit My Task</div>
                     </div>
                     <div class="ibox-body">
-                        <form name="form" action="{{ route('task.insert') }}" id="form" method="post" enctype="multipart/form-data">
+                        <form name="form" action="{{ route('mytasks.update') }}" id="form" method="post" enctype="multipart/form-data">
                             @csrf
+                            @method('PATCH')
+                            
+                            <input type="hidden" name="id" value="{{ $data->id }}">
+                            
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="title">Title</label>
-                                    <input type="text" name="title" id="title" class="form-control" placeholder="Plese enter title" />
+                                    <input type="text" name="title" id="title" value="{{ $data->title ?? '' }}" class="form-control" placeholder="Plese enter title" />
                                     <span class="kt-form__help error title"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="users">Allocate To</label>
-                                    <select name="users[]" class="form-control select2" placeholder="Plese Select Users" id="users" multiple>
-                                        @if(isset($data) && !empty($data))
-                                            @foreach($data AS $row)
-                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <span class="kt-form__help error users"></span>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <label for="description">Instruction</label>
-                                    <textarea name="description" id="description" class="form-control" placeholder="Plese enter Instruction"> </textarea>
-                                    <span class="kt-form__help error description"></span>
-                                </div>
-                                <div class="form-group col-sm-6">
                                     <label for="t_date">Taget Date</label>
-                                    <input type="date" name="t_date" id="t_date" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" />
+                                    <input type="date" name="t_date" id="t_date" value="{{ $data->target_date ??'' }}" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" />
                                     <span class="kt-form__help error t_date"></span>
                                 </div>
-
+                                <div class="form-group col-sm-12">
+                                    <label for="description">Instruction</label>
+                                    <textarea name="description" id="description" class="form-control" placeholder="Plese enter Instruction"> {{ $data->description ?? '' }} </textarea>
+                                    <span class="kt-form__help error description"></span>
+                                </div>
                                 <div class="form-group col-sm-12">
                                     <label for="file">Attechment</label>
-                                    <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" />
+                                    @if(isset($data->attechment) && !empty($data->attechment))
+                                        @php $file = url('/uploads/task/').'/'.$data->attechment; @endphp
+                                    @else
+                                        @php $file = ''; @endphp
+                                    @endif
+                                    <input type="file" name="file" id="file" class="form-control dropify" data-default-file="{{ $file }}" data-show-remove="false" placeholder="Plese select attachment" />
                                     <span class="kt-form__help error file"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
-                                <a href="{{ route('task') }}" class="btn btn-default">Back</a>
+                                <a href="{{ route('mytasks') }}" class="btn btn-default">Back</a>
                             </div>
                         </form>
                     </div>
@@ -75,7 +72,6 @@
     <script src="{{ asset('assets/js/promise.min.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert2.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
-    
     <script>
         $(document).ready(function(){
             $('.dropify').dropify({
@@ -93,7 +89,6 @@
         });
         });
     </script>
-
     <script>
         $(document).ready(function () {
             var form = $('#form');

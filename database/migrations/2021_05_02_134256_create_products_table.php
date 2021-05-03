@@ -20,6 +20,8 @@ class CreateProductsTable extends Migration
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
         });
+
+        Artisan::call('db:seed', ['--class' => ProductSeeder::class]);
     }
 
     /**

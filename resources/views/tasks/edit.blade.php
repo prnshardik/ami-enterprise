@@ -22,7 +22,7 @@
                         <div class="ibox-title">Edit Task</div>
                     </div>
                     <div class="ibox-body">
-                        <form name="form" action="{{ route('task.update') }}" id="form" method="post" enctype="multipart/form-data">
+                        <form name="form" action="{{ route('tasks.update') }}" id="form" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('PATCH')
                             
@@ -68,7 +68,7 @@
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
-                                <a href="{{ route('task') }}" class="btn btn-default">Back</a>
+                                <a href="{{ route('tasks') }}" class="btn btn-default">Back</a>
                             </div>
                         </form>
                     </div>

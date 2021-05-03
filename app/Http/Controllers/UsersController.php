@@ -90,7 +90,7 @@
                     else
                         return redirect()->route('users')->with('error', 'Faild To Create User!');
                 }else{
-                    return redirect()->back('users')->with('error', 'Something went wrong');
+                    return redirect()->route('users')->with('error', 'Something went wrong');
                 }
             }
         /** insert */
@@ -150,7 +150,7 @@
                     else
                         return redirect()->route('users')->with('error', 'Faild To Update User!');
                 }else{
-                    return redirect()->back('users')->with('error', 'Something went wrong');
+                    return redirect()->route('users')->with('error', 'Something went wrong');
                 }
             }
         /** update */

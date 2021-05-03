@@ -79,7 +79,7 @@
                     else
                         return redirect()->route('notices')->with('error', 'Faild To Create Notice!');
                 }else{
-                    return redirect()->back('notices')->with('error', 'Something went wrong');
+                    return redirect()->route('notices')->with('error', 'Something went wrong');
                 }
             }
         /** insert */
@@ -119,7 +119,7 @@
                     else
                         return redirect()->route('notices')->with('error', 'Faild To Update Notice!');
                 }else{
-                    return redirect()->back('notices')->with('error', 'Something went wrong');
+                    return redirect()->route('notices')->with('error', 'Something went wrong');
                 }
             }
         /** update */

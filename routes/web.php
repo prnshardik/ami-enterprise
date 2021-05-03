@@ -44,10 +44,6 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::get('products/delete/{id?}', 'ProductsController@delete')->name('products.delete');
         /** Products */
 
-        /** Notice-Board */
-            Route::get('notice-board', 'NoticesController@notices_board')->name('notice.board');
-        /** Notice-Board */ 
-
         /** Notice */
             Route::any('notices', 'NoticesController@index')->name('notices');
             Route::get('notices/create', 'NoticesController@create')->name('notices.create');
@@ -57,15 +53,29 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('notices/change-status', 'NoticesController@change_status')->name('notices.change.status');
         /** Notice */
 
-        /** Task */
-            Route::any('task', 'TaskController@index')->name('task');
-            Route::get('task/create', 'TaskController@create')->name('task.create');
-            Route::post('task/insert', 'TaskController@insert')->name('task.insert');
-            Route::get('task/view/{id?}', 'TaskController@view')->name('task.view');
-            Route::get('task/edit/{id?}', 'TaskController@edit')->name('task.edit');
-            Route::patch('task/update', 'TaskController@update')->name('task.update');
-            Route::post('task/change-status', 'TaskController@change_status')->name('task.change.status');
-        /** Task */
+        /** Notice-Board */
+            Route::get('notice-board', 'NoticesController@notices_board')->name('notice.board');
+        /** Notice-Board */ 
+
+        /** Tasks */
+            Route::any('tasks', 'TasksController@index')->name('tasks');
+            Route::get('tasks/create', 'TasksController@create')->name('tasks.create');
+            Route::post('tasks/insert', 'TasksController@insert')->name('tasks.insert');
+            Route::get('tasks/view/{id?}', 'TasksController@view')->name('tasks.view');
+            Route::get('tasks/edit/{id?}', 'TasksController@edit')->name('tasks.edit');
+            Route::patch('tasks/update', 'TasksController@update')->name('tasks.update');
+            Route::post('tasks/change-status', 'TasksController@change_status')->name('tasks.change.status');
+        /** Tasks */
+
+        /** My-Tasks */
+            Route::any('mytasks', 'MyTasksController@index')->name('mytasks');
+            Route::get('mytasks/create', 'MyTasksController@create')->name('mytasks.create');
+            Route::post('mytasks/insert', 'MyTasksController@insert')->name('mytasks.insert');
+            Route::get('mytasks/view/{id?}', 'MyTasksController@view')->name('mytasks.view');
+            Route::get('mytasks/edit/{id?}', 'MyTasksController@edit')->name('mytasks.edit');
+            Route::patch('mytasks/update', 'MyTasksController@update')->name('mytasks.update');
+            Route::post('mytasks/change-status', 'MyTasksController@change_status')->name('mytasks.change.status');
+        /** My-Tasks */
     });
 
     Route::get("{path}", function(){ return redirect()->route('login'); })->where('path', '.+');
