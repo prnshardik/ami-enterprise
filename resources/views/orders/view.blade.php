@@ -31,6 +31,48 @@
                                 <span class="kt-form__help error order_date"></span>
                             </div>
                         </div>
+                        @if(isset($data->order_details) && $data->order_details->isNotEmpty())
+                            <div class="row" id="table" style="display:block">
+                        @else
+                            <div class="row" id="table" style="display:none">
+                        @endif
+                            <div class="col-sm-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:10%">Sr. No</th>
+                                            <th style="width:30%">Product</th>
+                                            <th style="width:25%">Product</th>
+                                            <th style="width:25%">Price</th>
+                                            <th style="width:10%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(isset($data->order_details) && $data->order_details->isNotEmpty())
+                                            @php $i=1; @endphp
+                                            @foreach($data->order_details as $row)
+                                                <tr class="clone" id="clone_{{ $i }}">
+                                                    <th style="width:10%">{{ $i }}</th>
+                                                    <th style="width:30%">{{ $row->product_name }}
+                                                        <input type="hidden" name="product_id[]" id="product_{{ $i }}" value="{{ $row->product_id }}">
+                                                    </th>
+                                                    <th style="width:25%">
+                                                        <input type="text" name="quantity[]" id="quantity_{{ $i }}" value="{{ $row->quantity }}" class="form-control digit" disabled>
+                                                    </th>
+                                                    <th style="width:25%">
+                                                        <input type="text" name="price[]" id="price_{{ $i }}" value="{{ $row->price }}" class="form-control digit" disabled>
+                                                    </th>
+                                                    <th style="width:10%">
+                                                        <button type="button" class="btn btn-danger delete" data-id="{{ $i }}" disabled >Remove</button>
+                                                    </th>
+                                                </tr>
+                                                @php $i++; @endphp
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div> 
+                        </div>
                         <div class="form-group">
                             <a href="{{ route('orders') }}" class="btn btn-default">Back</a>
                         </div>

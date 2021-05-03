@@ -37,6 +37,75 @@
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <label for="base_product">Product <span class="text-danger">*</span></label>
+                                    <select name="base_product" id="base_product" class="form-control">
+                                        <option value="" hidden>Select Product</option>
+                                        @if(isset($products) && $products->isNotEmpty())
+                                            @foreach($products as $row)
+                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <span class="kt-form__help error product_id"></span>
+                                </div>
+                                <div class="form-group col-sm-2">
+                                    <label for="base_quantity">Quantity <span class="text-danger">*</span></label>
+                                    <input type="text" name="base_quantity" id="base_quantity" class="form-control digit" placeholder="Plese enter quantity" />
+                                    <span class="kt-form__help error quantity"></span>
+                                </div>
+                                <div class="form-group col-sm-2">
+                                    <label for="base_price">Price <span class="text-danger">*</span></label>
+                                    <input type="text" name="base_price" id="base_price" class="form-control digit" placeholder="Plese enter price" />
+                                    <span class="kt-form__help error price"></span>
+                                </div>
+                                <div class="form-group col-sm-2 d-flex align-items-center">
+                                    <button type="button" class="btn btn-md btn-primary mt-4" id="add_product">Add Product</button>
+                                </div>
+                            </div>
+                            @if(isset($data->order_details) && $data->order_details->isNotEmpty())
+                                <div class="row" id="table" style="display:block">
+                            @else
+                                <div class="row" id="table" style="display:none">
+                            @endif
+                                <div class="col-sm-12">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%">Sr. No</th>
+                                                <th style="width:30%">Product</th>
+                                                <th style="width:25%">Product</th>
+                                                <th style="width:25%">Price</th>
+                                                <th style="width:10%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if(isset($data->order_details) && $data->order_details->isNotEmpty())
+                                                @php $i=1; @endphp
+                                                @foreach($data->order_details as $row)
+                                                    <tr class="clone" id="clone_{{ $i }}">
+                                                        <th style="width:10%">{{ $i }}</th>
+                                                        <th style="width:30%">{{ $row->product_name }}
+                                                            <input type="hidden" name="product_id[]" id="product_{{ $i }}" value="{{ $row->product_id }}">
+                                                        </th>
+                                                        <th style="width:25%">
+                                                            <input type="text" name="quantity[]" id="quantity_{{ $i }}" value="{{ $row->quantity }}" class="form-control digit" required>
+                                                        </th>
+                                                        <th style="width:25%">
+                                                            <input type="text" name="price[]" id="price_{{ $i }}" value="{{ $row->price }}" class="form-control digit" required>
+                                                        </th>
+                                                        <th style="width:10%">
+                                                            <button type="button" class="btn btn-danger delete" data-id="{{ $i }}">Remove</button>
+                                                        </th>
+                                                    </tr>
+                                                    @php $i++; @endphp
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div> 
+                            </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <a href="{{ route('orders') }}" class="btn btn-default">Back</a>
@@ -50,6 +119,74 @@
 @endsection
 
 @section('scripts')
+<script>
+        $(document).ready(function() {
+            $('.digit').keyup(function(e)                                {
+                if (/\D/g.test(this.value)){
+                    this.value = this.value.replace(/\D/g, '');
+                }
+            });
+
+            let base_product = '';
+            let base_product_id = '';
+            let base_quantity = '';
+            let base_price = '';
+
+            $('#add_product').click(function(){
+                $('#table').css('display', 'block');
+
+                base_product = $('#base_product option:selected').text();
+                base_product_id = $('#base_product').val();
+                base_quantity = $('#base_quantity').val();
+                base_price = $('#base_price').val();
+
+                $('#base_product').val('');
+                $('#base_quantity').val('');
+                $('#base_price').val('');
+
+                var regex = /^(.+?)(\d+)$/i;
+                var cloneIndex = $("#table tbody tr").length;
+
+                if(cloneIndex !== 0){
+                    let num = parseInt(cloneIndex) + 1;
+
+                    var clone = clone_div(num);
+                    $("#table tbody").append(clone);
+                }else{
+                    var clone = clone_div(1);
+                    $("#table tbody").append(clone);
+                }
+            });
+
+            function clone_div(id){
+                return '<tr class="clone" id="clone_'+id+'">'+
+                        '<th style="width:10%">'+id+'</th>'+
+                        '<th style="width:30%">'+base_product+
+                            '<input type="hidden" name="product_id[]" id="product_'+id+'" value="'+base_product_id+'">'+
+                        '</th>'+
+                        '<th style="width:25%">'+
+                            '<input type="text" name="quantity[]" id="quantity_'+id+'" value="'+base_quantity+'" class="form-control digit" required>'+
+                        '</th>'+
+                        '<th style="width:25%">'+
+                            '<input type="text" name="price[]" id="price_'+id+'" value="'+base_price+'" class="form-control digit" required>'+
+                        '</th>'+
+                        '<th style="width:10%">'+
+                            '<button type="button" class="btn btn-danger delete" data-id="'+id+'">Remove</button>'+
+                        '</th>'+
+                    '</tr>';
+            }
+
+            $(document).on('click', ".delete", function () {
+                let id = $(this).data('id');
+
+                let con = confirm('Are you sure to delete?');
+                if (con) {
+                    $('#clone_'+id).remove();
+                }
+            })
+        });
+    </script>
+
     <script>
         $(document).ready(function () {
             var form = $('#form');

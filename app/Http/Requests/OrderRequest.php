@@ -13,12 +13,18 @@
             if($this->method() == 'PATCH'){
                 return [
                     'name' => 'required',
-                    'order_date' => 'required'
+                    'order_date' => 'required',
+                    'product_id' => 'required|array|min:1',
+                    'quantity' => 'required|array|min:1',
+                    'price' => 'required|array|min:1'
                 ];
             }else{
                 return [
                     'name' => 'required',
-                    'order_date' => 'required'
+                    'order_date' => 'required',
+                    'product_id' => 'required|array|min:1',
+                    'quantity' => 'required|array|min:1',
+                    'price' => 'required|array|min:1'
                 ];
             }
         }
@@ -26,7 +32,13 @@
         public function messages(){
             return [
                 'name.required' => 'Please enter name',
-                'order_date.required' => 'Please enter order date'
+                'order_date.required' => 'Please enter order date',
+                'product_id.required' => 'Please select product',
+                'product_id.min' => 'Please select product',
+                'quantity.required' => 'Please enter quantity',
+                'product_idquantity.min' => 'Please enter quantity',
+                'price.required' => 'Please enter price',
+                'price.min' => 'Please select price',
             ];
         }
     }

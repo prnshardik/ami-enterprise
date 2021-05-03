@@ -4,6 +4,8 @@
 
     use Illuminate\Http\Request;
     use App\Models\Order;
+    use App\Models\OrderDetails;
+    use App\Models\Product;
     use Illuminate\Support\Str;
     use App\Http\Requests\OrderRequest;
     use Auth, Validator, DB, Mail, DataTables;
@@ -60,7 +62,9 @@
 
         /** create */
             public function create(Request $request){
-                return view('orders.create');
+                $products = Product::select('id', 'name')->get();
+
+                return view('orders.create', ['products' => $products]);
             }
         /** create */
 
@@ -79,12 +83,40 @@
                             'updated_by' => auth()->user()->id
                     ];
 
-                    $last_id = Order::insertGetId($crud);
-                    
-                    if($last_id)
-                        return redirect()->route('orders')->with('success', 'Order Created Successfully.');
-                    else
+                    DB::beginTransaction();
+                    try {
+                        $last_id = Order::insertGetId($crud);
+                        
+                        if($last_id){
+                            $product_id = $request->product_id;
+                            $quantity = $request->quantity;
+                            $price = $request->price;
+
+                            for($i=0; $i<count($product_id); $i++){
+                                $order_detail_crud = [
+                                        'order_id' => $last_id,
+                                        'product_id' => $product_id[$i],
+                                        'quantity' => $quantity[$i],
+                                        'price' => $price[$i],
+                                        'created_at' => date('Y-m-d H:i:s'),
+                                        'created_by' => auth()->user()->id,
+                                        'updated_at' => date('Y-m-d H:i:s'),
+                                        'updated_by' => auth()->user()->id
+                                ];
+
+                                OrderDetails::insertGetId($order_detail_crud);
+                            }
+
+                            DB::commit();
+                            return redirect()->route('orders')->with('success', 'Order Created Successfully.');
+                        }else{
+                            DB::rollback();
+                            return redirect()->route('orders')->with('error', 'Faild To Create Order!');
+                        }
+                    } catch (\Exception $e) {
+                        DB::rollback();
                         return redirect()->route('orders')->with('error', 'Faild To Create Order!');
+                    }
                 }else{
                     return redirect()->route('orders')->with('error', 'Something went wrong');
                 }
@@ -100,10 +132,22 @@
 
                 $data = Order::select('id', 'name', 'order_date')->where(['id' => $id])->first();
                 
-                if($data)
-                    return view('orders.view')->with('data', $data);
-                else
+                if($data){
+                    $order_details = DB::table('orders_details as od')
+                                        ->select('od.product_id', 'od.quantity', 'od.price', 'p.name as product_name')
+                                        ->leftjoin('products as p', 'p.id', 'od.product_id')
+                                        ->where(['od.order_id' => $data->id])
+                                        ->get();
+
+                    if($order_details->isNotEmpty())
+                        $data->order_details = $order_details;
+                    else
+                       $data->order_details = collect();
+                    
+                       return view('orders.view')->with('data', $data);
+                }else{
                     return redirect()->route('orders')->with('error', 'No Order Found');
+                }
             }
         /** view */ 
 
@@ -114,12 +158,26 @@
 
                 $id = base64_decode($id);
 
+                $products = Product::select('id', 'name')->get();
+
                 $data = Order::select('id', 'name', 'order_date')->where(['id' => $id])->first();
                 
-                if($data)
-                    return view('orders.edit')->with('data', $data);
-                else
+                if($data){
+                    $order_details = DB::table('orders_details as od')
+                                        ->select('od.product_id', 'od.quantity', 'od.price', 'p.name as product_name')
+                                        ->leftjoin('products as p', 'p.id', 'od.product_id')
+                                        ->where(['od.order_id' => $data->id])
+                                        ->get();
+
+                    if($order_details->isNotEmpty())
+                        $data->order_details = $order_details;
+                    else
+                        $data->order_details = collect();
+
+                    return view('orders.edit', ['products' => $products, 'data' => $data]);
+                }else{
                     return redirect()->route('orders')->with('error', 'No Order Found');
+                }
             }
         /** edit */ 
 
@@ -131,16 +189,46 @@
                     $crud = [
                             'name' => ucfirst($request->name),
                             'order_date' => $request->order_date,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'created_by' => auth()->user()->id,
                             'updated_at' => date('Y-m-d H:i:s'),
                             'updated_by' => auth()->user()->id
                     ];
 
-                    $update = Order::where(['id' => $request->id])->update($crud);
+                    DB::beginTransaction();
+                    try {
+                        $last_id = Order::insertGetId($crud);
+                        
+                        if($last_id){
+                            $product_id = $request->product_id;
+                            $quantity = $request->quantity;
+                            $price = $request->price;
 
-                    if($update)
-                        return redirect()->route('orders')->with('success', 'Order Updated Successfully.');
-                    else
+                            for($i=0; $i<count($product_id); $i++){
+                                $order_detail_crud = [
+                                        'order_id' => $last_id,
+                                        'product_id' => $product_id[$i],
+                                        'quantity' => $quantity[$i],
+                                        'price' => $price[$i],
+                                        'created_at' => date('Y-m-d H:i:s'),
+                                        'created_by' => auth()->user()->id,
+                                        'updated_at' => date('Y-m-d H:i:s'),
+                                        'updated_by' => auth()->user()->id
+                                ];
+
+                                OrderDetails::insertGetId($order_detail_crud);
+                            }
+
+                            DB::commit();
+                            return redirect()->route('orders')->with('success', 'Order Updated Successfully.');
+                        }else{
+                            DB::rollback();
+                            return redirect()->route('orders')->with('error', 'Faild To Update Order!');
+                        }
+                    } catch (\Exception $e) {
+                        DB::rollback();
                         return redirect()->route('orders')->with('error', 'Faild To Update Order!');
+                    }
                 }else{
                     return redirect()->route('orders')->with('error', 'Something went wrong');
                 }
