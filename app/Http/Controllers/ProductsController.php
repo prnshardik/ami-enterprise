@@ -16,8 +16,8 @@
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    
-                    $data = Product::select('id','name')->get();
+                    $data = Product::select('id', 'name')->get();
+
                     return Datatables::of($data)
                             ->addIndexColumn()
                             ->addColumn('action', function($data){
@@ -25,8 +25,6 @@
                                                 <a href="'.route('products.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-edit"></i>
                                                 </a> &nbsp;
-                                                
-
                                                 <a href="'.route('products.delete', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-trash text-danger"></i>
                                                 </a> &nbsp;
@@ -34,20 +32,20 @@
                             })
 
                             ->editColumn('status', function($data) {
-                                if($data->status == 'active'){
+                                if($data->status == 'active')
                                     return '<span class="badge badge-pill badge-success">Active</span>';
-                                }else if($data->status == 'inactive'){
+                                else if($data->status == 'inactive')
                                     return '<span class="badge badge-pill badge-warning">Inactive</span>';
-                                }else if($data->status == 'deleted'){
+                                else if($data->status == 'deleted')
                                     return '<span class="badge badge-pill badge-danger">Delete</span>';
-                                }else{
+                                else
                                     return '-';
-                                }
                             })
 
                             ->rawColumns(['action', 'status'])
                             ->make(true);
                 }
+
                 return view('products.index');
             }
         /** index */
@@ -63,22 +61,20 @@
                 if($request->ajax()){ return true; }
 
                 if(!empty($request->all())){
-                    
                     $crud = [
-                            'name' => $request->name,
+                            'name' => ucfirst($request->name),
                             'created_at' => date('Y-m-d H:i:s'),
                             'created_by' => auth()->user()->id,
                             'updated_at' => date('Y-m-d H:i:s'),
                             'updated_by' => auth()->user()->id
                     ];
 
-                    $user_last_id = Product::insertGetId($crud);
+                    $last_id = Product::insertGetId($crud);
                     
-                    if($user_last_id){
+                    if($last_id)
                         return redirect()->route('products')->with('success', 'Product Created Successfully.');
-                    }else{
+                    else
                         return redirect()->route('products')->with('error', 'Faild To Create Product!');
-                    }
                 }else{
                     return redirect()->back('products')->with('error', 'Something went wrong');
                 }
@@ -92,9 +88,7 @@
 
                 $id = base64_decode($id);
 
-                $data = Product::select('id', 'name')
-                        ->where(['id' => $id])
-                        ->first();
+                $data = Product::select('id', 'name')->where(['id' => $id])->first();
                 
                 if($data)
                     return view('products.edit')->with('data', $data);
@@ -108,8 +102,6 @@
                 if($request->ajax()){ return true; }
 
                 if(!empty($request->all())){
-                    $ext_user = Product::where(['id' => $request->id])->first();
-
                     $crud = [
                             'name' => ucfirst($request->name),
                             'updated_at' => date('Y-m-d H:i:s'),
@@ -118,26 +110,27 @@
 
                     $update = Product::where(['id' => $request->id])->update($crud);
 
-                    if($update){
+                    if($update)
                         return redirect()->route('products')->with('success', 'Product Updated Successfully.');
-                    }else{
+                    else
                         return redirect()->route('products')->with('error', 'Faild To Update Product!');
-                    }
                 }else{
                     return redirect()->back('products')->with('error', 'Something went wrong');
                 }
             }
         /** update */
 
-        /** change-status */
+        /** delete */
             public function delete(Request $request){
                 $id = base64_decode($request->id);
-                $delete = Product::where('id',$id)->delete();
+
+                $delete = Product::where(['id' => $id])->delete();
+                
                 if($delete)
-                    return redirect()->route('products')->with('success' ,'Product Deleted Successfully.');
+                    return redirect()->route('products')->with('success', 'Product Deleted Successfully.');
                 else
-                    return redirect()->route('products')->with('error' ,'Faild To Delete Product !');
+                    return redirect()->route('products')->with('error', 'Faild To Delete Product !');
 
             }
-        /** change-status */
+        /** delete */
     }

@@ -22,7 +22,9 @@
                         <form name="form" action="{{ route('products.update') }}" id="form" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('PATCH')
+
                             <input type="hidden" name="id" value="{{ $data->id }}">
+                            
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="name">Name</label>

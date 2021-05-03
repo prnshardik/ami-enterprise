@@ -19,7 +19,7 @@ class CreateTaskTable extends Migration
             $table->string('user_id');
             $table->text('description');
             $table->date('target_date');
-            $table->string('attechment');
+            $table->text('attechment');
             $table->enum('status', ['pending', 'complated', 'deleted'])->default('pending');
             $table->timestamps();
             $table->integer('created_by')->nullable();

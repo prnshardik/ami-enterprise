@@ -54,7 +54,7 @@
 
                                 <div class="form-group col-sm-12">
                                     <label for="file">Attechment</label>
-                                    <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese enter target date" />
+                                    <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" />
                                     <span class="kt-form__help error file"></span>
                                 </div>
                             </div>
@@ -75,6 +75,7 @@
     <script src="{{ asset('assets/js/promise.min.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert2.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    
     <script>
         $(document).ready(function(){
             $('.dropify').dropify({
@@ -92,6 +93,7 @@
         });
         });
     </script>
+
     <script>
         $(document).ready(function () {
             var form = $('#form');

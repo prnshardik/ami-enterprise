@@ -24,6 +24,10 @@
                     <div class="ibox-body">
                         <form name="form" action="{{ route('task.update') }}" id="form" method="post" enctype="multipart/form-data">
                             @csrf
+                            @method('PATCH')
+                            
+                            <input type="hidden" name="id" value="{{ $data->id }}">
+                            
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="title">Title</label>
@@ -51,14 +55,19 @@
                                     <input type="date" name="t_date" id="t_date" value="{{ $data->target_date ??'' }}" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" />
                                     <span class="kt-form__help error t_date"></span>
                                 </div>
-
                                 <div class="form-group col-sm-12">
                                     <label for="file">Attechment</label>
-                                    <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese enter target date" />
+                                    @if(isset($data->attechment) && !empty($data->attechment))
+                                        @php $file = url('/uploads/task/').'/'.$data->attechment; @endphp
+                                    @else
+                                        @php $file = ''; @endphp
+                                    @endif
+                                    <input type="file" name="file" id="file" class="form-control dropify" data-default-file="{{ $file }}" data-show-remove="false" placeholder="Plese select attachment" />
                                     <span class="kt-form__help error file"></span>
                                 </div>
                             </div>
                             <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Submit</button>
                                 <a href="{{ route('task') }}" class="btn btn-default">Back</a>
                             </div>
                         </form>

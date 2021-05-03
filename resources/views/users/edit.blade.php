@@ -23,7 +23,6 @@
                             @csrf
                             @method('PATCH')
                             
-                             <input autocomplete="false" name="hidden" type="password" class="hidden">
                             <input type="hidden" name="id" value="{{ $data->id }}">
 
                             <div class="row">
@@ -44,7 +43,7 @@
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="password">Password</label>
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="Plese enter password number"  autofill="off">
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Plese enter password number" autofill="off">
                                     <span class="kt-form__help error password"></span>
                                 </div>
                             </div>

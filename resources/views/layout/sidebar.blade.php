@@ -5,7 +5,14 @@
                 <img src="{{ asset('assets/img/admin-avatar.png') }}" width="45px" />
             </div>
             <div class="admin-info">
-                <div class="font-strong">James Brown</div><small>Administrator</small>
+                <div class="font-strong">{{ auth()->user()->name }}</div>
+                <small>
+                    @if(auth()->user()->is_admin == 'y')
+                        Administrator 
+                    @else
+                        User
+                    @endif
+                </small>
             </div>
         </div>
         <ul class="side-menu metismenu">

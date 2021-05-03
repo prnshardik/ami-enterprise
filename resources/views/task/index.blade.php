@@ -128,7 +128,7 @@
 
             if (confirm(msg)) {
                 $.ajax({
-                    "url": "{!! route('users.change.status') !!}",
+                    "url": "{!! route('task.change.status') !!}",
                     "dataType": "json",
                     "type": "POST",
                     "data":{

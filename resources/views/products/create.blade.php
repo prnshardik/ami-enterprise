@@ -21,6 +21,7 @@
                     <div class="ibox-body">
                         <form name="form" action="{{ route('products.insert') }}" id="form" method="post" enctype="multipart/form-data">
                             @csrf
+                            
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="name">Name</label>

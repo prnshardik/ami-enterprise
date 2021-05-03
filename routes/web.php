@@ -51,7 +51,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::get('task/view/{id?}', 'TaskController@view')->name('task.view');
             Route::get('task/edit/{id?}', 'TaskController@edit')->name('task.edit');
             Route::patch('task/update', 'TaskController@update')->name('task.update');
-            Route::get('task/delete/{id?}', 'TaskController@delete')->name('task.delete');
+            Route::post('task/change-status', 'TaskController@change_status')->name('task.change.status');
         /** Task */
     });
 

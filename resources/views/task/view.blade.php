@@ -34,7 +34,7 @@
                                     <label for="users">Allocate To</label>
                                     <select name="users[]" class="form-control select2" placeholder="Plese Select Users" id="users" multiple disabled>
                                         @if(isset($users) && !empty($users))
-                                            @foreach($users AS $row)
+                                            @foreach($users as $row)
                                                 <option value="{{ $row->id }}" <?=(str_contains($data->user_id, $row->id) ? 'selected' : '')?>>{{ $row->name }}</option>
                                             @endforeach
                                         @endif
@@ -51,10 +51,14 @@
                                     <input type="date" name="t_date" id="t_date" value="{{ $data->target_date ??'' }}" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" disabled/>
                                     <span class="kt-form__help error t_date"></span>
                                 </div>
-
                                 <div class="form-group col-sm-12">
                                     <label for="file">Attechment</label>
-                                    <input type="file" name="file" id="file" class="dropify" placeholder="Plese enter target date" disabled/>
+                                    @if(isset($data->attechment) && !empty($data->attechment))
+                                        @php $file = url('/uploads/task/').'/'.$data->attechment; @endphp
+                                    @else
+                                        @php $file = ''; @endphp
+                                    @endif
+                                    <input type="file" name="file" id="file" class="dropify" data-default-file="{{ $file }}" placeholder="Plese select attachment" disabled/>
                                     <span class="kt-form__help error file"></span>
                                 </div>
                             </div>
@@ -76,19 +80,11 @@
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script>
         $(document).ready(function(){
-            $('.dropify').dropify({
-                messages: {
-                    'default': 'Drag and drop file here or click',
-                    'remove':  'Remove',
-                    'error':   'Ooops, something wrong happended.'
-                }
-            });
             var drEvent = $('.dropify').dropify();
         
-
-        $('#users').select2({
-            placeholder:"Plase Select User"
-        });
+            $('#users').select2({
+                placeholder:"Plase Select User"
+            });
         });
     </script>
    

@@ -16,10 +16,7 @@
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    
-                    $data = User::select('id', 'email', 'phone', 'status','name')
-                                    ->where(['is_admin' => 'n'])
-                                    ->get();
+                    $data = User::select('id', 'name', 'email', 'phone', 'status')->where(['is_admin' => 'n'])->get();
 
                     return Datatables::of($data)
                             ->addIndexColumn()
@@ -28,11 +25,9 @@
                                                 <a href="'.route('users.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-eye"></i>
                                                 </a> &nbsp;
-
                                                 <a href="'.route('users.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-edit"></i>
                                                 </a> &nbsp;
-                                                
                                                 <a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                                     <i class="fa fa-bars"></i>
                                                 </a> &nbsp;
@@ -45,15 +40,14 @@
                             })
 
                             ->editColumn('status', function($data) {
-                                if($data->status == 'active'){
+                                if($data->status == 'active')
                                     return '<span class="badge badge-pill badge-success">Active</span>';
-                                }else if($data->status == 'inactive'){
+                                else if($data->status == 'inactive')
                                     return '<span class="badge badge-pill badge-warning">Inactive</span>';
-                                }else if($data->status == 'deleted'){
+                                else if($data->status == 'deleted')
                                     return '<span class="badge badge-pill badge-danger">Delete</span>';
-                                }else{
+                                else
                                     return '-';
-                                }
                             })
 
                             ->rawColumns(['action', 'status'])
@@ -79,7 +73,7 @@
                     $crud = [
                             'name' => $request->name,
                             'email' => $request->email,
-                            'phone' => $request->phone ?? NULL,
+                            'phone' => $request->phone,
                             'password' => bcrypt($password),
                             'status' => 'active',
                             'is_admin' => 'n',
@@ -91,11 +85,10 @@
 
                     $user_last_id = User::insertGetId($crud);
                     
-                    if($user_last_id){
+                    if($user_last_id)
                         return redirect()->route('users')->with('success', 'User Created Successfully.');
-                    }else{
+                    else
                         return redirect()->route('users')->with('error', 'Faild To Create User!');
-                    }
                 }else{
                     return redirect()->back('users')->with('error', 'Something went wrong');
                 }
@@ -109,9 +102,7 @@
 
                 $id = base64_decode($id);
 
-                $data = User::select('id', 'name', 'email', 'phone','password')
-                        ->where(['id' => $id])
-                        ->first();
+                $data = User::select('id', 'name', 'email', 'phone')->where(['id' => $id])->first();
                 
                 if($data)
                     return view('users.view')->with('data', $data);
@@ -127,9 +118,7 @@
 
                 $id = base64_decode($id);
 
-                $data = User::select('id', 'name', 'email', 'status', 'phone')
-                        ->where(['id' => $id])
-                        ->first();
+                $data = User::select('id', 'name', 'email', 'phone', 'status')->where(['id' => $id])->first();
                 
                 if($data)
                     return view('users.edit')->with('data', $data);
@@ -143,8 +132,6 @@
                 if($request->ajax()){ return true; }
 
                 if(!empty($request->all())){
-                    $ext_user = User::where(['id' => $request->id])->first();
-
                     $crud = [
                             'name' => ucfirst($request->name),
                             'email' => $request->email,
@@ -152,17 +139,16 @@
                             'updated_at' => date('Y-m-d H:i:s'),
                             'updated_by' => auth()->user()->id
                     ];
-                    if(isset($request->password) && !empty($request->password)){
-                        $crud['password'] = bcrypt($request->password);
-                    }
                     
+                    if(isset($request->password) && !empty($request->password))
+                        $crud['password'] = bcrypt($request->password);
+
                     $update = User::where(['id' => $request->id])->update($crud);
 
-                    if($update){
+                    if($update)
                         return redirect()->route('users')->with('success', 'User Updated Successfully.');
-                    }else{
+                    else
                         return redirect()->route('users')->with('error', 'Faild To Update User!');
-                    }
                 }else{
                     return redirect()->back('users')->with('error', 'Something went wrong');
                 }
@@ -180,15 +166,11 @@
                     $data = User::where(['id' => $id])->first();
 
                     if(!empty($data)){
-                        if($status == 'deleted'){
-
+                        if($status == 'deleted')
                             $update = User::where('id',$id)->delete();
-
-                        }else{
-
+                        else
                             $update = User::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
-
-                        }
+                        
                         if($update)
                             return response()->json(['code' => 200]);
                         else
