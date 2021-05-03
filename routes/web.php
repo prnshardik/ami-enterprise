@@ -44,6 +44,10 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::get('products/delete/{id?}', 'ProductsController@delete')->name('products.delete');
         /** Products */
 
+        /** Notice-Board */
+            Route::get('notice-board', 'NoticesController@notices_board')->name('notice.board');
+        /** Notice-Board */ 
+
         /** Notice */
             Route::any('notices', 'NoticesController@index')->name('notices');
             Route::get('notices/create', 'NoticesController@create')->name('notices.create');

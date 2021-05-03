@@ -152,4 +152,11 @@
                 }
             }
         /** change-status */
+
+        /** board */
+            public function notices_board(){
+                $data = Notice::where(['status' => 'active'])->get();
+                return view('notices.board', ['data' => $data]);
+            } 
+        /** board */
     }

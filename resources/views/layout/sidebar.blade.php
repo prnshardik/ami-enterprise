@@ -36,11 +36,26 @@
                     <span class="nav-label">Tasks</span>
                 </a>
             </li>
-            <li class="{{ Request::is('notices*') ? 'active' : '' }}">
-                <a class="{{ Request::is('notices*') ? 'active' : '' }}" href="{{ route('notices') }}"><i class="sidebar-item-icon fa fa-bullhorn"></i>
+            <li class="{{ (Request::is('notices*') || Request::is('notice-board')) ? 'active' : '' }}">
+                <a href="javascript:;" aria-expanded="false">
+                    <i class="sidebar-item-icon fa fa-bullhorn"></i>
                     <span class="nav-label">Notices</span>
+                    <i class="fa fa-angle-left arrow"></i>
                 </a>
+                <ul class="nav-2-level collapse" aria-expanded="false">
+                    <li>
+                        <a class="{{ Request::is('notice-board') ? 'active' : '' }}" href="{{ route('notice.board') }}"><i class="sidebar-item-icon fa fa-bullhorn"></i>
+                            <span class="nav-label">Notices Board</span>
+                        </a>
+                    </li>
+                    <li class="{{ Request::is('notices*') ? 'active' : '' }}">
+                        <a class="{{ Request::is('notices*') ? 'active' : '' }}" href="{{ route('notices') }}"><i class="sidebar-item-icon fa fa-bullhorn"></i>
+                            <span class="nav-label">Notices</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
+
         </ul>
     </div>
 </nav>
