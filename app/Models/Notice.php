@@ -7,11 +7,11 @@
     use Illuminate\Foundation\Auth\User as Authenticatable;
     use Illuminate\Notifications\Notifiable;
 
-    class Product extends Authenticatable{
+    class Notice extends Authenticatable{
 
         use HasFactory, Notifiable;
 
-        protected $table = 'products';
-        
-        protected $fillable = ['name', 'created_by', 'created_at', 'updated_by', 'updated_at'];
+        protected $table = 'notices';
+
+        protected $fillable = ['title', 'description', 'created_by', 'created_at', 'updated_by', 'updated_at'];
     }

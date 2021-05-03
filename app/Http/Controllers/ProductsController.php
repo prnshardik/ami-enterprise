@@ -1,12 +1,10 @@
 <?php    
-    use Illuminate\Http\Request;
-    use App\Models\User;
-
 
     namespace App\Http\Controllers;
 
     use Illuminate\Http\Request;
     use App\Models\Product;
+    use App\Models\User;
     use Illuminate\Support\Str;
     use App\Http\Requests\ProductsRequest;
     use Auth, Validator, DB, Mail, DataTables;
@@ -130,7 +128,6 @@
                     return redirect()->route('products')->with('success', 'Product Deleted Successfully.');
                 else
                     return redirect()->route('products')->with('error', 'Faild To Delete Product !');
-
             }
         /** delete */
     }
