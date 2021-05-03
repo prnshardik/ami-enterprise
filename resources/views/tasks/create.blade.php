@@ -26,12 +26,12 @@
                             @csrf
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label for="title">Title</label>
+                                    <label for="title">Title <span class="text-danger">*</span></label>
                                     <input type="text" name="title" id="title" class="form-control" placeholder="Plese enter title" />
                                     <span class="kt-form__help error title"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="users">Allocate To</label>
+                                    <label for="users">Allocate To <span class="text-danger">*</span></label>
                                     <select name="users[]" class="form-control select2" placeholder="Plese Select Users" id="users" multiple>
                                         @if(isset($data) && !empty($data))
                                             @foreach($data AS $row)
@@ -42,17 +42,17 @@
                                     <span class="kt-form__help error users"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="description">Instruction</label>
+                                    <label for="description">Instruction <span class="text-danger">*</span></label>
                                     <textarea name="description" id="description" class="form-control" placeholder="Plese enter Instruction"> </textarea>
                                     <span class="kt-form__help error description"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="t_date">Taget Date</label>
+                                    <label for="t_date">Taget Date <span class="text-danger">*</span></label>
                                     <input type="date" name="t_date" id="t_date" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" />
                                     <span class="kt-form__help error t_date"></span>
                                 </div>
                                 <div class="form-group col-sm-12">
-                                    <label for="file">Attechment</label>
+                                    <label for="file">Attechment <span class="text-danger">*</span></label>
                                     <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" />
                                     <span class="kt-form__help error file"></span>
                                 </div>

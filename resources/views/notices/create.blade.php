@@ -24,14 +24,14 @@
                             
                             <div class="row">
                                 <div class="form-group col-sm-12">
-                                    <label for="title">Title</label>
+                                    <label for="title">Title <span class="text-danger">*</span></label>
                                     <input type="text" name="title" id="title" class="form-control" placeholder="Plese enter title" />
                                     <span class="kt-form__help error title"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12">
-                                    <label for="description">Description</label>
+                                    <label for="description">Description <span class="text-danger">*</span></label>
                                     <textarea name="description" id="description" class="form-control"  placeholder="Plese enter description" cols="30" rows="10"></textarea>
                                     <span class="kt-form__help error description"></span>
                                 </div>

@@ -27,17 +27,17 @@
 
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label for="name">First Name</label>
+                                    <label for="name">Name <span class="text-danger">*</span></label>
                                     <input type="text" name="name" id="name" class="form-control" placeholder="Plese enter name" value="{{ $data->name ?? '' }}" />
                                     <span class="kt-form__help error name"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="email">Email</label>
+                                    <label for="email">Email <span class="text-danger">*</span></label>
                                     <input type="text" name="email" id="email" class="form-control" placeholder="Plese enter email address" value="{{ $data->email ?? '' }}" />
                                     <span class="kt-form__help error email"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="phone">Phone Number</label>
+                                    <label for="phone">Phone Number <span class="text-danger">*</span></label>
                                     <input type="text" name="phone" id="phone" class="form-control" placeholder="Plese enter phone number" value="{{ $data->phone ?? '' }}" />
                                     <span class="kt-form__help error phone"></span>
                                 </div>

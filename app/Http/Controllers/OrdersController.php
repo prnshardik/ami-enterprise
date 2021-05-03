@@ -18,14 +18,18 @@
                     return Datatables::of($data)
                             ->addIndexColumn()
                             ->addColumn('action', function($data){
-                                return ' <div class="btn-group">
+                                $return = '<div class="btn-group">
                                                 <a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-eye"></i>
-                                                </a> &nbsp;
-                                                <a href="'.route('orders.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-edit"></i>
-                                                </a> &nbsp;
-                                                <a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                </a> &nbsp;';
+
+                                if($data->status == 'pending'){
+                                    $return .=      '<a href="'.route('orders.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a> &nbsp;';
+                                }
+                                
+                                $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                                     <i class="fa fa-bars"></i>
                                                 </a> &nbsp;
                                                 <ul class="dropdown-menu">
@@ -33,6 +37,8 @@
                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="completed" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Completed</a></li>
                                                 </ul>
                                             </div>';
+
+                                return $return;
                             })
 
                             ->editColumn('status', function($data) {
@@ -125,7 +131,6 @@
                     $crud = [
                             'name' => ucfirst($request->name),
                             'order_date' => $request->order_date,
-                            'status' => $request->status,
                             'updated_at' => date('Y-m-d H:i:s'),
                             'updated_by' => auth()->user()->id
                     ];

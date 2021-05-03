@@ -27,22 +27,14 @@
                             
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label for="name">Name</label>
+                                    <label for="name">Name <span class="text-danger">*</span></label>
                                     <input type="text" name="name" id="name" class="form-control" value="{{ $data->name ?? '' }}" placeholder="Plese enter name" />
                                     <span class="kt-form__help error name"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="order_date">Order Date</label>
+                                    <label for="order_date">Order Date <span class="text-danger">*</span></label>
                                     <input type="date" name="order_date" id="order_date" class="form-control" value="{{ $data->order_date ?? '' }}" placeholder="Plese enter order date" min="{{ Date('Y-m-d') }}" />
                                     <span class="kt-form__help error order_date"></span>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <label for="status">Status</label>
-                                    <select name="status" id="status" class="form-control">
-                                        <option value="pending" @if($data->status == 'pending') selected @endif>Pending</option>
-                                        <option value="completed" @if($data->status == 'completed') selected @endif>Completed</option>
-                                    </select>
-                                    <span class="kt-form__help error status"></span>
                                 </div>
                             </div>
                             <div class="form-group">
