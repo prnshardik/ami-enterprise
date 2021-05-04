@@ -4,7 +4,7 @@
 <head>
     @include('layout.meta')
 
-    <title>AMI Enterprise | @yield('title')</title>
+    <title>{{ _site_title() }} | @yield('title')</title>
     
     @include('layout.styles')
 

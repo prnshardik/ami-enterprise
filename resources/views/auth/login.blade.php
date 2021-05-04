@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="brand">
-        <a class="link" href="{{ route('dashboard') }}">AMI Enterprise</a>
+        <a class="link" href="{{ route('dashboard') }}">{{ _site_title() }}</a>
     </div>
     <form id="form" action="{{ route('signin') }}" method="post">
         @csrf

@@ -1,10 +1,8 @@
 <header class="header">
     <div class="page-brand">
         <a class="link" href="index.html">
-            <span class="brand">Admin
-                <span class="brand-tip">CAST</span>
-            </span>
-            <span class="brand-mini">AC</span>
+            <span class="brand">{{ _site_title() }}</span>
+            <span class="brand-mini">{{ _site_title_sf() }}</span>
         </a>
     </div>
     <div class="flexbox flex-1">

@@ -8,7 +8,7 @@
 
     @yield('meta')
 
-    <title>AMI Enterprise | @yield('title')</title>
+    <title>{{ _site_title() }} | @yield('title')</title>
     
     <link href="{{ asset('assets/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" />
