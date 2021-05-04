@@ -96,7 +96,7 @@
                                                             <input type="text" name="price[]" id="price_{{ $i }}" value="{{ $row->price }}" class="form-control digit" required>
                                                         </th>
                                                         <th style="width:10%">
-                                                            <button type="button" class="btn btn-danger delete" data-id="{{ $i }}">Remove</button>
+                                                            <button type="button" class="btn btn-danger delete" data-detail="{{ $row->id }}" data-id="{{ $i }}">Remove</button>
                                                         </th>
                                                     </tr>
                                                     @php $i++; @endphp
@@ -178,10 +178,28 @@
 
             $(document).on('click', ".delete", function () {
                 let id = $(this).data('id');
+                let detail_id = $(this).data('detail');
 
                 let con = confirm('Are you sure to delete?');
                 if (con) {
-                    $('#clone_'+id).remove();
+                    $.ajax({
+                        "url": "{!! route('orders.delete.detail') !!}",
+                        "dataType": "json",
+                        "type": "POST",
+                        "data":{
+                            id: detail_id,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function (response){
+                            if (response.code == 200){
+                                $('#clone_'+id).remove();
+                                toastr.success('Record deleted changed successfully.', 'Success');
+                            }else{
+                                toastr.error('Failed to delete record.', 'Error');
+                            }
+                        }
+                    });
+                    
                 }
             })
         });

@@ -85,6 +85,8 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::get('orders/edit/{id?}', 'OrdersController@edit')->name('orders.edit');
             Route::patch('orders/update', 'OrdersController@update')->name('orders.update');
             Route::post('orders/change-status', 'OrdersController@change_status')->name('orders.change.status');
+
+            Route::post('orders/delete-detail', 'OrdersController@delete_detail')->name('orders.delete.detail');
         /** orders */
     });
 
