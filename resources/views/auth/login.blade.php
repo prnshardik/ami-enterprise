@@ -41,6 +41,9 @@
                 @enderror
             </div>
         </div>
+        <div class="form-group d-flex justify-content-between">
+            <a href="{{ route('forget.password') }}">Forgot password?</a>
+        </div>
         <div class="form-group">
             <button class="btn btn-info btn-block" type="submit">Login</button>
         </div>
