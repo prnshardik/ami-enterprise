@@ -28,6 +28,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::get('products', 'ProductsController@products');
             Route::get('product/{id}', 'ProductsController@product');
             Route::post('product/insert', 'ProductsController@insert');
+            Route::post('product/delete', 'ProductsController@delete');
         /** products */
     });
 });

@@ -14,7 +14,7 @@
             if($products->isNotEmpty())
                 return response()->json(['status' => 200, 'message' => 'success', 'data' => $products]);
             else
-                return response()->json(['status' => 200, 'message' => 'No Products Found']);
+                return response()->json(['status' => 201, 'message' => 'No Products Found']);
         }
 
         public function product(Request $request, $id){
@@ -23,7 +23,7 @@
             if(!empty($product))
                 return response()->json(['status' => 200, 'message' => 'success', 'data' => $product]);
             else
-                return response()->json(['status' => 200, 'message' => 'No Products Found']);
+                return response()->json(['status' => 201, 'message' => 'No Products Found']);
         }
 
         public function insert(Request $request){
@@ -47,6 +47,15 @@
             if($last_id)
                 return response()->json(['status' => 200, 'message' => 'Product added successfully']);
             else
-                return response()->json(['status' => 200, 'message' => 'Something went wrong.']);
+                return response()->json(['status' => 201, 'message' => 'Something went wrong.']);
+        }
+
+        public function delete(Request $request){
+            $product = Product::where(['id' => $request->id])->delete();
+
+            if($product)
+                return response()->json(['status' => 200, 'message' => 'Product deleted successfully']);
+            else
+                return response()->json(['status' => 201, 'message' => 'No Products Found']);
         }
     }
