@@ -14,6 +14,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
+    Route::post('login', 'AuthController@login');
+
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('logout', 'AuthController@logout');
+
+        /** products */
+            Route::get('products', 'ProductsController@products');
+            Route::get('product/{id}', 'ProductsController@product');
+            Route::post('product/insert', 'ProductsController@insert');
+        /** products */
+    });
 });
+
+Route::get('/unauthenticated', function () {
+    return response()->json(['status' => 201, 'message' => 'Unacuthorized Access']);
+})->name('api.unauthenticated');
