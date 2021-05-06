@@ -4,71 +4,32 @@
 
     use App\Http\Controllers\Controller;
     use Illuminate\Http\Request;
-    use App\Models\Task;
+    use App\Models\Order;
+    use App\Models\OrderDetails;
     use Auth, DB, Validator, File;
 
-    class TasksController extends Controller{
+    class OrdersController extends Controller{
 
         /** tasks */
-            public function tasks(Request $request){
-                $path = URL('/uploads/task').'/';
-                $data = Task::select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status',
-                                        DB::Raw("CASE
-                                            WHEN ".'attechment'." != '' THEN CONCAT("."'".$path."'".", ".'attechment'.")
-                                            ELSE 'null'
-                                        END as attechment")
-                                    )
-                                ->leftjoin('users', 'task.user_id', 'users.id')
-                                ->leftjoin('users as u', 'task.created_by', 'u.id')
-                                ->get();
-
-                if(isset($data) && $data->isNotEmpty()){
-                    foreach($data as $row){
-                        $u_data = DB::select("SELECT GROUP_CONCAT(u.name SEPARATOR ', ') as names
-                                                FROM users as u
-                                                WHERE u.id IN($row->user_id)
-                                                GROUP BY 'All'");
-                        if(!empty($u_data[0])){
-                            $row->allocate_to = $u_data[0]->names;
-                        }                 
-                    }
-                }
+            public function orders(Request $request){
+                $data = Order::get();
 
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Tasks Found']);
+                    return response()->json(['status' => 201, 'message' => 'No Orders Found']);
             }
         /** tasks */
 
         /** task */
             public function task(Request $request, $id){
-                $path = URL('/uploads/task').'/';
-                $data = Task::select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status',
-                                        DB::Raw("CASE
-                                            WHEN ".'attechment'." != '' THEN CONCAT("."'".$path."'".", ".'attechment'.")
-                                            ELSE 'null'
-                                        END as attechment")
-                                    )
-                                ->leftjoin('users', 'task.user_id', 'users.id')
-                                ->leftjoin('users as u', 'task.created_by', 'u.id')
-                                ->where(['task.id' => $id])
+                $data = Order::where(['id' => $id])
                                 ->first();
-
-                if(!empty($data)){
-                    $u_data = DB::select("SELECT GROUP_CONCAT(u.name SEPARATOR ', ') as names
-                                            FROM users as u
-                                            WHERE u.id IN($data->user_id)
-                                            GROUP BY 'All'");
-                    if(!empty($u_data[0])){
-                        $data->allocate_to = $u_data[0]->names;
-                    }   
-                }
 
                 if(!empty($data))
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Task Found']);
+                    return response()->json(['status' => 201, 'message' => 'No Order Found']);
             }
         /** tasks */
 

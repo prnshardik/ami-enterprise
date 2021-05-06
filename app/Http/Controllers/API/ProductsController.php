@@ -27,7 +27,7 @@
                 if(!empty($data))
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Products Found']);
+                    return response()->json(['status' => 201, 'message' => 'No Product Found']);
             }
         /** product */
 
@@ -57,7 +57,7 @@
             }
         /** insert */
 
-        /** update */
+        /** delete */
             public function delete(Request $request){
                 $product = Product::where(['id' => $request->id])->delete();
 
@@ -66,5 +66,5 @@
                 else
                     return response()->json(['status' => 201, 'message' => 'No Products Found']);
             }
-        /** update */
+        /** delete */
     }

@@ -38,8 +38,27 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::post('task/update', 'TasksController@update');
             Route::post('task/change-status', 'TasksController@change_status');
         /** tasks */
+
+        /** my-tasks */
+            Route::get('mytasks', 'MyTasksController@tasks');
+            Route::get('mytask/{id}', 'MyTasksController@task');
+            Route::post('mytask/insert', 'MyTasksController@insert');
+            Route::post('mytask/update', 'MyTasksController@update');
+            Route::post('mytask/change-status', 'MyTasksController@change_status');
+        /** my-tasks */
+
+        /** order */
+            Route::get('orders', 'OrdersController@tasks');
+            Route::get('order/{id}', 'OrdersController@task');
+            Route::post('order/insert', 'OrdersController@insert');
+            Route::post('order/update', 'OrdersController@update');
+            Route::post('order/change-status', 'OrdersController@change_status');
+            Route::post('order/item-delete', 'OrdersController@item_delete');
+        /** order */
     });
 });
+
+Route::get("{path}", function(){ return response()->json(['status' => 500, 'message' => 'Bad request']); })->where('path', '.+');
 
 Route::get('/unauthenticated', function () {
     return response()->json(['status' => 201, 'message' => 'Unacuthorized Access']);
