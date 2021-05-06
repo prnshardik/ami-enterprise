@@ -48,8 +48,10 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
         /** my-tasks */
 
         /** order */
-            Route::get('orders', 'OrdersController@tasks');
-            Route::get('order/{id}', 'OrdersController@task');
+            Route::get('orders', 'OrdersController@orders');
+            Route::get('orders-pending', 'OrdersController@pending_orders');
+            Route::get('orders-comepleted', 'OrdersController@completed_orders');
+            Route::get('order/{id}', 'OrdersController@order');
             Route::post('order/insert', 'OrdersController@insert');
             Route::post('order/update', 'OrdersController@update');
             Route::post('order/change-status', 'OrdersController@change_status');
