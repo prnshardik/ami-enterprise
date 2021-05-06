@@ -9,33 +9,37 @@
 
     class AuthController extends Controller{
         
-        public function login(Request $request){
-            $rules = [
-                        'email' => 'required',
-                        'password' => 'required'
-                    ];
+        /** login */
+            public function login(Request $request){
+                $rules = [
+                            'email' => 'required',
+                            'password' => 'required'
+                        ];
 
-            $validator = Validator::make($request->all(), $rules);
+                $validator = Validator::make($request->all(), $rules);
 
-            if($validator->fails())
-                return response()->json(['status' => 422, 'message' => $validator->errors()]);
-            
-            $auth = auth()->attempt(['email' => $request->email, 'password' => $request->password]);
+                if($validator->fails())
+                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
+                
+                $auth = auth()->attempt(['email' => $request->email, 'password' => $request->password]);
 
-            if(!$auth){
-                return response()->json(['status' => 401, 'message' => 'Invalid login details']);
-            }else{
-                $user = User::where('email', $request->email)->firstOrFail();
+                if(!$auth){
+                    return response()->json(['status' => 401, 'message' => 'Invalid login details']);
+                }else{
+                    $user = User::where('email', $request->email)->firstOrFail();
 
-                $token = $user->createToken('auth_token')->plainTextToken;
+                    $token = $user->createToken('auth_token')->plainTextToken;
 
-                return response()->json(['status' => 200, 'message' => 'Login Successfully', 'token_type' => 'Bearer', 'access_token' => $token]);
+                    return response()->json(['status' => 200, 'message' => 'Login Successfully', 'token_type' => 'Bearer', 'access_token' => $token]);
+                }
             }
-        }
+        /** login */
 
-        public function logout(Request $request){
-            $request->user()->currentAccessToken()->delete();
+        /** logout */
+            public function logout(Request $request){
+                $request->user()->currentAccessToken()->delete();
 
-            return response()->json(['status' => 200, 'message' => 'Logout Successfully']);
-        }
+                return response()->json(['status' => 200, 'message' => 'Logout Successfully']);
+            }
+        /** logout */
     }

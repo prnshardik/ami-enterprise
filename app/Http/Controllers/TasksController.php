@@ -13,8 +13,6 @@
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-
-
                     $data = Task::select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status')
                                     ->leftjoin('users', 'task.user_id', 'users.id')
                                     ->leftjoin('users as u', 'task.created_by', 'u.id')

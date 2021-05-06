@@ -30,6 +30,14 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::post('product/insert', 'ProductsController@insert');
             Route::post('product/delete', 'ProductsController@delete');
         /** products */
+
+        /** tasks */
+            Route::get('tasks', 'TasksController@tasks');
+            Route::get('task/{id}', 'TasksController@task');
+            Route::post('task/insert', 'TasksController@insert');
+            Route::post('task/update', 'TasksController@update');
+            Route::post('task/change-status', 'TasksController@change_status');
+        /** tasks */
     });
 });
 
