@@ -57,6 +57,22 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::post('order/change-status', 'OrdersController@change_status');
             Route::post('order/item-delete', 'OrdersController@item_delete');
         /** order */
+
+         /** Users */
+            Route::get('users', 'UsersController@users');
+            Route::post('users/insert', 'UsersController@insert');
+            Route::get('users/view/{id?}', 'UsersController@view');
+            Route::post('users/update', 'UsersController@update');
+            Route::post('users/change-status', 'UsersController@change_status');
+        /** Users */
+
+         /** Notice */
+            Route::get('notice', 'NoticeController@notice');
+            Route::post('notice/insert', 'NoticeController@insert');
+            Route::get('notice/view/{id?}', 'NoticeController@view');
+            Route::post('notice/update', 'NoticeController@update');
+            Route::post('notice/change-status', 'NoticeController@change_status');
+        /** Notice */
     });
 });
 
