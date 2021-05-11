@@ -31,6 +31,11 @@
                     <span class="nav-label">Products</span>
                 </a>
             </li>
+            <li class="{{ Request::is('customers*') ? 'active' : '' }}">
+                <a class="{{ Request::is('customers*') ? 'active' : '' }}" href="{{ route('customers') }}"><i class="sidebar-item-icon fa fa-users"></i>
+                    <span class="nav-label">Customers</span>
+                </a>
+            </li>
             <li class="{{ Request::is('orders*') ? 'active' : '' }}">
                 <a class="{{ Request::is('orders*') ? 'active' : '' }}" href="{{ route('orders') }}"><i class="sidebar-item-icon fa fa-shopping-basket"></i>
                     <span class="nav-label">Orders</span>

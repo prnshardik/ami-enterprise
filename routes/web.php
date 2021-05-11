@@ -50,6 +50,16 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::get('products/delete/{id?}', 'ProductsController@delete')->name('products.delete');
         /** Products */
 
+        /** customers */
+            Route::any('customers', 'CustomerController@index')->name('customers');
+            Route::get('customers/create', 'CustomerController@create')->name('customers.create');
+            Route::post('customers/insert', 'CustomerController@insert')->name('customers.insert');
+            Route::get('customers/view/{id?}', 'CustomerController@view')->name('customers.view');
+            Route::get('customers/edit/{id?}', 'CustomerController@edit')->name('customers.edit');
+            Route::patch('customers/update', 'CustomerController@update')->name('customers.update');
+            Route::post('customers/change-status', 'CustomerController@change_status')->name('customers.change.status');
+        /** customers */
+
         /** Notice */
             Route::any('notices', 'NoticesController@index')->name('notices');
             Route::get('notices/create', 'NoticesController@create')->name('notices.create');
