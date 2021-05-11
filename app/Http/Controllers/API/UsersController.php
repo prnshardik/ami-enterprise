@@ -108,52 +108,37 @@
 
         /** change-status */
             public function change_status(Request $request){
-                     /**
-                            Status = [
-                                active, 
-                                inactive,
-                                deleted
-                            ] 
-                     **/
-                    $rules = [
-                        'id' => 'required',
-                        'status' => 'required'
-                    ];
+                $rules = [
+                    'id' => 'required',
+                    'status' => 'required'
+                ];
 
-                    $validator = Validator::make($request->all(), $rules);
+                $validator = Validator::make($request->all(), $rules);
 
-                    if($validator->fails()){
-                        return response()->json(['status' => 422, 'message' => $validator->errors()]);
-                    }
+                if($validator->fails())
+                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
 
-                    $id = $request->id;
-                    $status = $request->status;
+                $data = User::where(['id' => $request->id])->first();
 
-                    $data = User::where(['id' => $id])->first();
-
-                    if(!empty($data)){
-                        if($status == 'deleted'){
-                            $update = User::where('id',$id)->delete();
-                            if($update){
-                                return response()->json(['status' => 200 ,'message' => 'Record Deleted Successfully.']);
-                            }
-                            else{
-                                return response()->json(['status' => 201, 'message' => 'Faild To Delete Record !']);
-                            }
-
-
-                        }else{
-                            $update = User::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
+                if(!empty($data)){
+                    if($request->status == 'deleted'){
+                        $update = User::where('id', $request->id)->delete();
                         
-                            if($update){
-                                return response()->json(['status' => 200 ,'message' => 'Status Change Successfully.']);
-                            }else{
-                                return response()->json(['status' => 201, 'message' => 'Faild To Update User Status']);
-                            }
-                        }
+                        if($update)
+                            return response()->json(['status' => 200 ,'message' => 'Record deleted successfully.']);
+                        else
+                            return response()->json(['status' => 201, 'message' => 'Faild to delete record !']);
                     }else{
-                        return response()->json(['status' => 201, 'message' => 'Somthing Went Wrong !']);
+                        $update = User::where(['id' => $request->id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
+                    
+                        if($update)
+                            return response()->json(['status' => 200 ,'message' => 'Status change successfully.']);
+                        else
+                            return response()->json(['status' => 201, 'message' => 'Faild to update status']);
                     }
+                }else{
+                    return response()->json(['status' => 201, 'message' => 'Somthing went wrong !']);
+                }
             }
         /** change-status */
     }

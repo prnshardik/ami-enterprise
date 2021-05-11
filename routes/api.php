@@ -32,6 +32,14 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::post('product/delete', 'ProductsController@delete');
         /** products */
 
+        /** customers */
+            Route::get('customers', 'CustomersController@customers');
+            Route::get('customer/{id}', 'CustomersController@customer');
+            Route::post('customer/insert', 'CustomersController@insert');
+            Route::post('customer/update', 'CustomersController@update');
+            Route::post('customer/change-status', 'CustomersController@change_status');
+        /** customers */
+
         /** tasks */
             Route::get('tasks', 'TasksController@tasks');
             Route::get('task/{id}', 'TasksController@task');
