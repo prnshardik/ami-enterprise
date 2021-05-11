@@ -31,6 +31,31 @@
                                     <input type="text" name="name" id="name" class="form-control" value="{{ $data->name ?? '' }}" placeholder="Plese enter name" />
                                     <span class="kt-form__help error name"></span>
                                 </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="quantity">Quantity <span class="text-danger">*</span></label>
+                                    <input type="text" name="quantity" id="quantity" class="form-control digits" value="{{ $data->quantity ?? '' }}" placeholder="Plese enter quantity" />
+                                    <span class="kt-form__help error quantity"></span>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="unit">Unit <span class="text-danger">*</span></label>
+                                    <input type="text" name="unit" id="unit" class="form-control" value="{{ $data->unit ?? '' }}" placeholder="Plese enter unit" />
+                                    <span class="kt-form__help error unit"></span>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="color">Color <span class="text-danger">*</span></label>
+                                    <input type="text" name="color" id="color" class="form-control" value="{{ $data->color ?? '' }}" placeholder="Plese enter color" />
+                                    <span class="kt-form__help error color"></span>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="price">Price <span class="text-danger">*</span></label>
+                                    <input type="text" name="price" id="price" class="form-control digits" value="{{ $data->price ?? '' }}" placeholder="Plese enter price" />
+                                    <span class="kt-form__help error price"></span>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="note">Note <span class="text-danger"></span></label>
+                                    <input type="text" name="note" id="note" class="form-control" value="{{ $data->note ?? '' }}" placeholder="Plese enter note" />
+                                    <span class="kt-form__help error note"></span>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -45,6 +70,16 @@
 @endsection
 
 @section('scripts')
+    <script>
+        $(document).ready(function () {
+            $('.digits').keyup(function(e){
+                if (/\D/g.test(this.value)){
+                    this.value = this.value.replace(/\D/g, '');
+                }
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function () {
             var form = $('#form');

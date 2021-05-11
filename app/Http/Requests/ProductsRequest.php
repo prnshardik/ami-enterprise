@@ -12,11 +12,19 @@
         public function rules(){
             if($this->method() == 'PATCH'){
                 return [
-                    'name' => 'required|unique:products,name,'.$this->id
+                    'name' => 'required|unique:products,name,'.$this->id,
+                    'quantity' => 'required',
+                    'unit' => 'required',
+                    'color' => 'required',
+                    'price' => 'required'
                 ];
             }else{
                 return [
-                    'name' => 'required|unique:products,name'
+                    'name' => 'required|unique:products,name',
+                    'quantity' => 'required',
+                    'unit' => 'required',
+                    'color' => 'required',
+                    'price' => 'required'
                 ];
             }
         }
@@ -24,7 +32,11 @@
         public function messages(){
             return [
                 'name.required' => 'Please enter name',
-                'name.unique' => 'Prodcut name is already registered Please use another one'
+                'name.unique' => 'Prodcut name is already exists, please use another one',
+                'quantity.required' => 'Please enter quantity',
+                'unit.required' => 'Please enter unit',
+                'color.required' => 'Please enter color',
+                'price.required' => 'Please enter price'
             ];
         }
     }

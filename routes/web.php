@@ -44,6 +44,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::any('products', 'ProductsController@index')->name('products');
             Route::get('products/create', 'ProductsController@create')->name('products.create');
             Route::post('products/insert', 'ProductsController@insert')->name('products.insert');
+            Route::get('products/view/{id?}', 'ProductsController@view')->name('products.view');
             Route::get('products/edit/{id?}', 'ProductsController@edit')->name('products.edit');
             Route::patch('products/update', 'ProductsController@update')->name('products.update');
             Route::get('products/delete/{id?}', 'ProductsController@delete')->name('products.delete');

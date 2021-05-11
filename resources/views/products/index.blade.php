@@ -27,6 +27,10 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th>Color</th>
+                                    <th>Price</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -88,6 +92,22 @@
                         {
                             data: 'name',
                             name: 'name'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'unit',
+                            name: 'unit'
+                        },
+                        {
+                            data: 'color',
+                            name: 'color'
+                        },
+                        {
+                            data: 'price',
+                            name: 'price'
                         },
                         {
                             data: 'action',

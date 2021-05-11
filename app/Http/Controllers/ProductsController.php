@@ -14,12 +14,15 @@
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    $data = Product::select('id', 'name')->get();
+                    $data = Product::select('id', 'name', 'quantity', 'unit', 'color', 'price')->get();
 
                     return Datatables::of($data)
                             ->addIndexColumn()
                             ->addColumn('action', function($data){
                                 return ' <div class="btn-group">
+                                                <a href="'.route('products.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-eye"></i>
+                                                </a> &nbsp;
                                                 <a href="'.route('products.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-edit"></i>
                                                 </a> &nbsp;
@@ -61,6 +64,11 @@
                 if(!empty($request->all())){
                     $crud = [
                             'name' => ucfirst($request->name),
+                            'quantity' => $request->quantity, 
+                            'unit' => $request->unit, 
+                            'color' => $request->color, 
+                            'price' => $request->price, 
+                            'note' => $request->note ?? NULL,
                             'created_at' => date('Y-m-d H:i:s'),
                             'created_by' => auth()->user()->id,
                             'updated_at' => date('Y-m-d H:i:s'),
@@ -86,7 +94,7 @@
 
                 $id = base64_decode($id);
 
-                $data = Product::select('id', 'name')->where(['id' => $id])->first();
+                $data = Product::select('id', 'name', 'quantity', 'unit', 'color', 'price', 'note')->where(['id' => $id])->first();
                 
                 if($data)
                     return view('products.edit')->with('data', $data);
@@ -102,6 +110,11 @@
                 if(!empty($request->all())){
                     $crud = [
                             'name' => ucfirst($request->name),
+                            'quantity' => $request->quantity, 
+                            'unit' => $request->unit, 
+                            'color' => $request->color, 
+                            'price' => $request->price, 
+                            'note' => $request->note ?? NULL,
                             'updated_at' => date('Y-m-d H:i:s'),
                             'updated_by' => auth()->user()->id
                     ];
@@ -117,6 +130,22 @@
                 }
             }
         /** update */
+
+        /** view */
+            public function view(Request $request, $id=''){
+                if($id == '')
+                    return redirect()->route('products')->with('error', 'Something went wrong Found');
+
+                $id = base64_decode($id);
+
+                $data = Product::select('id', 'name', 'quantity', 'unit', 'color', 'price', 'note')->where(['id' => $id])->first();
+                
+                if($data)
+                    return view('products.view')->with('data', $data);
+                else
+                    return redirect()->route('products')->with('error', 'No Product Found');
+            }
+        /** view */ 
 
         /** delete */
             public function delete(Request $request){
