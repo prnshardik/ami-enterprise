@@ -68,9 +68,15 @@
             ]);
 
             $mailData = array('from_email' => 'info@amienterprise.com', 'email' => $request->email, 'link' => $link);
-            Mail::to($request->email)->send(new ForgetPassword($mailData));
+            
+            try{
+                Mail::to($request->email)->send(new ForgetPassword($mailData));
 
-            return redirect()->route('login')->with('success', 'please check your email and follow steps for reset password');
+                return redirect()->route('login')->with('success', 'please check your email and follow steps for reset password');
+            }catch(\Exception $e){
+                DB::table('password_resets')->where(['email' => $request->email])->delete();
+                return redirect()->route('login')->with('success', 'something went wrong, please try again later');
+            }
         }
 
         public function reset_password(Request $request, $string){
