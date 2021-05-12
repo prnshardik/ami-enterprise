@@ -17,8 +17,8 @@ class CreateOrdersDetailsTable extends Migration
             $table->id();
             $table->bigInteger('order_id')->nullable()->unsigned();
             $table->bigInteger('product_id')->nullable()->unsigned();
-            $table->string('quantity');
-            $table->string('price');
+            $table->string('quantity')->nullable();
+            $table->string('price')->nullable();
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

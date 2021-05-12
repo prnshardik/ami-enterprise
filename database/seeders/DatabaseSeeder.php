@@ -10,6 +10,10 @@ class DatabaseSeeder extends Seeder{
             UserSeeder::class,
             ProductSeeder::class,
             OrderSeeder::class,
+            CustomerSeeder::class,
+            TaskSeeder::class,
+            MyTaskSeeder::class,
+            NoticeSeeder::class,
         ]);
     }
 }

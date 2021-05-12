@@ -11,7 +11,7 @@
         public function run(){
             for($i=1; $i<=3; $i++){
                 $order_id = Order::insertGetId([
-                    'name' => 'Order '.$i,
+                    'name' => "Order $i",
                     'order_date' => date('Y-m-d'),
                     'status' => 'pending',
                     'created_at' => date('Y-m-d H:i:s'),

@@ -13,12 +13,12 @@
                 $k = array_rand($colors);
 
                 Product::create([
-                    'name' => 'Product '.$i,
+                    'name' => "Product $i",
                     'quantity' => 5 * $i,
                     'unit' => 5 * $i,
                     'color' => $colors[$k],
                     'price' => 5 * $i,
-                    'note' => 'lorem ipsum '.$i,
+                    'note' => "lorem ipsum $i",
                     'created_at' => date('Y-m-d H:i:s'),
                     'created_by' => 1,
                     'updated_at' => date('Y-m-d H:i:s'),
