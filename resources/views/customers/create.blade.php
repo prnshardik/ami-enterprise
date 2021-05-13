@@ -54,27 +54,27 @@
                                     <span class="kt-form__help error delivery_address"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="electrician">Electrician <span class="text-danger">*</span></label>
+                                    <label for="electrician">Electrician <span class="text-danger"></span></label>
                                     <input type="text" name="electrician" id="electrician" class="form-control" placeholder="Plese enter electrician" />
                                     <span class="kt-form__help error electrician"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="electrician_number">Electrician number <span class="text-danger">*</span></label>
+                                    <label for="electrician_number">Electrician number <span class="text-danger"></span></label>
                                     <input type="text" name="electrician_number" id="electrician_number" class="form-control digits" placeholder="Plese enter electrician number" />
                                     <span class="kt-form__help error electrician_number"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="architect">Architect <span class="text-danger">*</span></label>
+                                    <label for="architect">Architect <span class="text-danger"></span></label>
                                     <input type="text" name="architect" id="architect" class="form-control" placeholder="Plese enter architect" />
                                     <span class="kt-form__help error architect"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="architect_number">Architect number <span class="text-danger">*</span></label>
+                                    <label for="architect_number">Architect number <span class="text-danger"></span></label>
                                     <input type="text" name="architect_number" id="architect_number" class="form-control digits" placeholder="Plese enter architect number" />
                                     <span class="kt-form__help error architect_number"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="office_contact_person">Office contact person <span class="text-danger">*</span></label>
+                                    <label for="office_contact_person">Office contact person <span class="text-danger"></span></label>
                                     <input type="text" name="office_contact_person" id="office_contact_person" class="form-control" placeholder="Plese enter office contact person" />
                                     <span class="kt-form__help error office_contact_person"></span>
                                 </div>

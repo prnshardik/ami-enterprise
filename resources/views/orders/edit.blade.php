@@ -8,6 +8,14 @@
 @endsection
 
 @section('styles')
+    <link href="{{ asset('assets/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/main.min.css') }}" rel="stylesheet" />
+
+    <style>
+        .select2-container--default .select2-selection--single{
+            height: 35px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -28,12 +36,19 @@
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="name">Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="name" id="name" class="form-control" value="{{ $data->name ?? '' }}" placeholder="Plese enter name" />
+                                    <select name="name" id="name" class="form-control select2_demo_2" placeholder="Plese enter name">
+                                        <option></option>
+                                        @if(isset($customers) && $customers->isNotEmpty())
+                                            @foreach($customers as $row)
+                                                <option value="{{ $row->party_name }}" @if(isset($data) && $data->name != '' && $data->name == $row->party_name) selected @endif>{{ $row->party_name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
                                     <span class="kt-form__help error name"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="order_date">Order Date <span class="text-danger">*</span></label>
-                                    <input type="date" name="order_date" id="order_date" class="form-control" value="{{ $data->order_date ?? '' }}" placeholder="Plese enter order date" min="{{ Date('Y-m-d') }}" />
+                                    <input type="date" name="order_date" id="order_date" class="form-control" value="{{ $data->order_date ?? '' }}" placeholder="Plese enter order date" />
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                             </div>
@@ -119,9 +134,12 @@
 @endsection
 
 @section('scripts')
-<script>
+    <script src="{{ asset('assets/vendors/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets/js/scripts/form-plugins.js') }}"></script>
+    
+    <script>
         $(document).ready(function() {
-            $('.digit').keyup(function(e)                                {
+            $('.digit').keyup(function(e){
                 if (/\D/g.test(this.value)){
                     this.value = this.value.replace(/\D/g, '');
                 }

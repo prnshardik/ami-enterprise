@@ -10,7 +10,6 @@
     use Auth, Validator, DB, Mail, DataTables;
 
     class CustomerController extends Controller{
-
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
@@ -97,6 +96,42 @@
                 }
             }
         /** insert */
+
+        /** insert-ajax */
+            public function insert_ajax(CustomerRequest $request){
+                if(!$request->ajax()){ return true; }
+
+                if(!empty($request->all())){
+                    $crud = [
+                            'party_name' => ucfirst($request->party_name),
+                            'billing_name' => $request->billing_name,
+                            'contact_person' => $request->contact_person,
+                            'mobile_number' => $request->mobile_number,
+                            'billing_address' => $request->billing_address,
+                            'delivery_address' => $request->delivery_address,
+                            'electrician' => $request->electrician ?? null,
+                            'electrician_number' => $request->electrician_number ?? null,
+                            'architect' => $request->architect ?? null,
+                            'architect_number' => $request->architect_number ?? null,
+                            'office_contact_person' => $request->office_contact_person ?? null,
+                            'status' => 'active',
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'created_by' => auth()->user()->id,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            'updated_by' => auth()->user()->id
+                    ];
+
+                    $last_id = Customer::insertGetId($crud);
+                    
+                    if($last_id)
+                        return response()->json(['code' => 200]);
+                    else
+                        return response()->json(['code' => 201]);
+                }else{
+                    return response()->json(['code' => 201]);
+                }
+            }
+        /** insert-ajax */
 
         /** edit */
             public function edit(Request $request, $id=''){

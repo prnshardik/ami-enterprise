@@ -58,6 +58,8 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::get('customers/edit/{id?}', 'CustomerController@edit')->name('customers.edit');
             Route::patch('customers/update', 'CustomerController@update')->name('customers.update');
             Route::post('customers/change-status', 'CustomerController@change_status')->name('customers.change.status');
+
+            Route::post('customers/insert-ajax', 'CustomerController@insert_ajax')->name('customers.insert.ajax');
         /** customers */
 
         /** Notice */

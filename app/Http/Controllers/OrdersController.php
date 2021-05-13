@@ -6,12 +6,12 @@
     use App\Models\Order;
     use App\Models\OrderDetails;
     use App\Models\Product;
+    use App\Models\Customer;
     use Illuminate\Support\Str;
     use App\Http\Requests\OrderRequest;
     use Auth, Validator, DB, Mail, DataTables;
 
     class OrdersController extends Controller{
-
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
@@ -57,8 +57,9 @@
         /** create */
             public function create(Request $request){
                 $products = Product::select('id', 'name')->get();
+                $customers = Customer::select('id', 'party_name')->where(['status' => 'active'])->get();
 
-                return view('orders.create', ['products' => $products]);
+                return view('orders.create', ['products' => $products, 'customers' => $customers]);
             }
         /** create */
 
@@ -153,6 +154,7 @@
                 $id = base64_decode($id);
 
                 $products = Product::select('id', 'name')->get();
+                $customers = Customer::select('id', 'party_name')->where(['status' => 'active'])->get();
 
                 $data = Order::select('id', 'name', 'order_date')->where(['id' => $id])->first();
                 
@@ -168,7 +170,7 @@
                     else
                         $data->order_details = collect();
 
-                    return view('orders.edit', ['products' => $products, 'data' => $data]);
+                    return view('orders.edit', ['products' => $products, 'data' => $data, 'customers' => $customers]);
                 }else{
                     return redirect()->route('orders')->with('error', 'No Order Found');
                 }
