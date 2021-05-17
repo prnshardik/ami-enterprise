@@ -43,6 +43,17 @@
             }
         /** completed-orders */
 
+        /** completed-delivered */
+            public function delivered_orders(Request $request){
+                $data = Order::select('id', 'name', 'order_date', 'status')->where(['status' => 'delivered'])->get();
+
+                if($data->isNotEmpty())
+                    return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
+                else
+                    return response()->json(['status' => 201, 'message' => 'No Orders Found']);
+            }
+        /** completed-delivered */
+
         /** order */
             public function order(Request $request, $id){
                 $data = Order::select('id', 'name', 'order_date', 'status')->where(['id' => $id])->first();
@@ -253,10 +264,60 @@
                     if($delete)
                         return response()->json(['status' => 200, 'message' => 'Order item delete successfully']);
                     else
-                        return response()->json(['status' => 200, 'message' => 'Failed to detele order item']);
+                        return response()->json(['status' => 201, 'message' => 'Failed to detele order item']);
                 }else{
-                    return response()->json(['status' => 200, 'message' => 'Something went wrong']);
+                    return response()->json(['status' => 201, 'message' => 'Something went wrong']);
                 }
             }
         /** item-delete */
+
+        /** order-deliver */
+            public function deliver(Request $request){ 
+                $rules = [
+                    'id' => 'required',
+                    'file' => 'mimes:jpeg,jpg,png,gif|required|max:5000' 
+                ];
+
+                $validator = Validator::make($request->all(), $rules);
+
+                if($validator->fails())
+                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
+
+                $data = Order::where(['id' => $request->id, 'status' => 'completed'])->first();
+                
+                if($data == null && empty($data))
+                    return response()->json(['status' => 201, 'message' => 'order is not completed, please first complete order']);
+
+                $crud = [
+                    'status' => 'delivered'  
+                ];
+
+                if(!empty($request->file('file'))){
+                    $file = $request->file('file');
+                    $filenameWithExtension = $request->file('file')->getClientOriginalName();
+                    $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
+                    $extension = $request->file('file')->getClientOriginalExtension();
+                    $filenameToStore = time()."_".$filename.'.'.$extension;
+
+                    $folder_to_upload = public_path().'/uploads/order/';
+
+                    if (!\File::exists($folder_to_upload)) {
+                        \File::makeDirectory($folder_to_upload, 0777, true, true);
+                    }
+
+                    $crud["file"] = $filenameToStore;
+                }
+
+                $update = Order::where(['id' => $request->id])->update($crud);
+
+                if($update){
+                    if(!empty($request->file('file')))
+                        $file->move($folder_to_upload, $filenameToStore);
+                    
+                    return response()->json(['status' => 200, 'message' => 'Order deliver successfully']);
+                }else{
+                    return response()->json(['status' => 201, 'message' => 'Something went wrong']);
+                }
+            }
+        /** order-deliver */
     }

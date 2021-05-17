@@ -60,11 +60,13 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::get('orders', 'OrdersController@orders');
             Route::get('orders-pending', 'OrdersController@pending_orders');
             Route::get('orders-comepleted', 'OrdersController@completed_orders');
+            Route::get('orders-delivered', 'OrdersController@delivered_orders');
             Route::get('order/{id}', 'OrdersController@order');
             Route::post('order/insert', 'OrdersController@insert');
             Route::post('order/update', 'OrdersController@update');
             Route::post('order/change-status', 'OrdersController@change_status');
             Route::post('order/item-delete', 'OrdersController@item_delete');
+            Route::post('order/deliver', 'OrdersController@deliver');
         /** order */
 
          /** Users */

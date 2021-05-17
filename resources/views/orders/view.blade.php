@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="page-content fade-in-up">
-        <div class="row">
+        <div class="row" id="printableArea">
             <div class="col-md-12">
                 <div class="ibox">
                     <div class="ibox-head">
@@ -80,9 +80,26 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <input type="button" class="btn btn-primary" style="cursor:pointer" onclick="printDiv('printableArea')" value="Print" />
+            </div>
+        </div>
     </div>
 @endsection
 
 @section('scripts')
+    <script>
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+        }
+    </script>
 @endsection
 

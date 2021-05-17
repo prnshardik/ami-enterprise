@@ -20,28 +20,33 @@
                     return Datatables::of($data)
                             ->addIndexColumn()
                             ->addColumn('action', function($data){
-                                return '<div class="btn-group">
+                                $return = '<div class="btn-group">
                                                 <a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-eye"></i>
-                                                </a> &nbsp;
-                                                <a href="'.route('orders.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a> &nbsp;
-                                                <a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                    <i class="fa fa-bars"></i>
-                                                </a> &nbsp;
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="pending" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Pending</a></li>
-                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="completed" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Completed</a></li>
-                                                </ul>
-                                            </div>';
+                                                </a> &nbsp;';
+                                if($data->status != 'delivered'){
+                                    $return .= '<a href="'.route('orders.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-edit"></i>
+                                                </a> &nbsp;';
+                                    $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                                    <i class="fa fa-bars"></i>
+                                                                </a> &nbsp;
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="pending" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Pending</a></li>
+                                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="completed" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Completed</a></li>
+                                                                </ul>
+                                                            </div>';
+                                }
+                                return $return;
                             })
 
                             ->editColumn('status', function($data) {
                                 if($data->status == 'pending')
-                                    return '<span class="badge badge-pill badge-success">Pending</span>';
+                                    return '<span class="badge badge-pill badge-info">Pending</span>';
                                 else if($data->status == 'completed')
                                     return '<span class="badge badge-pill badge-warning">Completed</span>';
+                                else if($data->status == 'delivered')
+                                    return '<span class="badge badge-pill badge-success">Completed</span>';
                                 else
                                     return '-';
                             })
