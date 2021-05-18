@@ -17,7 +17,7 @@
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Orders Found']);
+                    return response()->json(['status' => 201, 'message' => 'No orders found']);
             }
         /** orders */
 
@@ -28,7 +28,7 @@
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Orders Found']);
+                    return response()->json(['status' => 201, 'message' => 'No orders found']);
             }
         /** pending-orders */
 
@@ -39,7 +39,7 @@
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Orders Found']);
+                    return response()->json(['status' => 201, 'message' => 'No orders found']);
             }
         /** completed-orders */
 
@@ -50,7 +50,7 @@
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Orders Found']);
+                    return response()->json(['status' => 201, 'message' => 'No orders found']);
             }
         /** completed-delivered */
 
@@ -72,7 +72,7 @@
 
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 }else{
-                    return response()->json(['status' => 201, 'message' => 'No Order Found']);
+                    return response()->json(['status' => 201, 'message' => 'No order found']);
                 }
             }
         /** order */

@@ -90,9 +90,9 @@
                     if($last_id)
                         return redirect()->route('customers')->with('success', 'Customer created successfully.');
                     else
-                        return redirect()->route('customers')->with('error', 'Faild To create customer!');
+                        return redirect()->back()->with('error', 'Faild to create customer!')->withInput();
                 }else{
-                    return redirect()->route('customers')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** insert */
@@ -136,7 +136,7 @@
         /** edit */
             public function edit(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('customers')->with('error', 'Something went wrong found');
+                    return redirect()->route('customers')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -178,9 +178,9 @@
                     if($update)
                         return redirect()->route('customers')->with('success', 'Customer updated successfully.');
                     else
-                        return redirect()->route('customers')->with('error', 'Faild to update customer!');
+                        return redirect()->back()->with('error', 'Faild to update customer!')->withInput();
                 }else{
-                    return redirect()->route('customers')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** update */
@@ -188,7 +188,7 @@
         /** view */
             public function view(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('customers')->with('error', 'Something went wrong found');
+                    return redirect()->route('customers')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -200,7 +200,7 @@
                 if($data)
                     return view('customers.view')->with('data', $data);
                 else
-                    return redirect()->route('customers')->with('error', 'No customer Found');
+                    return redirect()->route('customers')->with('error', 'No customer found');
             }
         /** view */ 
 

@@ -16,7 +16,7 @@
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Users Found']);
+                    return response()->json(['status' => 201, 'message' => 'No users found']);
             }
         /** index */
 
@@ -53,9 +53,9 @@
                     $user_last_id = User::insertGetId($crud);
                     
                     if($user_last_id)
-                        return response()->json(['status' => 200, 'message' => 'User Created Successfully.' ,'id' => $user_last_id]);
+                        return response()->json(['status' => 200, 'message' => 'User created successfully.' ,'id' => $user_last_id]);
                     else
-                        return response()->json(['status' => 201, 'message' => 'Faild To Create User !']);
+                        return response()->json(['status' => 201, 'message' => 'Faild to create user!']);
                 
             }
         /** insert */
@@ -66,9 +66,9 @@
                 $data = User::where(['id' => $id])->first();
                 
                 if($data)
-                    return response()->json(['status' => 200, 'message' => 'User Found' ,'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'User found' ,'data' => $data]);
                 else
-                    return response()->json(['status' => 404, 'message' => 'User Not Found !']);
+                    return response()->json(['status' => 404, 'message' => 'User not found!']);
             }
         /** view */
 
@@ -99,9 +99,9 @@
 
                 $update = User::where(['id' => $request->id])->update($crud);
                 if($update)
-                    return response()->json(['status' => 200, 'message' => 'User Updated Successfully.']);
+                    return response()->json(['status' => 200, 'message' => 'User updated successfully.']);
                 else
-                    return response()->json(['status' => 404, 'message' => 'Faild To Update User !']);
+                    return response()->json(['status' => 404, 'message' => 'Faild to update user!']);
                 
             }
         /** update */

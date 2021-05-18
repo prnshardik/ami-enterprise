@@ -154,7 +154,7 @@
                         if($update)
                             return response()->json(['status' => 200 ,'message' => 'Status change successfully.']);
                         else
-                            return response()->json(['status' => 201, 'message' => 'Faild to update status']);
+                            return response()->json(['status' => 201, 'message' => 'Faild to change status']);
                     }
                 }else{
                     return response()->json(['status' => 201, 'message' => 'Somthing went wrong !']);

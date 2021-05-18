@@ -111,12 +111,12 @@
                         if(!empty($request->file('file')))
                             $file->move($folder_to_upload, $filenameToStore);
 
-                        return redirect()->route('mytasks')->with('success', 'Task Created Successfully.');
+                        return redirect()->route('mytasks')->with('success', 'Task created successfully.');
                     }else{
-                        return redirect()->route('mytasks')->with('error', 'Faild To Create Task!');
+                        return redirect()->back()->with('error', 'Faild to create task!')->withInput();
                     }
                 }else{
-                    return redirect()->route('mytasks')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** insert */
@@ -124,7 +124,7 @@
         /** view */
             public function view(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('mytasks')->with('error', 'Something went wrong Found');
+                    return redirect()->route('mytasks')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -134,14 +134,14 @@
                 if($data)
                     return view('mytasks.view')->with(['users' => $users, 'data' => $data]);
                 else
-                    return redirect()->route('mytasks')->with('error', 'No Task Found');
+                    return redirect()->route('mytasks')->with('error', 'No task found');
             }
         /** view */
 
         /** edit */
             public function edit(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('mytask')->with('error', 'Something went wrong Found');
+                    return redirect()->route('mytask')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -150,7 +150,7 @@
                 if($data)
                     return view('mytasks.edit')->with(['data' => $data]);
                 else
-                    return redirect()->route('mytasks')->with('error', 'No Task Found');
+                    return redirect()->route('mytasks')->with('error', 'No task found');
             }
         /** edit */ 
 
@@ -199,12 +199,12 @@
                             }
                         }
 
-                        return redirect()->route('mytasks')->with('success', 'Task Updated Successfully.');
+                        return redirect()->route('mytasks')->with('success', 'Task updated successfully.');
                     }else{
-                        return redirect()->route('mytasks')->with('error', 'Faild To Update Task!');
+                        return redirect()->back()->with('error', 'Faild to update task!')->withInput();
                     }
                 }else{
-                    return redirect()->route('mytasks')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** update */

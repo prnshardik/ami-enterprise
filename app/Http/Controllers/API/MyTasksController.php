@@ -25,7 +25,7 @@
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Tasks Found']);
+                    return response()->json(['status' => 201, 'message' => 'No tasks found']);
             }
         /** tasks */
 
@@ -45,7 +45,7 @@
                 if(!empty($data))
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Task Found']);
+                    return response()->json(['status' => 201, 'message' => 'No task found']);
             }
         /** tasks */
 

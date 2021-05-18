@@ -108,17 +108,17 @@
                             }
 
                             DB::commit();
-                            return redirect()->route('orders')->with('success', 'Order Created Successfully.');
+                            return redirect()->route('orders')->with('success', 'Order created successfully.');
                         }else{
                             DB::rollback();
-                            return redirect()->route('orders')->with('error', 'Faild To Create Order!');
+                            return redirect()->back()->with('error', 'Faild to create order!')->withInput();
                         }
                     } catch (\Exception $e) {
                         DB::rollback();
-                        return redirect()->route('orders')->with('error', 'Faild To Create Order!');
+                        return redirect()->back()->with('error', 'Faild to create order!')->withInput();
                     }
                 }else{
-                    return redirect()->route('orders')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** insert */
@@ -126,7 +126,7 @@
         /** view */
             public function view(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('orders')->with('error', 'Something went wrong Found');
+                    return redirect()->route('orders')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -146,7 +146,7 @@
                     
                        return view('orders.view')->with('data', $data);
                 }else{
-                    return redirect()->route('orders')->with('error', 'No Order Found');
+                    return redirect()->route('orders')->with('error', 'No order found');
                 }
             }
         /** view */ 
@@ -154,7 +154,7 @@
         /** edit */
             public function edit(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('orders')->with('error', 'Something went wrong Found');
+                    return redirect()->route('orders')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -177,7 +177,7 @@
 
                     return view('orders.edit', ['products' => $products, 'data' => $data, 'customers' => $customers]);
                 }else{
-                    return redirect()->route('orders')->with('error', 'No Order Found');
+                    return redirect()->route('orders')->with('error', 'No order found');
                 }
             }
         /** edit */ 
@@ -234,17 +234,17 @@
                             }
 
                             DB::commit();
-                            return redirect()->route('orders')->with('success', 'Order Updated Successfully.');
+                            return redirect()->route('orders')->with('success', 'Order updated successfully.');
                         }else{
                             DB::rollback();
-                            return redirect()->route('orders')->with('error', 'Faild To Update Order!');
+                            return redirect()->back()->with('error', 'Faild to update order!')->withInput();
                         }
                     } catch (\Exception $e) {
                         DB::rollback();
-                        return redirect()->route('orders')->with('error', 'Faild To Update Order!');
+                        return redirect()->back()->with('error', 'Faild to update order!')->withInput();
                     }
                 }else{
-                    return redirect()->route('orders')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** update */

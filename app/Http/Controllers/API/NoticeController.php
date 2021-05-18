@@ -15,7 +15,7 @@
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Notice Found']);
+                    return response()->json(['status' => 201, 'message' => 'No notice found']);
             }
         /** index */
 
@@ -45,9 +45,9 @@
                     $notice_last_id = Notice::insertGetId($crud);
                     
                     if($notice_last_id)
-                        return response()->json(['status' => 200, 'message' => 'Notice Created Successfully.' ,'id' => $notice_last_id]);
+                        return response()->json(['status' => 200, 'message' => 'Notice created successfully.' ,'id' => $notice_last_id]);
                     else
-                        return response()->json(['status' => 201, 'message' => 'Faild To Create Notice !']);
+                        return response()->json(['status' => 201, 'message' => 'Faild to create notice !']);
                 
             }
         /** insert */
@@ -58,9 +58,9 @@
                 $data = Notice::where(['id' => $id])->first();
                 
                 if($data)
-                    return response()->json(['status' => 200, 'message' => 'Notice Found' ,'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'Notice found' ,'data' => $data]);
                 else
-                    return response()->json(['status' => 404, 'message' => 'Notice Not Found !']);
+                    return response()->json(['status' => 404, 'message' => 'Notice not found!']);
             }
         /** view */
 
@@ -96,52 +96,45 @@
 
         /** change-status */
             public function change_status(Request $request){
-                     /**
-                            Status = [
-                                active, 
-                                inactive,
-                                deleted
-                            ] 
-                     **/
-                    $rules = [
-                        'id' => 'required',
-                        'status' => 'required'
-                    ];
+                $rules = [
+                    'id' => 'required',
+                    'status' => 'required'
+                ];
 
-                    $validator = Validator::make($request->all(), $rules);
+                $validator = Validator::make($request->all(), $rules);
 
-                    if($validator->fails()){
-                        return response()->json(['status' => 422, 'message' => $validator->errors()]);
-                    }
+                if($validator->fails()){
+                    return response()->json(['status' => 422, 'message' => $validator->errors()]);
+                }
 
-                    $id = $request->id;
-                    $status = $request->status;
+                $id = $request->id;
+                $status = $request->status;
 
-                    $data = Notice::where(['id' => $id])->first();
+                $data = Notice::where(['id' => $id])->first();
 
-                    if(!empty($data)){
-                        if($status == 'deleted'){
-                            $update = Notice::where('id',$id)->delete();
-                            if($update){
-                                return response()->json(['status' => 200 ,'message' => 'Record Deleted Successfully.']);
-                            }
-                            else{
-                                return response()->json(['status' => 201, 'message' => 'Faild To Delete Record !']);
-                            }
-
-
-                        }else{
-                            $update = Notice::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
-                        
-                            if($update){
-                                return response()->json(['status' => 200 ,'message' => 'Status Change Successfully.']);
-                            }else{
-                                return response()->json(['status' => 201, 'message' => 'Faild To Update User Status']);
-                            }
+                if(!empty($data)){
+                    if($status == 'deleted'){
+                        $update = Notice::where('id',$id)->delete();
+                        if($update){
+                            return response()->json(['status' => 200 ,'message' => 'Record deleted successfully.']);
                         }
+                        else{
+                            return response()->json(['status' => 201, 'message' => 'Faild to delete record!']);
+                        }
+
+
                     }else{
-                        return response()->json(['status' => 201, 'message' => 'Somthing Went Wrong !']);
+                        $update = Notice::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
+                    
+                        if($update){
+                            return response()->json(['status' => 200 ,'message' => 'Status change successfully.']);
+                        }else{
+                            return response()->json(['status' => 201, 'message' => 'Faild to update status!']);
+                        }
                     }
+                }else{
+                    return response()->json(['status' => 201, 'message' => 'Somthing went wrong!']);
+                }
             }
         /** change-status */
     }

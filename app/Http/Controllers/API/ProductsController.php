@@ -16,7 +16,7 @@
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Products Found']);
+                    return response()->json(['status' => 201, 'message' => 'No products found']);
             }
         /** products */
 
@@ -27,7 +27,7 @@
                 if(!empty($data))
                     return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No Product Found']);
+                    return response()->json(['status' => 201, 'message' => 'No product found']);
             }
         /** product */
 

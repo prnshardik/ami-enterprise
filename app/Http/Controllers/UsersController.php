@@ -86,11 +86,11 @@
                     $user_last_id = User::insertGetId($crud);
                     
                     if($user_last_id)
-                        return redirect()->route('users')->with('success', 'User Created Successfully.');
+                        return redirect()->route('users')->with('success', 'User created successfully.');
                     else
-                        return redirect()->route('users')->with('error', 'Faild To Create User!');
+                        return redirect()->back()->with('error', 'Faild to create user!')->withInput();
                 }else{
-                    return redirect()->route('users')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** insert */
@@ -98,7 +98,7 @@
         /** view */
             public function view(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('users')->with('error', 'Something went wrong Found');
+                    return redirect()->route('users')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -107,14 +107,14 @@
                 if($data)
                     return view('users.view')->with('data', $data);
                 else
-                    return redirect()->route('users')->with('error', 'No User Found');
+                    return redirect()->route('users')->with('error', 'No user found');
             }
         /** view */
 
         /** edit */
             public function edit(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('users')->with('error', 'Something went wrong Found');
+                    return redirect()->route('users')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -123,7 +123,7 @@
                 if($data)
                     return view('users.edit')->with('data', $data);
                 else
-                    return redirect()->route('users')->with('error', 'No User Found');
+                    return redirect()->route('users')->with('error', 'No user found');
             }
         /** edit */ 
 
@@ -146,11 +146,11 @@
                     $update = User::where(['id' => $request->id])->update($crud);
 
                     if($update)
-                        return redirect()->route('users')->with('success', 'User Updated Successfully.');
+                        return redirect()->route('users')->with('success', 'User updated successfully.');
                     else
-                        return redirect()->route('users')->with('error', 'Faild To Update User!');
+                        return redirect()->back()->with('error', 'Faild to update user!')->withInput();
                 }else{
-                    return redirect()->route('users')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** update */

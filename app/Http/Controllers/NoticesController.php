@@ -75,11 +75,11 @@
                     $last_id = Notice::insertGetId($crud);
                     
                     if($last_id)
-                        return redirect()->route('notices')->with('success', 'Notice Created Successfully.');
+                        return redirect()->route('notices')->with('success', 'Notice created successfully.');
                     else
-                        return redirect()->route('notices')->with('error', 'Faild To Create Notice!');
+                        return redirect()->back()->with('error', 'Faild to create notice!')->withInput();
                 }else{
-                    return redirect()->route('notices')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** insert */
@@ -87,7 +87,7 @@
         /** edit */
             public function edit(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('notices')->with('error', 'Something went wrong Found');
+                    return redirect()->route('notices')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -96,7 +96,7 @@
                 if($data)
                     return view('notices.edit')->with('data', $data);
                 else
-                    return redirect()->route('notices')->with('error', 'No Notice Found');
+                    return redirect()->route('notices')->with('error', 'No notice found');
             }
         /** edit */ 
 
@@ -115,9 +115,9 @@
                     $update = Notice::where(['id' => $request->id])->update($crud);
 
                     if($update)
-                        return redirect()->route('notices')->with('success', 'Notice Updated Successfully.');
+                        return redirect()->route('notices')->with('success', 'Notice updated successfully.');
                     else
-                        return redirect()->route('notices')->with('error', 'Faild To Update Notice!');
+                        return redirect()->route('notices')->with('error', 'Faild to update notice!');
                 }else{
                     return redirect()->route('notices')->with('error', 'Something went wrong');
                 }

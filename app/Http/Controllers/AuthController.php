@@ -97,12 +97,12 @@
             $tokenData = \DB::table('password_resets')->where('token', $request->token)->OrderBy('created_at', 'desc')->first();
 
             if(!isset($tokenData) && $tokenData == null)
-                return redirect()->route('login')->with('error', 'reset password token mismatch, please regenerate link again')->withInput();
+                return redirect()->route('login')->with('error', 'Reset password token mismatch, Please regenerate link again')->withInput();
 
             $user = \DB::table('users')->where('email', $request->email)->first();
 
             if(!isset($user) && $user == null)
-                return redirect()->back()->with('error', 'email address does not exists, please check email address')->withInput();
+                return redirect()->back()->with('error', 'Email address does not exists, Please check email address')->withInput();
 
             $crud = array(
                 'password' => bcrypt($request->password),

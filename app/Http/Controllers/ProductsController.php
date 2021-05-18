@@ -78,9 +78,9 @@
                     $last_id = Product::insertGetId($crud);
                     
                     if($last_id)
-                        return redirect()->route('products')->with('success', 'Product Created Successfully.');
+                        return redirect()->route('products')->with('success', 'Product created successfully.');
                     else
-                        return redirect()->route('products')->with('error', 'Faild To Create Product!');
+                        return redirect()->back()->with('error', 'Faild to create product!')->withInput();
                 }else{
                     return redirect()->route('products')->with('error', 'Something went wrong');
                 }
@@ -90,7 +90,7 @@
         /** edit */
             public function edit(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('products')->with('error', 'Something went wrong Found');
+                    return redirect()->route('products')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -99,7 +99,7 @@
                 if($data)
                     return view('products.edit')->with('data', $data);
                 else
-                    return redirect()->route('products')->with('error', 'No Product Found');
+                    return redirect()->route('products')->with('error', 'No product found');
             }
         /** edit */ 
 
@@ -122,11 +122,11 @@
                     $update = Product::where(['id' => $request->id])->update($crud);
 
                     if($update)
-                        return redirect()->route('products')->with('success', 'Product Updated Successfully.');
+                        return redirect()->route('products')->with('success', 'Product updated successfully.');
                     else
-                        return redirect()->route('products')->with('error', 'Faild To Update Product!');
+                        return redirect()->back()->with('error', 'Faild to update product!')->withInput();
                 }else{
-                    return redirect()->route('products')->with('error', 'Something went wrong');
+                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** update */
@@ -134,7 +134,7 @@
         /** view */
             public function view(Request $request, $id=''){
                 if($id == '')
-                    return redirect()->route('products')->with('error', 'Something went wrong Found');
+                    return redirect()->route('products')->with('error', 'Something went wrong');
 
                 $id = base64_decode($id);
 
@@ -143,7 +143,7 @@
                 if($data)
                     return view('products.view')->with('data', $data);
                 else
-                    return redirect()->route('products')->with('error', 'No Product Found');
+                    return redirect()->route('products')->with('error', 'No product found');
             }
         /** view */ 
 
@@ -154,9 +154,9 @@
                 $delete = Product::where(['id' => $id])->delete();
                 
                 if($delete)
-                    return redirect()->route('products')->with('success', 'Product Deleted Successfully.');
+                    return redirect()->route('products')->with('success', 'Product deleted successfully.');
                 else
-                    return redirect()->route('products')->with('error', 'Faild To Delete Product !');
+                    return redirect()->route('products')->with('error', 'Faild to delete product !');
             }
         /** delete */
     }
