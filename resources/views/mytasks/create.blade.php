@@ -27,17 +27,17 @@
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="title">Title <span class="text-danger">*</span></label>
-                                    <input type="text" name="title" id="title" class="form-control" placeholder="Plese enter title" />
+                                    <input type="text" name="title" id="title" class="form-control" placeholder="Plese enter title" value="{{ @old('title') }}" />
                                     <span class="kt-form__help error title"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="t_date">Taget Date <span class="text-danger">*</span></label>
-                                    <input type="date" name="t_date" id="t_date" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" />
+                                    <input type="date" name="t_date" id="t_date" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" value="{{ @old('t_date') }}" />
                                     <span class="kt-form__help error t_date"></span>
                                 </div>
                                 <div class="form-group col-sm-12">
                                     <label for="description">Instruction <span class="text-danger">*</span></label>
-                                    <textarea name="description" id="description" class="form-control" placeholder="Plese enter Instruction"> </textarea>
+                                    <textarea name="description" id="description" class="form-control" placeholder="Plese enter Instruction">{{ @old('description') }}</textarea>
                                     <span class="kt-form__help error description"></span>
                                 </div>
                                 <div class="form-group col-sm-12">

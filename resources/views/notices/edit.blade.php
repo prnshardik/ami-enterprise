@@ -28,14 +28,14 @@
                             <div class="row">
                                 <div class="form-group col-sm-12">
                                     <label for="title">Title <span class="text-danger">*</span></label>
-                                    <input type="text" name="title" id="title" class="form-control" value="{{ $data->title ?? '' }}"  placeholder="Plese enter title" />
+                                    <input type="text" name="title" id="title" class="form-control" value="{{ @old('title', $data->title) }}"  placeholder="Plese enter title" />
                                     <span class="kt-form__help error title"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12">
                                     <label for="description">Description <span class="text-danger">*</span></label>
-                                    <textarea name="description" id="description" class="form-control" placeholder="Plese enter description" cols="30" rows="10">{{ $data->description ?? '' }}</textarea>
+                                    <textarea name="description" id="description" class="form-control" placeholder="Plese enter description" cols="30" rows="10">{{ @old('description', $data->description) }}</textarea>
                                     <span class="kt-form__help error description"></span>
                                 </div>
                             </div>

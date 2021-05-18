@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="order_date">Order Date <span class="text-danger">*</span></label>
-                                    <input type="date" name="order_date" id="order_date" class="form-control" value="{{ $data->order_date ?? '' }}" placeholder="Plese enter order date" />
+                                    <input type="date" name="order_date" id="order_date" class="form-control" value="{{ @old('order_date', $data->order_date) }}" placeholder="Plese enter order date" />
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                             </div>

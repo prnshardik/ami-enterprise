@@ -31,7 +31,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="title">Title <span class="text-danger">*</span></label>
-                                    <input type="text" name="title" id="title" value="{{ $data->title ?? '' }}" class="form-control" placeholder="Plese enter title" />
+                                    <input type="text" name="title" id="title" value="{{ @old('title', $data->title) }}" class="form-control" placeholder="Plese enter title" />
                                     <span class="kt-form__help error title"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
@@ -47,12 +47,12 @@
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="description">Instruction <span class="text-danger">*</span></label>
-                                    <textarea name="description" id="description" class="form-control" placeholder="Plese enter Instruction"> {{ $data->description ?? '' }} </textarea>
+                                    <textarea name="description" id="description" class="form-control" placeholder="Plese enter Instruction"> {{ @old('description', $data->description) }} </textarea>
                                     <span class="kt-form__help error description"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="t_date">Taget Date</label>
-                                    <input type="date" name="t_date" id="t_date" value="{{ $data->target_date ??'' }}" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" />
+                                    <input type="date" name="t_date" id="t_date" value="{{ @old('t_date', $data->target_date) }}" class="form-control" placeholder="Plese enter target date" min="{{ Date('Y-m-d') }}" />
                                     <span class="kt-form__help error t_date"></span>
                                 </div>
                                 <div class="form-group col-sm-12">
