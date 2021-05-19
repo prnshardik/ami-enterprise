@@ -1,6 +1,6 @@
 <header class="header">
     <div class="page-brand">
-        <a class="link" href="index.html">
+        <a class="link" href="{{ route('dashboard') }}">
             <span class="brand">{{ _site_title() }}</span>
             <span class="brand-mini">{{ _site_title_sf() }}</span>
         </a>
