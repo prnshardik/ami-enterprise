@@ -200,24 +200,28 @@
 
                 let con = confirm('Are you sure to delete?');
                 if (con) {
-                    $.ajax({
-                        "url": "{!! route('orders.delete.detail') !!}",
-                        "dataType": "json",
-                        "type": "POST",
-                        "data":{
-                            id: detail_id,
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function (response){
-                            if (response.code == 200){
-                                $('#clone_'+id).remove();
-                                toastr.success('Record deleted changed successfully.', 'Success');
-                            }else{
-                                toastr.error('Failed to delete record.', 'Error');
+                    if(detail_id != null){
+                        $.ajax({
+                            "url": "{!! route('orders.delete.detail') !!}",
+                            "dataType": "json",
+                            "type": "POST",
+                            "data":{
+                                id: detail_id,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function (response){
+                                if (response.code == 200){
+                                    $('#clone_'+id).remove();
+                                    toastr.success('Record deleted changed successfully.', 'Success');
+                                }else{
+                                    toastr.error('Failed to delete record.', 'Error');
+                                }
                             }
-                        }
-                    });
-                    
+                        });
+                    } else {
+                        $('#clone_'+id).remove();
+                        toastr.success('Record deleted changed successfully.', 'Success');
+                    }
                 }
             })
         });
