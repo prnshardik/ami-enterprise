@@ -28,9 +28,13 @@
                 }else{
                     $user = User::where('email', $request->email)->firstOrFail();
 
-                    $token = $user->createToken('auth_token')->plainTextToken;
+                    if($user->status == 'active'){
+                        $token = $user->createToken('auth_token')->plainTextToken;
 
-                    return response()->json(['status' => 200, 'message' => 'Login Successfully', 'token_type' => 'Bearer', 'access_token' => $token]);
+                        return response()->json(['status' => 200, 'message' => 'Login Successfully', 'token_type' => 'Bearer', 'access_token' => $token]);
+                    }else{
+                        return response()->json(['status' => 201, 'message' => 'This account has been inactive or deleted, please contact admin']);
+                    }
                 }
             }
         /** login */
