@@ -67,7 +67,7 @@
                 'created_at' => date('Y-m-d H:i:s')
             ]);
 
-            $mailData = array('from_email' => 'info@amienterprise.com', 'email' => $request->email, 'link' => $link);
+            $mailData = array('from_email' => _mail_from(), 'email' => $request->email, 'link' => $link);
             
             try{
                 Mail::to($request->email)->send(new ForgetPassword($mailData));
