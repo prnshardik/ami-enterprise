@@ -106,6 +106,11 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
 
             Route::post('orders/delete-detail', 'OrdersController@delete_detail')->name('orders.delete.detail');
         /** orders */
+
+        /** payment */
+            Route::get('payment/import', 'PaymentController@file_import')->name('payment.import.file');
+            Route::post('payment/import', 'PaymentController@import')->name('payment.import');
+        /** payment */
     });
 
     Route::get("{path}", function(){ return redirect()->route('login'); })->where('path', '.+');
