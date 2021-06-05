@@ -49,6 +49,13 @@
                 </a>
                 <ul class="nav-2-level collapse" aria-expanded="false">
                     <li class="{{ Request::is('payment*') ? 'active' : '' }}">
+                        <a class="{{ Request::is('payment*') ? 'active' : '' }}" href="{{ route('payment') }}"><i class="sidebar-item-icon fa fa-money"></i>
+                            <span class="nav-label">Payments</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav-2-level collapse" aria-expanded="false">
+                    <li class="{{ Request::is('payment*') ? 'active' : '' }}">
                         <a class="{{ Request::is('payment*') ? 'active' : '' }}" href="{{ route('payment.import.file') }}"><i class="sidebar-item-icon fa fa-money"></i>
                             <span class="nav-label">Payment Import</span>
                         </a>
