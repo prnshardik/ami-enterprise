@@ -41,6 +41,20 @@
                     <span class="nav-label">Orders</span>
                 </a>
             </li>
+            <li class="{{ Request::is('payment*') ? 'active' : '' }}">
+                <a href="javascript:;" aria-expanded="false">
+                    <i class="sidebar-item-icon fa fa-money"></i>
+                    <span class="nav-label">Payments</span>
+                    <i class="fa fa-angle-left arrow"></i>
+                </a>
+                <ul class="nav-2-level collapse" aria-expanded="false">
+                    <li class="{{ Request::is('payment*') ? 'active' : '' }}">
+                        <a class="{{ Request::is('payment*') ? 'active' : '' }}" href="{{ route('payment.import.file') }}"><i class="sidebar-item-icon fa fa-money"></i>
+                            <span class="nav-label">Payment Import</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li class="{{ (Request::is('tasks*') || Request::is('mytasks*')) ? 'active' : '' }}">
                 <a href="javascript:;" aria-expanded="false">
                     <i class="sidebar-item-icon fa fa-tasks"></i>
