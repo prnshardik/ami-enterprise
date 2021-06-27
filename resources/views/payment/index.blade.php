@@ -18,27 +18,45 @@
                     <div class="ibox-head">
                         <h1 class="ibox-title">Payments</h1>
                         <h1 class="pull-right">
-                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('payment.import.file') }}">Import Payment File</a>
+                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('payment.import.file') }}">Import </a>
                         </h1>
                     </div>
 
-                    <div class="dataTables_wrapper container-fluid dt-bootstrap4">
-                        <table class="table table-bordered data-table" id="data-table">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Party Name</th>
-                                    <th>Bill No</th>
-                                    <th>Bill Date</th>
-                                    <th>Due Days</th>
-                                    <th>Bill Amount</th>
-                                    <th>Balance Amount</th>
-                                    <th>Mobile No</th>
-                                </tr>
-                            </thead>
-                        </table>
+                    <div class="ibox-body">
+                        <div class="row my-5 mx-2">
+                            <div class="col-sm-4">
+                                <select name="type" id="type" class="form-control param">
+                                    <option value="">Select Type</option>
+                                    <option value="assigned">Assigned</option>
+                                    <option value="not_assigned">Not Assigned</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="date" name="start_date" id="start_date" class="form-control param">
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="date" name="end_date" id="end_date" class="form-control param">
+                            </div>
+                        </div>
+
+                        <div class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <table class="table table-bordered data-table" id="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Party Name</th>
+                                        <th>Bill No</th>
+                                        <th>Bill Date</th>
+                                        <th>Due Days</th>
+                                        <th>Bill Amount</th>
+                                        <th>Balance Amount</th>
+                                        <th>Mobile No</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="text-center"></div>
                     </div>
-                    <div class="text-center"></div>
                 </div>
             </div>
         </div>
@@ -47,6 +65,9 @@
 
 @section('scripts')
     <script type="text/javascript">
+        $('.param').change(function(){
+            $('#data-table').DataTable().draw(true);            
+        });
 
         var datatable;
 
@@ -77,8 +98,14 @@
                         "url": "{{ route('payment') }}",
                         "type": "POST",
                         "dataType": "json",
-                        "data":{
-                            _token: "{{csrf_token()}}"
+                        // "data":{
+                        //     _token: "{{csrf_token()}}"
+                        // },
+                        data: function (d) {
+                            d._token = "{{csrf_token()}}";
+                            d.type = $('#type').val();
+                            d.start_date = $('#start_date').val();
+                            d.end_date = $('#end_date').val();
                         }
                     },
                     "columnDefs": [{
@@ -122,6 +149,6 @@
                     ]
                 });
             }
-        });
+        }); 
     </script>
 @endsection

@@ -13,6 +13,10 @@
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
+                    $type = $request->type;
+                    $start_date = $request->start_date;
+                    $end_date = $request->end_date;
+
                     $data = Payment::select('id', 'party_name', 'bill_no', 'bill_date', 'due_days', 'bill_amount', 'balance_amount', 'mobile_no')->get();
 
                     return Datatables::of($data)

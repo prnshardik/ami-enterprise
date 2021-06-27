@@ -21,22 +21,25 @@
                             <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('customers.create') }}">Add New</a>
                         </h1>
                     </div>
-                    <div class="dataTables_wrapper container-fluid dt-bootstrap4">
-                        <table class="table table-bordered data-table" id="data-table">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Party Name</th>
-                                    <th>Billing Name</th>
-                                    <th>Contact Person</th>
-                                    <th>Mobile Number</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                        </table>
+
+                    <div class="ibox-body">
+                        <div class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <table class="table table-bordered data-table" id="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Party Name</th>
+                                        <th>Billing Name</th>
+                                        <th>Contact Person</th>
+                                        <th>Mobile Number</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="text-center"></div>
                     </div>
-                    <div class="text-center"></div>
                 </div>
             </div>
         </div>

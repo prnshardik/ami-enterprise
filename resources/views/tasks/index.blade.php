@@ -22,23 +22,25 @@
                         </h1>
                     </div>
 
-                    <div class="dataTables_wrapper container-fluid dt-bootstrap4">
-                        <table class="table table-bordered data-table" id="data-table">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Allocated From</th>
-                                    <th>Allocated To</th>
-                                    <th>Task</th>
-                                    <th>Task Date</th>
-                                    <th>Target Date</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                        </table>
+                    <div class="ibox-body">
+                        <div class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <table class="table table-bordered data-table" id="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Allocated From</th>
+                                        <th>Allocated To</th>
+                                        <th>Task</th>
+                                        <th>Task Date</th>
+                                        <th>Target Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="text-center"></div>
                     </div>
-                    <div class="text-center"></div>
                 </div>
             </div>
         </div>
