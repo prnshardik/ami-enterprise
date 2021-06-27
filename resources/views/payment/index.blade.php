@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="ibox-body">
-                        <div class="row my-5 mx-2">
+                        <div class="row mb-5 mt-2 mx-2">
                             <div class="col-sm-4">
                                 <select name="type" id="type" class="form-control param">
                                     <option value="">Select Type</option>
@@ -77,15 +77,15 @@
                     processing: true,
                     serverSide: true,
 
-                    // "pageLength": 10,
+                    "pageLength": 5,
                     // "iDisplayLength": 10,
                     "responsive": true,
                     "aaSorting": [],
-                    // "order": [], //Initial no order.
-                    //     "aLengthMenu": [
-                    //     [5, 10, 25, 50, 100, -1],
-                    //     [5, 10, 25, 50, 100, "All"]
-                    // ],
+                    "order": [], //Initial no order.
+                        "aLengthMenu": [
+                        [5, 10, 25, 50, 100, -1],
+                        [5, 10, 25, 50, 100, "All"]
+                    ],
 
                     // "scrollX": true,
                     // "scrollY": '',

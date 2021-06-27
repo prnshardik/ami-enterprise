@@ -17,7 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->string('party_name')->nullable();
             $table->string('bill_no')->nullable();
-            $table->string('bill_date')->nullable();
+            $table->date('bill_date')->nullable();
             $table->string('due_days')->nullable();
             $table->string('bill_amount')->nullable();
             $table->string('balance_amount')->nullable();

@@ -18,13 +18,18 @@
         }
 
         public function model(array $row){
+            if(intval($row[2]) == 0 || intval($row[2]) == null)
+                $date = null;
+            else
+                $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject(intval($row[2]))->format('Y-m-d');
+
             if($row[0] != '' || $row[0] != null){
                 $this->name = $row[0];
                 
                 return new Payment([
                     'party_name' => $row[0],
                     'bill_no' => $row[1],
-                    'bill_date' => $row[2],
+                    'bill_date' => $date,
                     'due_days' => $row[3],
                     'bill_amount' => $row[4],
                     'balance_amount' => $row[5],
@@ -36,7 +41,11 @@
                 if(!empty($data)){
                     $data->bill_amount = $data->bill_amount + $row[4];
                     $data->balance_amount = $row[5];
-
+                    
+                    if($data->bill_date == null){
+                        $data->bill_date = $date;
+                    }
+                    
                     if($data->save())
                         return $data;
                 }
