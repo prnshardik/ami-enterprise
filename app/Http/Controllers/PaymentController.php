@@ -26,6 +26,18 @@
                     if($start_date && $end_date)
                         $collection->whereBetween('bill_date', [$start_date, $end_date]);
 
+                    if($type && $type == 'assigned'){
+                        $collection->whereIn('party_name', function($query){
+                                                $query->select('party_name')
+                                                    ->from(with(new PaymentAssign)->getTable());
+                                            });
+                    }elseif($type && $type == 'not_assigned'){
+                        $collection->whereNotIn('party_name', function($query){
+                                                $query->select('party_name')
+                                                    ->from(with(new PaymentAssign)->getTable());
+                                            });
+                    }
+
                     $data = $collection->get();
 
                     if($data->isNotEmpty()){
