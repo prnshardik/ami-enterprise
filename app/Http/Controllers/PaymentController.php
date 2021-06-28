@@ -17,9 +17,13 @@
                     $start_date = $request->start_date;
                     $end_date = $request->end_date;
 
-                    $data = Payment::select('id', 'party_name', 'bill_date', 'balance_amount', 'mobile_no', DB::Raw("null as note"), DB::Raw("null as reminder"))
-                                    ->whereRaw('id IN (select MAX(id) FROM payments GROUP BY party_name)')
-                                    ->get();
+                    $collection = Payment::select('id', 'party_name', 'bill_date', 'balance_amount', 'mobile_no', DB::Raw("null as note"), DB::Raw("null as reminder"))
+                                    ->whereRaw('id IN (select MAX(id) FROM payments GROUP BY party_name)');
+                    
+                    if($start_date && $end_date)
+                        $collection->whereBetween('bill_date', [$start_date, $end_date]);
+
+                    $data = $collection->get();
 
                     return Datatables::of($data)
                             ->addIndexColumn()
@@ -50,16 +54,17 @@
                                     }
                                 }
 
-                                    $info .="</tbody></table>";
+                                $info .="</tbody></table>";
 
-                                return '<div class="btn-group">
-                                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#infoModal'.$data->id.'">
-                                                    <i class="fa fa-exclamation-circle"></i>
-                                                </button> &nbsp;
-                                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#assignModal'.$data->id.'">
-                                                    <i class="fa fa-legal"></i>
-                                                </button> &nbsp;
-                                            </div>
+                                return  '<div class="btn-group">
+                                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#infoModal'.$data->id.'">
+                                                <i class="fa fa-exclamation-circle"></i>
+                                            </button> &nbsp;
+                                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#assignModal'.$data->id.'">
+                                                <i class="fa fa-legal"></i>
+                                            </button> &nbsp;
+                                        </div>
+
                                         <div class="modal fade" id="infoModal'.$data->id.'" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel'.$data->id.'" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">

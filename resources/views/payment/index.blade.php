@@ -25,17 +25,17 @@
                     <div class="ibox-body">
                         <div class="row mb-5 mt-2 mx-2">
                             <div class="col-sm-4">
-                                <select name="type" id="type" class="form-control param">
+                                <select name="type" id="type" class="form-control">
                                     <option value="">Select Type</option>
                                     <option value="assigned">Assigned</option>
                                     <option value="not_assigned">Not Assigned</option>
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <input type="date" name="start_date" id="start_date" class="form-control param">
+                                <input type="date" name="start_date" id="start_date" class="form-control date">
                             </div>
                             <div class="col-sm-4">
-                                <input type="date" name="end_date" id="end_date" class="form-control param">
+                                <input type="date" name="end_date" id="end_date" class="form-control date">
                             </div>
                         </div>
 
@@ -65,8 +65,17 @@
 
 @section('scripts')
     <script type="text/javascript">
-        $('.param').change(function(){
+        $('#type').change(function(){
             $('#data-table').DataTable().draw(true);            
+        });
+
+        $('.date').change(function(){
+            let startDate = $('#start_date').val();
+            let endDate = $('#end_date').val();
+
+            if(startDate && endDate){
+                $('#data-table').DataTable().draw(true);            
+            }
         });
 
         var datatable;
