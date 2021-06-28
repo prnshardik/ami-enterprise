@@ -111,6 +111,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::any('payments', 'PaymentController@index')->name('payment');
             Route::get('payment/import', 'PaymentController@file_import')->name('payment.import.file');
             Route::post('payment/import', 'PaymentController@import')->name('payment.import');
+            Route::post('payment/assign', 'PaymentController@assign')->name('payment.assign');
         /** payment */
     });
 

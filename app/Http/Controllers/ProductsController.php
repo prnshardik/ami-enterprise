@@ -109,14 +109,14 @@
 
                 if(!empty($request->all())){
                     $crud = [
-                            'name' => ucfirst($request->name),
-                            'quantity' => $request->quantity, 
-                            'unit' => $request->unit, 
-                            'color' => $request->color, 
-                            'price' => $request->price, 
-                            'note' => $request->note ?? NULL,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'name' => ucfirst($request->name),
+                        'quantity' => $request->quantity, 
+                        'unit' => $request->unit, 
+                        'color' => $request->color, 
+                        'price' => $request->price, 
+                        'note' => $request->note ?? NULL,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     $update = Product::where(['id' => $request->id])->update($crud);

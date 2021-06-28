@@ -163,6 +163,51 @@
 
         $(document).on("submit", ".form", function(e){
             e.preventDefault();
+            $('.error').html('');
+
+            let id = $(this).attr('id');
+
+            let assign_id = $('#assign_id').val();
+            let party_name = $('#party_name'+id).val();
+            let date = $('#date'+id).val();
+            let user = $('#user'+id+' option').filter(':selected').val();
+            let note = $('#note'+id).val();
+
+            $.ajax({
+                "url": "{!! route('payment.assign') !!}",
+                "dataType": "json",
+                "type": "POST",
+                "data":{
+                    assign_id: assign_id,
+                    party_name: party_name,
+                    date: date,
+                    user: user,
+                    note: note,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function (response){
+                    if (response.code == 200){
+                        $('#date'+id).val('');
+                        $('#note'+id).val('');
+                        $('#user'+id+' option').filter(':selected').prop('selected', false);
+                        $('#assignModal'+id).modal('hide');
+                        toastr.success(response.message, 'Success');
+                        $('#data-table').DataTable().draw(true);
+                    }else{
+                        toastr.error(response.message, 'Error');
+                    }
+                },
+                error: function(response){
+                    if(response.status === 422) {
+                        var errors_ = response.responseJSON;
+                        $.each(errors_, function (key, value) {
+                            toastr.error(value, 'Error');
+                        });
+                    }
+                }
+
+            });
+
         });
     </script>
 @endsection
