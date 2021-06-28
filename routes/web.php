@@ -2,16 +2,27 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('command', function() {
+Route::get('clear', function() {
     Artisan::call('cache:clear');
     Artisan::call('optimize:clear');
     Artisan::call('config:cache');
-    return "Command Successfully";
+    Artisan::call('view:clear');
+    return "config, cache, and view cleared successfully";
 });
 
 Route::get('key-generate', function() {
     Artisan::call('key:generate');
-    return "Key Generate Successfully";
+    return "Key generate successfully";
+});
+
+Route::get('migrate', function() {
+    Artisan::call('migrate:refresh');
+    return "Database migration generated";
+});
+
+Route::get('seed', function() {
+    Artisan::call('db:seed');
+    return "Database seeding generated";
 });
 
 Route::group(['middleware' => ['prevent-back-history']], function(){
