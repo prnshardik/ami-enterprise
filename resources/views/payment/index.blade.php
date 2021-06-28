@@ -65,19 +65,6 @@
 
 @section('scripts')
     <script type="text/javascript">
-        $('#type').change(function(){
-            $('#data-table').DataTable().draw(true);            
-        });
-
-        $('.date').change(function(){
-            let startDate = $('#start_date').val();
-            let endDate = $('#end_date').val();
-
-            if(startDate && endDate){
-                $('#data-table').DataTable().draw(true);            
-            }
-        });
-
         var datatable;
 
         $(document).ready(function() {
@@ -160,5 +147,23 @@
                 });
             }
         }); 
+
+        $('#type').change(function(){
+            $('#data-table').DataTable().draw(true);            
+        });
+
+        $('.date').change(function(){
+            let startDate = $('#start_date').val();
+            let endDate = $('#end_date').val();
+
+            if(startDate && endDate){
+                $('#data-table').DataTable().draw(true);            
+            }
+        });
+
+        $('.form').on("submit", function(event){
+            event.preventDefault();
+            
+        });
     </script>
 @endsection
