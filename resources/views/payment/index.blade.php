@@ -18,7 +18,7 @@
                     <div class="ibox-head">
                         <h1 class="ibox-title">Payments</h1>
                         <h1 class="pull-right">
-                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('payment.import.file') }}">Import </a>
+                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('payment.import.file') }}">Upload new data </a>
                         </h1>
                     </div>
 
@@ -45,12 +45,12 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Party Name</th>
-                                        <th>Bill No</th>
-                                        <th>Bill Date</th>
-                                        <th>Due Days</th>
-                                        <th>Bill Amount</th>
-                                        <th>Balance Amount</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
                                         <th>Mobile No</th>
+                                        <th>Reminder</th>
+                                        <th>Note</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -123,20 +123,8 @@
                             name: 'party_name'
                         },
                         {
-                            data: 'bill_no',
-                            name: 'bill_no'
-                        },
-                        {
                             data: 'bill_date',
                             name: 'bill_date'
-                        },
-                        {
-                            data: 'due_days',
-                            name: 'due_days'
-                        },
-                        {
-                            data: 'bill_amount',
-                            name: 'bill_amount'
                         },
                         {
                             data: 'balance_amount',
@@ -146,6 +134,19 @@
                             data: 'mobile_no',
                             name: 'mobile_no',
                         },
+                        {
+                            data: 'reminder',
+                            name: 'reminder',
+                        },
+                        {
+                            data: 'note',
+                            name: 'note',
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                        }
                     ]
                 });
             }

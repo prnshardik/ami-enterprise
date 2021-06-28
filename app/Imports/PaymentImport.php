@@ -36,19 +36,17 @@
                     'mobile_no' => $row[6]
                 ]);
             }else{
-                $data = Payment::select('id', 'bill_amount')->where(['party_name' => $this->name])->first();
+                $data = Payment::select('id', 'party_name', 'bill_amount')->where(['party_name' => $this->name])->first();
 
-                if(!empty($data)){
-                    $data->bill_amount = $data->bill_amount + $row[4];
-                    $data->balance_amount = $row[5];
-                    
-                    if($data->bill_date == null){
-                        $data->bill_date = $date;
-                    }
-                    
-                    if($data->save())
-                        return $data;
-                }
+                return new Payment([
+                    'party_name' => $data->party_name,
+                    'bill_no' => $row[1],
+                    'bill_date' => $date,
+                    'due_days' => $row[3],
+                    'bill_amount' => $row[4],
+                    'balance_amount' => $row[5],
+                    'mobile_no' => $row[6]
+                ]);
             }
         }
     }

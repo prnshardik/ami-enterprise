@@ -4,7 +4,7 @@
 @endsection
 
 @section('title')
-    Import Payment
+    Upload new data - Payment
 @endsection
 
 @section('styles')
@@ -16,13 +16,13 @@
             <div class="col-md-12">
                 <div class="ibox">
                     <div class="ibox-head">
-                        <div class="ibox-title">Import Payment</div>
+                        <div class="ibox-title">Upload new data - Payment</div>
                     </div>
                     <div class="ibox-body">
                         <form name="form" action="{{ route('payment.import') }}" id="form" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col-sm-12">
                                     <label for="file">File <span class="text-danger">*</span></label>
                                     <input type="file" name="file" id="file" class="form-control" placeholder="Plese select file" />
                                     <span class="kt-form__help error file"></span>
