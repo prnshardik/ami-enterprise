@@ -9,5 +9,14 @@
 	.error{
 		color:red;
 	}
+	.page-footer{
+		position: fixed;
+		top: 600px;
+		left: 222px;
+	}
+
+	body:not(.fixed-layout).sidebar-mini .page-footer {
+    	left: 60px; 
+	}
 </style>
 @yield('styles')

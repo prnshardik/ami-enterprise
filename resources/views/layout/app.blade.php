@@ -7,15 +7,6 @@
     <title>{{ _site_title() }} | @yield('title')</title>
     
     @include('layout.styles')
-
-    <style>
-        .page-footer{
-            position: fixed;
-            top: 550px;
-            left: 222px;
-        }
-    </style>
-
 </head>
 
 <body class="fixed-navbar">

@@ -161,9 +161,8 @@
             }
         });
 
-        $('.form').on("submit", function(event){
-            event.preventDefault();
-            
+        $(document).on("submit", ".form", function(e){
+            e.preventDefault();
         });
     </script>
 @endsection

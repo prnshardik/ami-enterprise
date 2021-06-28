@@ -82,7 +82,7 @@
                                             </div>
                                             <div class='form-group col-sm-12'>
                                                 <label for='note'>Note </label>
-                                                <input type='note' name='note' id='note' class='form-control' style='max-width: 90%;'/>
+                                                <textarea type='note' name='note' id='note' class='form-control' style='max-width: 90%;'/></textarea>
                                                 <span class='kt-form__help error note'></span>
                                             </div>
                                         </div>";

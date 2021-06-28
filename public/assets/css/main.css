@@ -3101,8 +3101,9 @@ body.fixed-layout.sidebar-mini .content-wrapper {
   margin-left: 0; }
 
 .page-footer {
-  position: absolute;
-  left: 0;
+  position: fixed;
+  top: 600px;
+  left: 222px;
   bottom: 0;
   width: 100%;
   display: -webkit-box;
