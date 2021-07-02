@@ -64,12 +64,12 @@
 
                 if(!empty($request->all())){
                     $crud = [
-                            'title' => ucfirst($request->title),
-                            'description' => $request->description ?? NULL,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'created_by' => auth()->user()->id,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'title' => ucfirst($request->title),
+                        'description' => $request->description ?? NULL,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'created_by' => auth()->user()->id,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     $last_id = Notice::insertGetId($crud);
@@ -106,10 +106,10 @@
 
                 if(!empty($request->all())){
                     $crud = [
-                            'title' => ucfirst($request->title),
-                            'description' => $request->description ?? NULL,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'title' => ucfirst($request->title),
+                        'description' => $request->description ?? NULL,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     $update = Notice::where(['id' => $request->id])->update($crud);

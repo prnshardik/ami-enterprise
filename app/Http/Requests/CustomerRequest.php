@@ -12,21 +12,11 @@
         public function rules(){
             if($this->method() == 'PATCH'){
                 return [
-                    'party_name' => 'required|unique:customers,party_name,'.$this->id,
-                    'billing_name' => 'required',
-                    'contact_person' => 'required',
-                    'mobile_number' => 'required',
-                    'billing_address' => 'required',
-                    'delivery_address' => 'required'
+                    'party_name' => 'required|unique:customers,party_name,'.$this->id
                 ];
             }else{
                 return [
-                    'party_name' => 'required|unique:customers,party_name',
-                    'billing_name' => 'required',
-                    'contact_person' => 'required',
-                    'mobile_number' => 'required',
-                    'billing_address' => 'required',
-                    'delivery_address' => 'required'
+                    'party_name' => 'required|unique:customers,party_name'
                 ];
             }
         }

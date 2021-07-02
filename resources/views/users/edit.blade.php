@@ -37,13 +37,13 @@
                                     <span class="kt-form__help error email"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="phone">Phone Number <span class="text-danger">*</span></label>
+                                    <label for="phone">Phone Number <span class="text-danger"></span></label>
                                     <input type="text" name="phone" id="phone" class="form-control" placeholder="Plese enter phone number" value="{{ @old('phone', $data->phone) }}" />
                                     <span class="kt-form__help error phone"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="password">Password</label>
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="Plese enter password number" autofill="off">
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Plese enter password" autofill="off">
                                     <span class="kt-form__help error password"></span>
                                 </div>
                             </div>

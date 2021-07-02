@@ -52,7 +52,26 @@
                                     return '-';
                             })
 
-                            ->rawColumns(['action', 'status'])
+                            ->editColumn('name', function($data) {
+                                return '<a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'" class="text-dark">'.$data->name.'</a>';
+                            })
+
+                            ->editColumn('order_date', function($data) {
+                                return '<a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'" class="text-dark">'.$data->order_date.'</a>';
+                            })
+
+                            ->editColumn('status', function($data) {
+                                if($data->status == 'pending')
+                                    return '<a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'"><span class="badge badge-pill badge-info">Pending</span></a>';
+                                else if($data->status == 'completed')
+                                    return '<a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'"><span class="badge badge-pill badge-warning">Completed</span></a>';
+                                else if($data->status == 'delivered')
+                                    return '<a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'"><span class="badge badge-pill badge-success">Completed</span></a>';
+                                else
+                                    return '-';
+                            })
+
+                            ->rawColumns(['action', 'status', 'name', 'order_date'])
                             ->make(true);
                 }
 
@@ -75,13 +94,13 @@
 
                 if(!empty($request->all())){
                     $crud = [
-                            'name' => ucfirst($request->name),
-                            'order_date' => $request->order_date,
-                            'status' => 'pending',
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'created_by' => auth()->user()->id,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'name' => ucfirst($request->name),
+                        'order_date' => $request->order_date ?? NULL,
+                        'status' => 'pending',
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'created_by' => auth()->user()->id,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     DB::beginTransaction();
@@ -89,23 +108,25 @@
                         $last_id = Order::insertGetId($crud);
                         
                         if($last_id){
-                            $product_id = $request->product_id;
-                            $quantity = $request->quantity;
-                            $price = $request->price;
+                            $product_id = $request->product_id ?? NULL;
+                            $quantity = $request->quantity ?? NULL;
+                            $price = $request->price ?? NULL;
 
-                            for($i=0; $i<count($product_id); $i++){
-                                $order_detail_crud = [
+                            if($product_id != null){
+                                for($i=0; $i<count($product_id); $i++){
+                                    $order_detail_crud = [
                                         'order_id' => $last_id,
-                                        'product_id' => $product_id[$i],
-                                        'quantity' => $quantity[$i],
-                                        'price' => $price[$i],
+                                        'product_id' => $product_id[$i] ?? NULL,
+                                        'quantity' => $quantity[$i] ?? NULL,
+                                        'price' => $price[$i] ?? NULL,
                                         'created_at' => date('Y-m-d H:i:s'),
                                         'created_by' => auth()->user()->id,
                                         'updated_at' => date('Y-m-d H:i:s'),
                                         'updated_by' => auth()->user()->id
-                                ];
+                                    ];
 
-                                OrderDetails::insertGetId($order_detail_crud);
+                                    OrderDetails::insertGetId($order_detail_crud);
+                                }
                             }
 
                             DB::commit();
@@ -189,10 +210,10 @@
 
                 if(!empty($request->all())){
                     $crud = [
-                            'name' => ucfirst($request->name),
-                            'order_date' => $request->order_date,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'name' => ucfirst($request->name),
+                        'order_date' => $request->order_date ?? NULL,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     DB::beginTransaction();
@@ -200,37 +221,39 @@
                         $update = Order::where(['id' => $request->id])->update($crud);
                        
                         if($update){
-                            $product_id = $request->product_id;
-                            $quantity = $request->quantity;
-                            $price = $request->price;
+                            $product_id = $request->product_id ?? NULL;
+                            $quantity = $request->quantity ?? NULL;
+                            $price = $request->price ?? NULL;
 
-                            for($i=0; $i<count($product_id); $i++){
-                                $exst_detail = OrderDetails::select('id')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
+                            if($product_id != null){
+                                for($i=0; $i<count($product_id); $i++){
+                                    $exst_detail = OrderDetails::select('id')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
 
-                                if(!empty($exst_detail)){
-                                    $order_detail_crud = [
+                                    if(!empty($exst_detail)){
+                                        $order_detail_crud = [
                                             'order_id' => $request->id,
-                                            'product_id' => $product_id[$i],
-                                            'quantity' => $quantity[$i],
-                                            'price' => $price[$i],
+                                            'product_id' => $product_id[$i] ?? NULL,
+                                            'quantity' => $quantity[$i] ?? NULL,
+                                            'price' => $price[$i] ?? NULL,
                                             'updated_at' => date('Y-m-d H:i:s'),
                                             'updated_by' => auth()->user()->id
-                                    ];
+                                        ];
 
-                                    OrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
-                                }else{
-                                    $order_detail_crud = [
+                                        OrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
+                                    }else{
+                                        $order_detail_crud = [
                                             'order_id' => $request->id,
-                                            'product_id' => $product_id[$i],
-                                            'quantity' => $quantity[$i],
-                                            'price' => $price[$i],
+                                            'product_id' => $product_id[$i] ?? NULL,
+                                            'quantity' => $quantity[$i] ?? NULL,
+                                            'price' => $price[$i] ?? NULL,
                                             'created_at' => date('Y-m-d H:i:s'),
                                             'created_by' => auth()->user()->id,
                                             'updated_at' => date('Y-m-d H:i:s'),
                                             'updated_by' => auth()->user()->id
-                                    ];
+                                        ];
 
-                                    OrderDetails::insertGetId($order_detail_crud);
+                                        OrderDetails::insertGetId($order_detail_crud);
+                                    }
                                 }
                             }
 

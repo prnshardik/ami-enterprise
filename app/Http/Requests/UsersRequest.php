@@ -13,15 +13,12 @@
             if($this->method() == 'PATCH'){
                 return [
                     'name' => 'required',
-                    'email' => 'required|email|unique:users,email,'.$this->id,
-                    'phone' => 'required|numeric|unique:users,phone,'.$this->id
+                    'email' => 'required|email|unique:users,email,'.$this->id
                 ];
             }else{
                 return [
                     'name' => 'required',
-                    'email' => 'required|email|unique:users,email',
-                    'phone' => 'required|numeric|unique:users,phone',
-                    'password' => 'required|min:7'
+                    'email' => 'required|email|unique:users,email'
                 ];
             }
         }

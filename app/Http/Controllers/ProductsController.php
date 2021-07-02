@@ -64,10 +64,10 @@
                 if(!empty($request->all())){
                     $crud = [
                             'name' => ucfirst($request->name),
-                            'quantity' => $request->quantity, 
-                            'unit' => $request->unit, 
-                            'color' => $request->color, 
-                            'price' => $request->price, 
+                            'quantity' => $request->quantity ?? NULL, 
+                            'unit' => $request->unit ?? NULL, 
+                            'color' => $request->color ?? NULL, 
+                            'price' => $request->price ?? NULL, 
                             'note' => $request->note ?? NULL,
                             'created_at' => date('Y-m-d H:i:s'),
                             'created_by' => auth()->user()->id,
@@ -110,10 +110,10 @@
                 if(!empty($request->all())){
                     $crud = [
                         'name' => ucfirst($request->name),
-                        'quantity' => $request->quantity, 
-                        'unit' => $request->unit, 
-                        'color' => $request->color, 
-                        'price' => $request->price, 
+                        'quantity' => $request->quantity ?? NULL, 
+                        'unit' => $request->unit ?? NULL, 
+                        'color' => $request->color ?? NULL, 
+                        'price' => $request->price ?? NULL, 
                         'note' => $request->note ?? NULL,
                         'updated_at' => date('Y-m-d H:i:s'),
                         'updated_by' => auth()->user()->id

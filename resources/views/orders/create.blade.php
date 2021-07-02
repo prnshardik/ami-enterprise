@@ -25,6 +25,9 @@
                 <div class="ibox">
                     <div class="ibox-head">
                         <div class="ibox-title">Create Order</div>
+                        <h1 class="pull-right">
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#customerModal">New Customer</button>
+                        </h1>
                     </div>
                     <div class="ibox-body">
                         <form name="form" action="{{ route('orders.insert') }}" id="form" method="post" enctype="multipart/form-data">
@@ -33,7 +36,6 @@
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="name">Name <span class="text-danger">*</span></label>
-                                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#customerModal">+</button>
                                     <select name="name" id="name" class="form-control select2_demo_2" placeholder="Plese enter name">
                                         <option></option>
                                         @if(isset($customers) && $customers->isNotEmpty())
@@ -45,14 +47,14 @@
                                     <span class="kt-form__help error name"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="order_date">Order Date <span class="text-danger">*</span></label>
+                                    <label for="order_date">Order Date <span class="text-danger"></span></label>
                                     <input type="date" name="order_date" id="order_date" class="form-control" placeholder="Plese enter order date" value="{{ @old('order_date') }}" />
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label for="base_product">Product <span class="text-danger">*</span></label>
+                                    <label for="base_product">Product <span class="text-danger"></span></label>
                                     <select name="base_product" id="base_product" class="form-control">
                                         <option value="" hidden>Select Product</option>
                                         @if(isset($products) && $products->isNotEmpty())
@@ -64,12 +66,12 @@
                                     <span class="kt-form__help error product_id"></span>
                                 </div>
                                 <div class="form-group col-sm-2">
-                                    <label for="base_quantity">Quantity <span class="text-danger">*</span></label>
+                                    <label for="base_quantity">Quantity <span class="text-danger"></span></label>
                                     <input type="text" name="base_quantity" id="base_quantity" class="form-control digit" placeholder="Plese enter quantity" />
                                     <span class="kt-form__help error quantity"></span>
                                 </div>
                                 <div class="form-group col-sm-2">
-                                    <label for="base_price">Price <span class="text-danger">*</span></label>
+                                    <label for="base_price">Price <span class="text-danger"></span></label>
                                     <input type="text" name="base_price" id="base_price" class="form-control digit" placeholder="Plese enter price" />
                                     <span class="kt-form__help error price"></span>
                                 </div>
@@ -127,27 +129,27 @@
                                 <span class="kt-form__help error party_name"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="billing_name">Billing Name <span class="text-danger">*</span></label>
+                                <label for="billing_name">Billing Name <span class="text-danger"></span></label>
                                 <input type="text" name="billing_name" id="billing_name" class="form-control" placeholder="Plese enter billing name" />
                                 <span class="kt-form__help error billing_name"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="contact_person">Contact person <span class="text-danger">*</span></label>
+                                <label for="contact_person">Contact person <span class="text-danger"></span></label>
                                 <input type="text" name="contact_person" id="contact_person" class="form-control" placeholder="Plese enter contact person" />
                                 <span class="kt-form__help error contact_person"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="mobile_number">Mobile number <span class="text-danger">*</span></label>
+                                <label for="mobile_number">Mobile number <span class="text-danger"></span></label>
                                 <input type="text" name="mobile_number" id="mobile_number" class="form-control digits" placeholder="Plese enter mobile number" />
                                 <span class="kt-form__help error mobile_number"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="billing_address">Billing address <span class="text-danger">*</span></label>
+                                <label for="billing_address">Billing address <span class="text-danger"></span></label>
                                 <textarea name="billing_address" id="billing_address" cols="3" rows="5" class="form-control" placeholder="Plese enter billing address"></textarea>
                                 <span class="kt-form__help error billing_address"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="delivery_address">Delivery address <span class="text-danger">*</span></label>
+                                <label for="delivery_address">Delivery address <span class="text-danger"></span></label>
                                 <textarea name="delivery_address" id="delivery_address" cols="3" rows="5" class="form-control" placeholder="Plese enter delivery address"></textarea>
                                 <span class="kt-form__help error delivery_address"></span>
                             </div>

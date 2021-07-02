@@ -31,7 +31,7 @@
                                 <span class="kt-form__help error email"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="phone">Phone Number <span class="text-danger">*</span></label>
+                                <label for="phone">Phone Number <span class="text-danger"></span></label>
                                 <input type="text" name="phone" id="phone" class="form-control" placeholder="Plese enter phone number" value="{{ $data->phone ?? '' }}" disabled="disabled" />
                                 <span class="kt-form__help error phone"></span>
                             </div>

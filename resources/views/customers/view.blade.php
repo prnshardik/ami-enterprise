@@ -26,27 +26,27 @@
                                 <span class="kt-form__help error party_name"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="billing_name">Billing Name <span class="text-danger">*</span></label>
+                                <label for="billing_name">Billing Name <span class="text-danger"></span></label>
                                 <input type="text" name="billing_name" id="billing_name" class="form-control" value="{{ $data->billing_name ?? '' }}" placeholder="Plese enter billing name" disabled />
                                 <span class="kt-form__help error billing_name"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="contact_person">Contact person <span class="text-danger">*</span></label>
+                                <label for="contact_person">Contact person <span class="text-danger"></span></label>
                                 <input type="text" name="contact_person" id="contact_person" class="form-control" value="{{ $data->contact_person ?? '' }}" placeholder="Plese enter contact person" disabled />
                                 <span class="kt-form__help error contact_person"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="mobile_number">Mobile number <span class="text-danger">*</span></label>
+                                <label for="mobile_number">Mobile number <span class="text-danger"></span></label>
                                 <input type="text" name="mobile_number" id="mobile_number" class="form-control" value="{{ $data->mobile_number ?? '' }}" placeholder="Plese enter mobile number" disabled />
                                 <span class="kt-form__help error mobile_number digits"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="billing_address">Billing address <span class="text-danger">*</span></label>
+                                <label for="billing_address">Billing address <span class="text-danger"></span></label>
                                 <textarea name="billing_address" id="billing_address" cols="5" rows="10" class="form-control" placeholder="Plese enter billing address" disabled>{{ $data->billing_address ?? '' }}</textarea>
                                 <span class="kt-form__help error billing_address"></span>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="billing_address">Delivery address <span class="text-danger">*</span></label>
+                                <label for="billing_address">Delivery address <span class="text-danger"></span></label>
                                 <textarea name="billing_address" id="billing_address" cols="5" rows="10" class="form-control" placeholder="Plese enter delivery address" disabled>{{ $data->billing_address ?? '' }}</textarea>
                                 <span class="kt-form__help error billing_address"></span>
                             </div>

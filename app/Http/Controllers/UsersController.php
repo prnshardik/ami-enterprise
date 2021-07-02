@@ -65,12 +65,12 @@
                 if($request->ajax()){ return true; }
 
                 if(!empty($request->all())){
-                    $password = $request->password;
+                    $password = $request->password ?? 'Abcd@1234';
                     
                     $crud = [
                             'name' => $request->name,
                             'email' => $request->email,
-                            'phone' => $request->phone,
+                            'phone' => $request->phone ?? NULL,
                             'password' => bcrypt($password),
                             'status' => 'active',
                             'is_admin' => 'n',
@@ -80,9 +80,9 @@
                             'updated_by' => auth()->user()->id
                     ];
 
-                    $user_last_id = User::insertGetId($crud);
+                    $last_id = User::insertGetId($crud);
                     
-                    if($user_last_id)
+                    if($last_id)
                         return redirect()->route('users')->with('success', 'User created successfully.');
                     else
                         return redirect()->back()->with('error', 'Faild to create user!')->withInput();

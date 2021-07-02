@@ -12,13 +12,11 @@
         public function rules(){
             if($this->method() == 'PATCH'){
                 return [
-                    'title' => 'required',
-                    'description' => 'required'
+                    'title' => 'required'
                 ];
             }else{
                 return [
-                    'title' => 'required',
-                    'description' => 'required'
+                    'title' => 'required'
                 ];
             }
         }
