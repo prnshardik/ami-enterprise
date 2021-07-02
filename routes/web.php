@@ -10,6 +10,11 @@ Route::get('clear', function() {
     return "config, cache, and view cleared successfully";
 });
 
+Route::get('config', function() {
+    Artisan::call('config:cache');
+    return "config cache successfully";
+});
+
 Route::get('key-generate', function() {
     Artisan::call('key:generate');
     return "Key generate successfully";
