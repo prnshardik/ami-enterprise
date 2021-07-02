@@ -9,7 +9,6 @@
 
 @section('styles')
     <link href="{{ asset('assets/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/css/main.min.css') }}" rel="stylesheet" />
 
     <style> 
         .select2-container--default .select2-selection--single{
