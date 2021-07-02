@@ -34,6 +34,7 @@
                                                                 <ul class="dropdown-menu">
                                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="pending" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Pending</a></li>
                                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="completed" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Completed</a></li>
+                                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="delete" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Delete</a></li>
                                                                 </ul>
                                                             </div>';
                                 }
@@ -260,7 +261,7 @@
                     $data = Order::where(['id' => $id])->first();
 
                     if(!empty($data)){
-                        if($status == 'deleted')
+                        if($status == 'delete')
                             $update = Order::where('id',$id)->delete();
                         else
                             $update = Order::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
