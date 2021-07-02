@@ -24,18 +24,21 @@
 
                     <div class="ibox-body">
                         <div class="row mb-5 mt-2 mx-2">
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <select name="type" id="type" class="form-control">
                                     <option value="">Select Type</option>
                                     <option value="assigned">Assigned</option>
                                     <option value="not_assigned">Not Assigned</option>
                                 </select>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <input type="date" name="start_date" id="start_date" class="form-control date">
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <input type="date" name="end_date" id="end_date" class="form-control date">
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="button" name="reset" id="reset" class="form-control btn btn-primary">Reset</button>
                             </div>
                         </div>
 
@@ -45,9 +48,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Party Name</th>
-                                        <th>Date</th>
                                         <th>Amount</th>
-                                        <th>Mobile No</th>
                                         <th>Reminder</th>
                                         <th>Note</th>
                                         <th>Action</th>
@@ -119,16 +120,8 @@
                             name: 'party_name'
                         },
                         {
-                            data: 'bill_date',
-                            name: 'bill_date'
-                        },
-                        {
                             data: 'balance_amount',
                             name: 'balance_amount'
-                        },
-                        {
-                            data: 'mobile_no',
-                            name: 'mobile_no',
                         },
                         {
                             data: 'reminder',
@@ -149,6 +142,13 @@
         }); 
 
         $('#type').change(function(){
+            $('#data-table').DataTable().draw(true);            
+        });
+
+        $('#reset').click(function(){
+            $('#type').val('');
+            $('#start_date').val('');
+            $('#end_date').val('');
             $('#data-table').DataTable().draw(true);            
         });
 
