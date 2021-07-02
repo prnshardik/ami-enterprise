@@ -21,6 +21,8 @@
                     <div class="ibox-body">
                         <form name="form" action="{{ route('customers.insert') }}" id="form" method="post" enctype="multipart/form-data">
                             @csrf
+
+                            <input type="hidden" name="previous" value="{{ $previous }}">
                             
                             <div class="row">
                                 <div class="form-group col-sm-6">

@@ -79,12 +79,18 @@
             }
         /** index */
 
+        /** select-customer */
+            public function select_customer(Request $request){
+                return view('orders.select_customer');
+            }
+        /** select-customer */
+
         /** create */
-            public function create(Request $request){
+            public function create(Request $request, $customer_id=''){
                 $products = Product::select('id', 'name')->get();
                 $customers = Customer::select('id', 'party_name')->where(['status' => 'active'])->get();
 
-                return view('orders.create', ['products' => $products, 'customers' => $customers]);
+                return view('orders.create', ['products' => $products, 'customers' => $customers, 'customer_id' => $customer_id]);
             }
         /** create */
 

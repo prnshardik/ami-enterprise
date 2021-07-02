@@ -18,7 +18,7 @@
                     <div class="ibox-head">
                         <h1 class="ibox-title">Orders</h1>
                         <h1 class="pull-right">
-                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('orders.create') }}">Add New</a>
+                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('orders.select.customer') }}">Add New</a>
                         </h1>
                     </div>
 

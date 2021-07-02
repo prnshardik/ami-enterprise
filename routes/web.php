@@ -108,7 +108,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
 
         /** orders */
             Route::any('orders', 'OrdersController@index')->name('orders');
-            Route::get('orders/create', 'OrdersController@create')->name('orders.create');
+            Route::get('orders/create/{customer_id?}', 'OrdersController@create')->name('orders.create');
             Route::post('orders/insert', 'OrdersController@insert')->name('orders.insert');
             Route::get('orders/view/{id?}', 'OrdersController@view')->name('orders.view');
             Route::get('orders/edit/{id?}', 'OrdersController@edit')->name('orders.edit');
@@ -116,6 +116,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('orders/change-status', 'OrdersController@change_status')->name('orders.change.status');
 
             Route::post('orders/delete-detail', 'OrdersController@delete_detail')->name('orders.delete.detail');
+            Route::get('orders/select-customer', 'OrdersController@select_customer')->name('orders.select.customer');
         /** orders */
 
         /** payment */

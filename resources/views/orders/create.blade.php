@@ -40,7 +40,7 @@
                                         <option></option>
                                         @if(isset($customers) && $customers->isNotEmpty())
                                             @foreach($customers as $row)
-                                                <option value="{{ $row->party_name }}">{{ $row->party_name }}</option>
+                                                <option value="{{ $row->party_name }}" @if(isset($customer_id) && $customer_id == $row->id) selected @endif >{{ $row->party_name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
