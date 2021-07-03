@@ -167,7 +167,7 @@
 
             let id = $(this).attr('id');
 
-            let assign_id = $('#assign_id').val();
+            let assign_id = $('#assign_id'+id).val();
             let party_name = $('#party_name'+id).val();
             let date = $('#date'+id).val();
             let user = $('#user'+id+' option').filter(':selected').val();
@@ -205,9 +205,7 @@
                         });
                     }
                 }
-
             });
-
         });
     </script>
 @endsection

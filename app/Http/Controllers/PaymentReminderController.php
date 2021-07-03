@@ -2,38 +2,151 @@
     namespace App\Http\Controllers;
 
     use Illuminate\Http\Request;
-    use App\Models\PaymentReminder;
     use App\Models\User;
     use App\Models\Payment;
+    use App\Models\PaymentReminder;
     use Illuminate\Support\Str;
-    use App\Http\Requests\PaymentReminderRequest;
     use Auth, Validator, DB, Mail, DataTables, File;
 
     class PaymentReminderController extends Controller{
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    $data = PaymentReminder::select('payment_reminder.id', 'payment_reminder.party_name' , 'payment_reminder.mobile_no', 'payment_reminder.date', 
+                    $date = $request->date ?? 'today';
+
+                    $collection = PaymentReminder::select('payment_reminder.id', 'payment_reminder.party_name' , 'payment_reminder.mobile_no', 'payment_reminder.date', 
                                                         'payment_reminder.amount', 'payment_reminder.note', 'u.name as user_name'
                                                     )
-                                                ->leftjoin('users as u', 'payment_reminder.user_id', 'u.id')
-                                                ->get();
+                                                    ->leftjoin('users as u', 'payment_reminder.user_id', 'u.id')
+                                                    ->whereRaw('payment_reminder.id IN (select MAX(id) FROM payment_reminder GROUP BY party_name)');
+
+                    $collection->whereIn('payment_reminder.party_name', function($query){
+                        $query->select('party_name')
+                            ->from(with(new Payment)->getTable());
+                    });
+
+                    if($date == 'past')
+                        $collection->whereDate('payment_reminder.next_date', '<', date('Y-m-d'));
+                    elseif($date == 'future')
+                        $collection->whereDate('payment_reminder.next_date', '>', date('Y-m-d'));
+                    else
+                        $collection->whereDate('payment_reminder.next_date', '=', date('Y-m-d'));
+                    
+                    $data = $collection->get();
 
                     return Datatables::of($data)
                             ->addIndexColumn()
                             ->addColumn('action', function($data){
+                                $reminders = PaymentReminder::select('payment_reminder.id', 'payment_reminder.date', 'payment_reminder.amount', 'payment_reminder.next_date', 
+                                                                    'payment_reminder.next_time', 'payment_reminder.note', 'u.name as user_name')
+                                                                    ->leftjoin('users as u', 'payment_reminder.user_id', 'u.id')
+                                                                    ->where(['payment_reminder.party_name' => $data->party_name])
+                                                                    ->get();
+
+                                $details = '';
+
+                                if($reminders->isNotEmpty()){
+                                    $details .= "<ul class='media-list media-list-divider m-0'>";
+                                        foreach($reminders as $row){
+                                            $details .= "<li class='media followup_details'>
+                                                            <div class='media-body'>
+                                                                <div class='media-heading'>
+                                                                    $row->user_name
+                                                                    <span class='font-13 float-right'>$row->date</span>
+                                                                </div>
+                                                                <div class='font-13'>$row->note</div>
+                                                                <div class='font-13 text-danger'>Next Follow-up On $row->next_date $row->next_time</div>
+                                                            </div>
+                                                        </li>
+                                                        <br/>";
+                                        }
+                                    $details .= "</ul>"; 
+                                }else{
+                                    $details = '<div class="row"><div class="col-sm-12 text-center"><h1>No Reminders Yet</h1></div></div>';
+                                }
+
+                                $form = "<div class='row'>
+                                            <input type='hidden' value='$data->party_name' id='party_name$data->id' />
+                                            <div class='form-group col-sm-12'>
+                                                <label for='note'>Note </label>
+                                                <textarea type='note' name='note$data->id' id='note$data->id' class='form-control' style='max-width: 90%;'/></textarea>
+                                                <span class='kt-form__help error note$data->id'></span>
+                                            </div>
+                                            <div class='form-group col-sm-5'>
+                                                <label for='next_date$data->id'>Next date <span class='text-danger'>*</span></label>
+                                                <input type='date' name='next_date$data->id' id='next_date$data->id' class='form-control' style='max-width: 90%;'>
+                                                <span class='kt-form__help error next_date$data->id'></span>
+                                            </div>
+                                            <div class='form-group col-sm-5'>
+                                                <label for='next_time$data->id'>Next time <span class='text-danger'>*</span></label>
+                                                <input type='time' name='next_time$data->id' id='next_time$data->id' class='form-control' style='max-width: 90%;'>
+                                                <span class='kt-form__help error next_time$data->id'></span>
+                                            </div>
+                                            <div class='form-group col-sm-12'>
+                                                <label for='mobile_no$data->id'>Mobile no </label>
+                                                <input type='text' name='mobile_no$data->id' id='mobile_no$data->id' class='form-control digit' style='max-width: 90%;'/>
+                                                <span class='kt-form__help error mobile_no$data->id'></span>
+                                            </div>
+                                            <div class='form-group col-sm-12'>
+                                                <label for='amount$data->id'>Amount </label>
+                                                <input type='text' name='amount$data->id' id='amount$data->id' class='form-control digit' style='max-width: 90%;'/>
+                                                <span class='kt-form__help error amount$data->id'></span>
+                                            </div>
+                                        </div>";
+
                                 return ' <div class="btn-group">
-                                                <a href="'.route('payments.reminders.view', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-eye"></i>
-                                                </a> &nbsp;
-                                                <a href="'.route('payments.reminders.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-edit"></i>
-                                                </a> &nbsp;
-                                                <a href="javascript:;" class="btn btn-default btn-xs" onclick="change_status(this);" data-status="deleted" data-id="'.base64_encode($data->id).'">
+                                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#followup'.$data->id.'">
+                                                    <i class="fa fa-plus"></i>
+                                                </button> &nbsp;
+
+                                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#details'.$data->id.'">
+                                                    <i class="fa fa-exclamation-circle"></i>
+                                                </button> &nbsp;
+
+                                                <a href="javascript:;" class="btn btn-default btn-xs" onclick="change_status(this);" data-name="'.$data->party_name.'" data-status="deleted" data-id="'.base64_encode($data->id).'">
                                                     <i class="fa fa-trash"></i>
-                                                </a>
+                                                </a> &nbsp;
+
+                                                <div class="modal fade" id="followup'.$data->id.'" tabindex="-1" role="dialog" aria-labelledby="examplefollowup'.$data->id.'" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="examplefollowup'.$data->id.'">New Followup - '.$data->party_name.'</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form class="form" id='.$data->id.'>
+                                                                <div class="modal-body">'.$form.'</div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal fade" id="details'.$data->id.'" tabindex="-1" role="dialog" aria-labelledby="exampledetails'.$data->id.'" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampledetails'.$data->id.'">Followup Details - '.$data->party_name.'</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form class="form" id='.$data->id.'>
+                                                                <div class="modal-body">'.$details.'</div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>';
-                            })
+                                            })
 
                             ->editColumn('next_date',function($data){
                                 return date('d-m-Y' ,strtotime($data->next_date));
@@ -51,180 +164,76 @@
             }
         /** index */
 
-        /** create */
-            public function create(Request $request){
-                $users = User::select('id', 'name')->where(['status' => 'active', 'is_admin' => 'n'])->get();
-
-                return view('payment_reminder.create')->with('data', $users);
-            }
-        /** create */
-
         /** insert */
-            public function insert(TaskRequest $request){
-                if($request->ajax()){ return true; }
+            public function insert(Request $request){
+                if(!$request->ajax()){ return true; }
                 
-                if(!empty($request->all())){
-                    $crud = [
-                            'title' => ucfirst($request->title),
-                            'user_id' => implode(',', $request->users) ,
-                            'description' => $request->description ?? NULL,
-                            'target_date' => $request->t_date,
+                $validator = Validator::make(
+                                            ['party_name' => $request->party_name, 'next_date' => $request->next_date, 'next_time' => $request->next_time],
+                                            ['party_name' => 'required', 'next_date' => 'required', 'next_time' => 'required']
+                                        );
+
+                if($validator->fails()){
+                    return response()->json($validator->errors(), 422);
+                }else{
+                    if(!empty($request->all())){
+                        $crud = [
+                            'user_id' => auth()->user()->id,
+                            'party_name' => $request->party_name,
+                            'note' => $request->note ?? NULL,
+                            'mobile_no' => $request->mobile_no ?? NULL,
+                            'date' => date('Y-m-d'),
+                            'next_date' => $request->next_date,
+                            'next_time' => $request->next_time,
+                            'amount' => $request->amount ?? NULL,
                             'created_at' => date('Y-m-d H:i:s'),
                             'created_by' => auth()->user()->id,
                             'updated_at' => date('Y-m-d H:i:s'),
                             'updated_by' => auth()->user()->id
-                    ];
+                        ];
 
-                    if(!empty($request->file('file'))){
-                        $file = $request->file('file');
-                        $filenameWithExtension = $request->file('file')->getClientOriginalName();
-                        $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
-                        $extension = $request->file('file')->getClientOriginalExtension();
-                        $filenameToStore = time()."_".$filename.'.'.$extension;
-
-                        $folder_to_upload = public_path().'/uploads/task/';
-
-                        if (!\File::exists($folder_to_upload)) {
-                            \File::makeDirectory($folder_to_upload, 0777, true, true);
-                        }
-
-                        $crud["attechment"] = $filenameToStore;
-                    }
-
-                    $last_id = Task::insertGetId($crud);
-                    
-                    if($last_id){
-                        if(!empty($request->file('file')))
-                            $file->move($folder_to_upload, $filenameToStore);
-
-                        return redirect()->route('tasks')->with('success', 'Task created successfully.');
+                        $last_id = PaymentReminder::insertGetId($crud);
+                        
+                        if($last_id)
+                            return response()->json(['code' => 200, 'message' => 'Record added successfully']);
+                        else
+                            return response()->json(['code' => 201, 'message' => 'Failed to add record']);
                     }else{
-                        return redirect()->back()->with('error', 'Faild to create task!')->withInput();
+                        return response()->json(['code' => 201, 'message' => 'Something went wrong']);
                     }
-                }else{
-                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
             }
         /** insert */
 
-        /** view */
-            public function view(Request $request, $id=''){
-                if($id == '')
-                    return redirect()->route('tasks')->with('error', 'Something went wrong');
-
-                $id = base64_decode($id);
-
-                $data = Task::where(['id' => $id])->first();
-                $users = User::select('id', 'name')->where(['status' => 'active', 'is_admin' => 'n'])->get();
-                
-                if($data)
-                    return view('tasks.view')->with(['users' => $users, 'data' => $data]);
-                else
-                    return redirect()->route('tasks')->with('error', 'No task found');
-            }
-        /** view */
-
-        /** edit */
-            public function edit(Request $request, $id=''){
-                if($id == '')
-                    return redirect()->route('tasks')->with('error', 'Something went wrong');
-
-                $id = base64_decode($id);
-
-                $data = Task::where(['id' => $id])->first();
-                $users = User::select('id', 'name')->where(['status' => 'active', 'is_admin' => 'n'])->get();
-                
-                if($data)
-                    return view('tasks.edit')->with(['data' => $data, 'users' => $users]);
-                else
-                    return redirect()->route('tasks')->with('error', 'No task found');
-            }
-        /** edit */ 
-
-        /** update */
-            public function update(TaskRequest $request){
-                if($request->ajax()){ return true; }
-
-                if(!empty($request->all())){
-                    $exst_data = Task::where(['id' => $request->id])->first();
-
-                    $crud = [
-                            'title' => ucfirst($request->title),
-                            'user_id' => implode(',', $request->users) ,
-                            'description' => $request->description ?? NULL,
-                            'target_date' => $request->t_date,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
-                    ];
-
-                    if(!empty($request->file('file'))){
-                        $exst_file = public_path().'/uploads/task/'.$exst_data->attechment;
-
-                        $file = $request->file('file');
-                        $filenameWithExtension = $request->file('file')->getClientOriginalName();
-                        $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
-                        $extension = $request->file('file')->getClientOriginalExtension();
-                        $filenameToStore = time()."_".$filename.'.'.$extension;
-
-                        $folder_to_upload = public_path().'/uploads/task/';
-
-                        if (!\File::exists($folder_to_upload)) {
-                            \File::makeDirectory($folder_to_upload, 0777, true, true);
-                        }
-
-                        $crud["attechment"] = $filenameToStore;
-                    }
-                    
-                    $update = Task::where(['id' => $request->id])->update($crud);
-
-                    if($update){
-                        if(!empty($request->file('file'))){
-                            $file->move($folder_to_upload, $filenameToStore);
-
-                            if(\File::exists($exst_file) && $exst_file != ''){
-                                @unlink($exst_file);
-                            }
-                        }
-
-                        return redirect()->route('tasks')->with('success', 'Task updated successfully.');
-                    }else{
-                        return redirect()->back()->with('error', 'Faild to update task!')->withInput();
-                    }
-                }else{
-                    return redirect()->back()->with('error', 'Something went wrong')->withInput();
-                }
-            }
-        /** update */
-
         /** change-status */
             public function change_status(Request $request){
                 if(!$request->ajax()){ exit('No direct script access allowed'); }
-
+                
                 if(!empty($request->all())){
                     $id = base64_decode($request->id);
                     $status = $request->status;
+                    $name = $request->name;
 
-                    $data = Task::where(['id' => $id])->first();
-
-                    if(!empty($data)){
-                        if($status == 'deleted')
-                            $update = Task::where(['id' => $id])->delete();
-                        else
-                            $update = Task::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
+                    DB::beginTransaction();
+                    try {
+                        $paymentDelete = Payment::where(['party_name' => $name])->delete();
                         
-                        if($update){
-                            if($status == 'deleted'){
-                                $exst_file = public_path().'/uploads/task/'.$data->attechment;
+                        if($paymentDelete){
+                            $reminderDelete = PaymentReminder::where(['party_name' => $name])->delete();
 
-                                if(\File::exists($exst_file) && $exst_file != ''){
-                                    @unlink($exst_file);
-                                }
+                            if($reminderDelete){
+                                DB::commit();
+                                return response()->json(['code' => 200]);
+                            }else{
+                                DB::rollback();
+                                return response()->json(['code' => 201]);
                             }
-                            return response()->json(['code' => 200]);
                         }else{
+                            DB::rollback();
                             return response()->json(['code' => 201]);
                         }
-                    }else{
+                    } catch (\Exception $e) {
+                        DB::rollback();
                         return response()->json(['code' => 201]);
                     }
                 }else{

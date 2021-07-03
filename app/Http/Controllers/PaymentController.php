@@ -65,6 +65,7 @@
                                 $note = null;
                                 $date = null;
                                 $assign_id = null;
+                                
                                 if($assigned){
                                     $user_id = $assigned->user_id;
                                     $note = $assigned->note;

@@ -133,11 +133,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
 
         /** payments-reminder */
             Route::any('payments-reminder', 'PaymentReminderController@index')->name('payments.reminders');
-            Route::get('payments-reminder/create', 'PaymentReminderController@create')->name('payments.reminders.create');
             Route::post('payments-reminder/insert', 'PaymentReminderController@insert')->name('payments.reminders.insert');
-            Route::get('payments-reminder/view/{id?}', 'PaymentReminderController@view')->name('payments.reminders.view');
-            Route::get('payments-reminder/edit/{id?}', 'PaymentReminderController@edit')->name('payments.reminders.edit');
-            Route::patch('payments-reminder/update', 'PaymentReminderController@update')->name('payments.reminders.update');
             Route::post('payments-reminder/change-status', 'PaymentReminderController@change_status')->name('payments.reminders.change.status');
         /** payments-reminder */
     });
