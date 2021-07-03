@@ -10,12 +10,11 @@
     use Auth, Validator, DB, Mail, DataTables, File;
 
     class PaymentReminderController extends Controller{
-
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
                     $data = PaymentReminder::select('payment_reminder.id', 'payment_reminder.party_name' , 'payment_reminder.mobile_no', 'payment_reminder.date', 
-                                                        'payment_reminder.amount', 'payment_reminder.next_date', 'payment_reminder.next_time', 'u.name as user_name'
+                                                        'payment_reminder.amount', 'payment_reminder.note', 'u.name as user_name'
                                                     )
                                                 ->leftjoin('users as u', 'payment_reminder.user_id', 'u.id')
                                                 ->get();
@@ -30,7 +29,9 @@
                                                 <a href="'.route('payments.reminders.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
                                                     <i class="fa fa-edit"></i>
                                                 </a> &nbsp;
-                                                <a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="deleted" data-id="'.base64_encode($data->id).'">Delete</a>
+                                                <a href="javascript:;" class="btn btn-default btn-xs" onclick="change_status(this);" data-status="deleted" data-id="'.base64_encode($data->id).'">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
                                             </div>';
                             })
 

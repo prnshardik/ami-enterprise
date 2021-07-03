@@ -28,13 +28,12 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>Date</th>
+                                        <th>User Name</th>
                                         <th>Party Name</th>
                                         <th>Mobile No</th>
-                                        <th>Date</th>
-                                        <th>Next Date</th>
-                                        <th>Next Time</th>
                                         <th>Amount</th>
-                                        <th>User Name</th>
+                                        <th>Note</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -94,6 +93,14 @@
                             name: 'DT_RowIndex'
                         },
                         {
+                            data: 'date',
+                            name: 'date'
+                        },
+                        {
+                            data: 'user_name',
+                            name: 'user_name'
+                        },
+                        {
                             data: 'party_name',
                             name: 'party_name'
                         },
@@ -102,24 +109,12 @@
                             name: 'mobile_no'
                         },
                         {
-                            data: 'date',
-                            name: 'date'
-                        },
-                        {
-                            data: 'next_date',
-                            name: 'next_date'
-                        },
-                        {
-                            data: 'next_time',
-                            name: 'next_time'
-                        },
-                        {
-                            data: 'user_name',
-                            name: 'user_name'
-                        },
-                        {
                             data: 'amount',
                             name: 'amount'
+                        },
+                        {
+                            data: 'note',
+                            name: 'note'
                         },
                         {
                             data: 'action',
