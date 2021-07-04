@@ -149,10 +149,10 @@
                                         </div>";
 
                                 return  '<div class="btn-group">
-                                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#assignModal'.$data->id.'">
+                                            <button type="button" title="Assign reminder" class="btn btn-default btn-xs" data-toggle="modal" data-target="#assignModal'.$data->id.'">
                                                 <i class="fa fa-plus"></i>
                                             </button> &nbsp;
-                                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#infoModal'.$data->id.'">
+                                            <button type="button" title="Bill details" class="btn btn-default btn-xs" data-toggle="modal" data-target="#infoModal'.$data->id.'">
                                                 <i class="fa fa-file-text"></i>
                                             </button> &nbsp;
                                         </div>

@@ -25,6 +25,7 @@
                     <div class="ibox-body">
                         <div class="row mb-5 mt-2 mx-2">
                             <div class="col-sm-3">
+                                <label for="type" class="font-weight-bold">Type <span class="text-danger"></span></label>
                                 <select name="type" id="type" class="form-control">
                                     <option value="">Select Type</option>
                                     <option value="assigned">Assigned</option>
@@ -32,13 +33,16 @@
                                 </select>
                             </div>
                             <div class="col-sm-3">
+                                <label for="start_date" class="font-weight-bold">Start Date <span class="text-danger"></span></label>
                                 <input type="date" name="start_date" id="start_date" class="form-control date">
                             </div>
                             <div class="col-sm-3">
+                                <label for="end_date" class="font-weight-bold">End Date <span class="text-danger"></span></label>
                                 <input type="date" name="end_date" id="end_date" class="form-control date">
                             </div>
                             <div class="col-sm-3">
-                                <button type="button" name="reset" id="reset" class="form-control btn btn-primary">Reset</button>
+                                <label for="reset"> <span class="text-danger"></span></label>
+                                <button type="button" name="reset" id="reset" class="form-control btn btn-primary mt-2">Reset</button>
                             </div>
                         </div>
 

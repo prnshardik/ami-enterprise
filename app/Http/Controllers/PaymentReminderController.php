@@ -125,19 +125,19 @@
                                         </div>";
 
                                 return ' <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#followup'.$data->id.'">
+                                                <button type="button" title="Add followup" class="btn btn-default btn-xs" data-toggle="modal" data-target="#followup'.$data->id.'">
                                                     <i class="fa fa-plus"></i>
                                                 </button> &nbsp;
 
-                                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#details'.$data->id.'">
+                                                <button type="button" title="Followup details" class="btn btn-default btn-xs" data-toggle="modal" data-target="#details'.$data->id.'">
                                                     <i class="fa fa-exclamation-circle"></i>
                                                 </button> &nbsp;
 
-                                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#infoModal'.$data->id.'">
+                                                <button type="button" title="Bill details" class="btn btn-default btn-xs" data-toggle="modal" data-target="#infoModal'.$data->id.'">
                                                     <i class="fa fa-file-text"></i>
                                                 </button> &nbsp;
 
-                                                <a href="javascript:;" class="btn btn-default btn-xs" onclick="change_status(this);" data-name="'.$data->party_name.'" data-status="deleted" data-id="'.base64_encode($data->id).'">
+                                                <a href="javascript:;" title="Delete record" class="btn btn-default btn-xs" onclick="change_status(this);" data-name="'.$data->party_name.'" data-status="deleted" data-id="'.base64_encode($data->id).'">
                                                     <i class="fa fa-trash"></i>
                                                 </a> &nbsp;
 
