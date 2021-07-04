@@ -134,7 +134,7 @@
                                                 </button> &nbsp;
 
                                                 <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#infoModal'.$data->id.'">
-                                                    <i class="fa fa-exclamation-circle"></i>
+                                                    <i class="fa fa-file-text"></i>
                                                 </button> &nbsp;
 
                                                 <a href="javascript:;" class="btn btn-default btn-xs" onclick="change_status(this);" data-name="'.$data->party_name.'" data-status="deleted" data-id="'.base64_encode($data->id).'">
