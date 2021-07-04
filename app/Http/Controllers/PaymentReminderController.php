@@ -37,6 +37,33 @@
                     return Datatables::of($data)
                             ->addIndexColumn()
                             ->addColumn('action', function($data){
+                                $rec = Payment::select('bill_no', 'bill_date', 'bill_amount')->where(['party_name' => $data->party_name])->get();
+
+                                $info = "<table class='table table-bordered'>
+                                            <thead class='thead-default'>
+                                                <tr>
+                                                    <th>Sr. No</th>
+                                                    <th>Bill No</th>
+                                                    <th>Bill Date</th>
+                                                    <th>Bill Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>";
+
+                                if($rec->isNotEmpty()){
+                                    $i=1;
+                                    foreach($rec as $r){
+                                        $info .= "<tr>
+                                                    <td>$i</td>
+                                                    <td>$r->bill_no</td>
+                                                    <td>$r->bill_date</td>
+                                                    <td>$r->bill_amount</td>
+                                                </tr>";
+                                        $i++;
+                                    }
+                                }
+                                $info .="</tbody></table>";
+
                                 $reminders = PaymentReminder::select('payment_reminder.id', 'payment_reminder.date', 'payment_reminder.amount', 'payment_reminder.next_date', 
                                                                     'payment_reminder.next_time', 'payment_reminder.note', 'u.name as user_name')
                                                                     ->leftjoin('users as u', 'payment_reminder.user_id', 'u.id')
@@ -44,7 +71,6 @@
                                                                     ->get();
 
                                 $details = '';
-
                                 if($reminders->isNotEmpty()){
                                     $details .= "<ul class='media-list media-list-divider m-0'>";
                                         foreach($reminders as $row){
@@ -103,6 +129,10 @@
                                                     <i class="fa fa-exclamation-circle"></i>
                                                 </button> &nbsp;
 
+                                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#infoModal'.$data->id.'">
+                                                    <i class="fa fa-exclamation-circle"></i>
+                                                </button> &nbsp;
+
                                                 <a href="javascript:;" class="btn btn-default btn-xs" onclick="change_status(this);" data-name="'.$data->party_name.'" data-status="deleted" data-id="'.base64_encode($data->id).'">
                                                     <i class="fa fa-trash"></i>
                                                 </a> &nbsp;
@@ -142,6 +172,23 @@
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                                 </div>
                                                             </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal fade" id="infoModal'.$data->id.'" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel'.$data->id.'" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="infoModalLabel'.$data->id.'">'.$data->party_name.'</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">'.$info.'</div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

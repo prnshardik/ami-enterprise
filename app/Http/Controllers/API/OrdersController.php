@@ -109,7 +109,8 @@
 
                         if($product_id != null){
                             for($i=0; $i<count($product_id); $i++){
-                                $order_detail_crud = [
+                                if($product_id[$i] != null){
+                                    $order_detail_crud = [
                                         'order_id' => $last_id,
                                         'product_id' => $product_id[$i],
                                         'quantity' => $quantity[$i],
@@ -118,9 +119,10 @@
                                         'created_by' => auth('sanctum')->user()->id,
                                         'updated_at' => date('Y-m-d H:i:s'),
                                         'updated_by' => auth('sanctum')->user()->id
-                                ];
-
-                                OrderDetails::insertGetId($order_detail_crud);
+                                    ];
+    
+                                    OrderDetails::insertGetId($order_detail_crud);
+                                }
                             }
                         }
 
@@ -181,18 +183,20 @@
 
                                     OrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
                                 }else{
-                                    $order_detail_crud = [
-                                        'order_id' => $request->id,
-                                        'product_id' => $product_id[$i],
-                                        'quantity' => $quantity[$i],
-                                        'price' => $price[$i],
-                                        'created_at' => date('Y-m-d H:i:s'),
-                                        'created_by' => auth('sanctum')->user()->id,
-                                        'updated_at' => date('Y-m-d H:i:s'),
-                                        'updated_by' => auth('sanctum')->user()->id
-                                    ];
-
-                                    OrderDetails::insertGetId($order_detail_crud);
+                                    if($product_id[$i] != null){
+                                        $order_detail_crud = [
+                                            'order_id' => $request->id,
+                                            'product_id' => $product_id[$i],
+                                            'quantity' => $quantity[$i],
+                                            'price' => $price[$i],
+                                            'created_at' => date('Y-m-d H:i:s'),
+                                            'created_by' => auth('sanctum')->user()->id,
+                                            'updated_at' => date('Y-m-d H:i:s'),
+                                            'updated_by' => auth('sanctum')->user()->id
+                                        ];
+    
+                                        OrderDetails::insertGetId($order_detail_crud);
+                                    }
                                 }
                             }
                         }

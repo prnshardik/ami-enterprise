@@ -11,10 +11,7 @@
         
         /** login */
             public function login(Request $request){
-                $rules = [
-                            'email' => 'required',
-                            'password' => 'required'
-                        ];
+                $rules = ['email' => 'required', 'password' => 'required'];
 
                 $validator = Validator::make($request->all(), $rules);
 
