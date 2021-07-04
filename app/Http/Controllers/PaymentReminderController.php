@@ -4,6 +4,7 @@
     use Illuminate\Http\Request;
     use App\Models\User;
     use App\Models\Payment;
+    use App\Models\PaymentAssign;
     use App\Models\PaymentReminder;
     use Illuminate\Support\Str;
     use Auth, Validator, DB, Mail, DataTables, File;
@@ -14,23 +15,26 @@
                 if($request->ajax()){
                     $date = $request->date ?? 'today';
 
-                    $collection = PaymentReminder::select('payment_reminder.id', 'payment_reminder.party_name' , 'payment_reminder.mobile_no', 'payment_reminder.date', 
+                    $collection = PaymentReminder::select('payment_reminder.id', 'payment_reminder.party_name' , 'payment_reminder.mobile_no', 'payment_reminder.date', 'payment_reminder.next_date', 
                                                         'payment_reminder.amount', 'payment_reminder.note', 'u.name as user_name'
                                                     )
-                                                    ->leftjoin('users as u', 'payment_reminder.user_id', 'u.id')
-                                                    ->whereRaw('payment_reminder.id IN (select MAX(id) FROM payment_reminder GROUP BY party_name)');
-
+                                                    ->leftjoin('users as u', 'payment_reminder.user_id', 'u.id');
+                                                    
                     $collection->whereIn('payment_reminder.party_name', function($query){
                         $query->select('party_name')
                             ->from(with(new Payment)->getTable());
                     });
 
-                    if($date == 'past')
+                    if($date == 'past'){
                         $collection->whereDate('payment_reminder.next_date', '<', date('Y-m-d'));
-                    elseif($date == 'future')
+                        $collection->whereRaw('payment_reminder.id IN (select MAX(id) FROM payment_reminder where DATE(next_date) < "'.date('Y-m-d').'" GROUP BY party_name)');
+                    }elseif($date == 'future'){
                         $collection->whereDate('payment_reminder.next_date', '>', date('Y-m-d'));
-                    else
+                        $collection->whereRaw('payment_reminder.id IN (select MAX(id) FROM payment_reminder where DATE(next_date) > "'.date('Y-m-d').'" GROUP BY party_name)');
+                    }else{
                         $collection->whereDate('payment_reminder.next_date', '=', date('Y-m-d'));
+                        $collection->whereRaw('payment_reminder.id IN (select MAX(id) FROM payment_reminder where DATE(next_date) = "'.date('Y-m-d').'" GROUP BY party_name)');
+                    }
                     
                     $data = $collection->get();
 
@@ -266,11 +270,18 @@
                         $paymentDelete = Payment::where(['party_name' => $name])->delete();
                         
                         if($paymentDelete){
-                            $reminderDelete = PaymentReminder::where(['party_name' => $name])->delete();
+                            $assignDelete = PaymentAssign::where(['party_name' => $name])->delete();
 
-                            if($reminderDelete){
-                                DB::commit();
-                                return response()->json(['code' => 200]);
+                            if($assignDelete){
+                                $reminderDelete = PaymentReminder::where(['party_name' => $name])->delete();
+
+                                if($reminderDelete){
+                                    DB::commit();
+                                    return response()->json(['code' => 200]);
+                                }else{
+                                    DB::rollback();
+                                    return response()->json(['code' => 201]);
+                                }
                             }else{
                                 DB::rollback();
                                 return response()->json(['code' => 201]);

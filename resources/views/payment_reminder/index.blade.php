@@ -133,8 +133,8 @@
                             name: 'DT_RowIndex'
                         },
                         {
-                            data: 'date',
-                            name: 'date'
+                            data: 'next_date',
+                            name: 'next_date'
                         },
                         {
                             data: 'user_name',

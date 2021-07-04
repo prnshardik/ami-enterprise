@@ -23,8 +23,13 @@
                     $collection = Payment::select('id', 'party_name', 'bill_date', 'balance_amount', 'mobile_no', DB::Raw("null as note"), DB::Raw("null as reminder"))
                                     ->whereRaw('id IN (select MAX(id) FROM payments GROUP BY party_name)');
                     
-                    if($start_date && $end_date)
-                        $collection->whereBetween('bill_date', [$start_date, $end_date]);
+                    if($start_date && $end_date){
+                        $collection->whereIn('party_name', function($query) use($start_date, $end_date){
+                                                $query->select('party_name')
+                                                    ->from(with(new PaymentReminder)->getTable())
+                                                    ->whereBetween('next_date', [$start_date, $end_date]);
+                                            });
+                    }
 
                     if($type && $type == 'assigned'){
                         $collection->whereIn('party_name', function($query){
@@ -51,6 +56,15 @@
                             if($assigned){
                                 $row->note = $assigned->note;
                                 $row->reminder = $assigned->reminder;
+                            }
+
+                            $remider = PaymentReminder::select('payment_reminder.note')
+                                                        ->where(['payment_reminder.party_name' => $row->party_name])
+                                                        ->orderBy('payment_reminder.next_date', 'desc')
+                                                        ->first();
+
+                            if($remider){
+                                $row->note = $remider->note;
                             }
                         }
                     }
@@ -196,7 +210,7 @@
                                                 ['user' => $request->user, 'party_name' => $request->party_name, 'date' => $request->date, 'note' => $request->note],
                                                 ['user' => 'required', 'party_name' => 'required', 'date' => 'required']
                                             );
-
+ 
                 if($validator->fails()){
                     return response()->json($validator->errors(), 422);
                 }else{
@@ -216,10 +230,10 @@
                             if($update){
                                 $payment_reminder = PaymentReminder::select('id')->where(['party_name' => $request->party_name])->orderBy('id', 'desc')->first();
 
-                                $remoder_crud = [
+                                $remider_crud = [
                                     'user_id' => $request->user, 
                                     'date' => date('Y-m-d H:i:s'), 
-                                    'next_date' => $request->date, 
+                                    'next_date' => $request->date ?? date('Y-m-d H:i:s'), 
                                     'next_time' => '00:00', 
                                     'note' => $request->note ?? NULL,
                                     'amount' => NULL,
@@ -227,7 +241,7 @@
                                     'updated_by' => auth()->user()->id
                                 ];
 
-                                $remider_update = PaymentReminder::where(['id' => $payment_reminder->id])->update($crud);
+                                $remider_update = PaymentReminder::where(['id' => $payment_reminder->id])->update($remider_crud);
 
                                 if($remider_update){
                                     DB::commit();
@@ -261,12 +275,12 @@
                                 if($payment)
                                     $mobile_no = $payment->mobile_no;
 
-                                $remoder_crud = [
+                                $remider_crud = [
                                     'user_id' => $request->user, 
                                     'party_name' => $request->party_name,
                                     'mobile_no' => $request->mobile_no,
                                     'date' => date('Y-m-d H:i:s'), 
-                                    'next_date' => $request->date, 
+                                    'next_date' => $request->date ?? date('Y-m-d H:i:s'), 
                                     'next_time' => '00:00', 
                                     'note' => $request->note ?? NULL,
                                     'amount' => NULL,
@@ -276,7 +290,7 @@
                                     'updated_by' => auth()->user()->id
                                 ];
 
-                                $remider_id = PaymentReminder::insertGetId($crud);
+                                $remider_id = PaymentReminder::insertGetId($remider_crud);
 
                                 if($remider_id){
                                     DB::commit();
