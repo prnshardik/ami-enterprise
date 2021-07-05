@@ -14,16 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
     Route::post('login', 'AuthController@login');
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('logout', 'AuthController@logout');
-
+        
         /** products */
             Route::get('products', 'ProductsController@products');
             Route::get('product/{id}', 'ProductsController@product');
@@ -69,26 +65,26 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::post('order/deliver', 'OrdersController@deliver');
         /** order */
 
-         /** Users */
+        /** users */
             Route::get('users', 'UsersController@users');
             Route::post('users/insert', 'UsersController@insert');
             Route::get('users/view/{id?}', 'UsersController@view');
             Route::post('users/update', 'UsersController@update');
             Route::post('users/change-status', 'UsersController@change_status');
-        /** Users */
+        /** users */
 
-         /** Notice */
+        /** notice */
             Route::get('notice', 'NoticeController@notice');
             Route::post('notice/insert', 'NoticeController@insert');
             Route::get('notice/view/{id?}', 'NoticeController@view');
             Route::post('notice/update', 'NoticeController@update');
             Route::post('notice/change-status', 'NoticeController@change_status');
-        /** Notice */
+        /** notice */
     });
 });
-
-Route::get("{path}", function(){ return response()->json(['status' => 500, 'message' => 'Bad request']); })->where('path', '.+');
 
 Route::get('/unauthenticated', function () {
     return response()->json(['status' => 201, 'message' => 'Unacuthorized Access']);
 })->name('api.unauthenticated');
+
+Route::get("{path}", function(){ return response()->json(['status' => 500, 'message' => 'Bad request']); })->where('path', '.+');

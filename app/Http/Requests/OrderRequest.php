@@ -12,19 +12,11 @@
         public function rules(){
             if($this->method() == 'PATCH'){
                 return [
-                    'name' => 'required',
-                    'order_date' => 'required',
-                    'product_id' => 'required|array|min:1',
-                    'quantity' => 'required|array|min:1',
-                    'price' => 'required|array|min:1'
+                    'name' => 'required'
                 ];
             }else{
                 return [
-                    'name' => 'required',
-                    'order_date' => 'required',
-                    'product_id' => 'required|array|min:1',
-                    'quantity' => 'required|array|min:1',
-                    'price' => 'required|array|min:1'
+                    'name' => 'required'
                 ];
             }
         }

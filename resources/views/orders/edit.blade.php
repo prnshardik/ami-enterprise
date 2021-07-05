@@ -9,7 +9,6 @@
 
 @section('styles')
     <link href="{{ asset('assets/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/css/main.min.css') }}" rel="stylesheet" />
 
     <style>
         .select2-container--default .select2-selection--single{
@@ -47,14 +46,14 @@
                                     <span class="kt-form__help error name"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="order_date">Order Date <span class="text-danger">*</span></label>
+                                    <label for="order_date">Order Date <span class="text-danger"></span></label>
                                     <input type="date" name="order_date" id="order_date" class="form-control" value="{{ @old('order_date', $data->order_date) }}" placeholder="Plese enter order date" />
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label for="base_product">Product <span class="text-danger">*</span></label>
+                                    <label for="base_product">Product <span class="text-danger"></span></label>
                                     <select name="base_product" id="base_product" class="form-control">
                                         <option value="" hidden>Select Product</option>
                                         @if(isset($products) && $products->isNotEmpty())
@@ -66,12 +65,12 @@
                                     <span class="kt-form__help error product_id"></span>
                                 </div>
                                 <div class="form-group col-sm-2">
-                                    <label for="base_quantity">Quantity <span class="text-danger">*</span></label>
+                                    <label for="base_quantity">Quantity <span class="text-danger"></span></label>
                                     <input type="text" name="base_quantity" id="base_quantity" class="form-control digit" placeholder="Plese enter quantity" />
                                     <span class="kt-form__help error quantity"></span>
                                 </div>
                                 <div class="form-group col-sm-2">
-                                    <label for="base_price">Price <span class="text-danger">*</span></label>
+                                    <label for="base_price">Price <span class="text-danger"></span></label>
                                     <input type="text" name="base_price" id="base_price" class="form-control digit" placeholder="Plese enter price" />
                                     <span class="kt-form__help error price"></span>
                                 </div>

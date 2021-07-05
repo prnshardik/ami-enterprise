@@ -34,7 +34,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12">
-                                    <label for="description">Description <span class="text-danger">*</span></label>
+                                    <label for="description">Description <span class="text-danger"></span></label>
                                     <textarea name="description" id="description" class="form-control" placeholder="Plese enter description" cols="30" rows="10">{{ @old('description', $data->description) }}</textarea>
                                     <span class="kt-form__help error description"></span>
                                 </div>

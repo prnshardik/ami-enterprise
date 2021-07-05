@@ -29,22 +29,22 @@
                                     <span class="kt-form__help error name"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="quantity">Quantity <span class="text-danger">*</span></label>
+                                    <label for="quantity">Quantity <span class="text-danger"></span></label>
                                     <input type="text" name="quantity" id="quantity" class="form-control digits" placeholder="Plese enter quantity" value="{{ @old('quantity') }}" />
                                     <span class="kt-form__help error quantity"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="unit">Unit <span class="text-danger">*</span></label>
+                                    <label for="unit">Unit <span class="text-danger"></span></label>
                                     <input type="text" name="unit" id="unit" class="form-control" placeholder="Plese enter unit" value="{{ @old('unit') }}" />
                                     <span class="kt-form__help error unit"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="color">Color <span class="text-danger">*</span></label>
+                                    <label for="color">Color <span class="text-danger"></span></label>
                                     <input type="text" name="color" id="color" class="form-control" placeholder="Plese enter color" value="{{ @old('color') }}" />
                                     <span class="kt-form__help error color"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <label for="price">Price <span class="text-danger">*</span></label>
+                                    <label for="price">Price <span class="text-danger"></span></label>
                                     <input type="text" name="price" id="price" class="form-control digits" placeholder="Plese enter price" value="{{ @old('price') }}" />
                                     <span class="kt-form__help error price"></span>
                                 </div>

@@ -5,7 +5,7 @@
     use Illuminate\Http\Request;
     use App\Models\User;
     use App\Http\Requests\UsersRequest;
-    use Auth, Validator, DB, Mail,;
+    use Auth, Validator, DB, Mail;
 
     class UsersController extends Controller{
 
@@ -24,39 +24,35 @@
             public function insert(Request $request){
                 $rules = [
                     'name' => 'required',
-                    'email' => 'required|email|unique:users,email',
-                    'phone' => 'required|numeric|unique:users,phone',
-                    'password' => 'required|min:7'
+                    'email' => 'required|email|unique:users,email'
                 ];
 
                 $validator = Validator::make($request->all(), $rules);
 
-                if($validator->fails()){
+                if($validator->fails())
                     return response()->json(['status' => 422, 'message' => $validator->errors()]);
-                }
 
-                    $password = $request->password;
-                    
-                    $crud = [
-                            'name' => $request->name,
-                            'email' => $request->email,
-                            'phone' => $request->phone,
-                            'password' => bcrypt($password),
-                            'status' => 'active',
-                            'is_admin' => 'n',
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'created_by' => auth('sanctum')->user()->id,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth('sanctum')->user()->id
-                    ];
-
-                    $user_last_id = User::insertGetId($crud);
-                    
-                    if($user_last_id)
-                        return response()->json(['status' => 200, 'message' => 'User created successfully.' ,'id' => $user_last_id]);
-                    else
-                        return response()->json(['status' => 201, 'message' => 'Faild to create user!']);
+                $password = $request->password ?? 'Abcd@1234';
                 
+                $crud = [
+                    'name' => ucfirst($request->name),
+                    'email' => $request->email,
+                    'phone' => $request->phone ?? NULL,
+                    'password' => bcrypt($password),
+                    'status' => 'active',
+                    'is_admin' => 'n',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => auth('sanctum')->user()->id,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => auth('sanctum')->user()->id
+                ];
+
+                $last_id = User::insertGetId($crud);
+                
+                if($last_id)
+                    return response()->json(['status' => 200, 'message' => 'Record added successfully', 'id' => $last_id]);
+                else
+                    return response()->json(['status' => 201, 'message' => 'Faild to add record']);            
             }
         /** insert */
 
@@ -66,9 +62,9 @@
                 $data = User::where(['id' => $id])->first();
                 
                 if($data)
-                    return response()->json(['status' => 200, 'message' => 'User found' ,'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
                 else
-                    return response()->json(['status' => 404, 'message' => 'User not found!']);
+                    return response()->json(['status' => 404, 'message' => 'No data found']);
             }
         /** view */
 
@@ -76,22 +72,20 @@
             public function update(Request $request){
                 $rules = [
                     'name' => 'required',
-                    'email' => 'required|email|unique:users,email,'.$request->id,
-                    'phone' => 'required|numeric|unique:users,phone,'.$request->id
+                    'email' => 'required|email|unique:users,email,'.$request->id
                 ];
 
                 $validator = Validator::make($request->all(), $rules);
 
-                if($validator->fails()){
+                if($validator->fails())
                     return response()->json(['status' => 422, 'message' => $validator->errors()]);
-                }
 
                 $crud = [
-                        'name' => ucfirst($request->name),
-                        'email' => $request->email,
-                        'phone' => $request->phone ?? NULL,
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'updated_by' => auth('sanctum')->user()->id
+                    'name' => ucfirst($request->name),
+                    'email' => $request->email,
+                    'phone' => $request->phone ?? NULL,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => auth('sanctum')->user()->id
                 ];
                     
                 if(isset($request->password) && !empty($request->password))
@@ -99,9 +93,9 @@
 
                 $update = User::where(['id' => $request->id])->update($crud);
                 if($update)
-                    return response()->json(['status' => 200, 'message' => 'User updated successfully.']);
+                    return response()->json(['status' => 200, 'message' => 'Record updated successfully']);
                 else
-                    return response()->json(['status' => 404, 'message' => 'Faild to update user!']);
+                    return response()->json(['status' => 404, 'message' => 'Faild to update record']);
                 
             }
         /** update */
@@ -125,14 +119,14 @@
                         $update = User::where('id', $request->id)->delete();
                         
                         if($update)
-                            return response()->json(['status' => 200 ,'message' => 'Record deleted successfully.']);
+                            return response()->json(['status' => 200 ,'message' => 'Record deleted successfully']);
                         else
-                            return response()->json(['status' => 201, 'message' => 'Faild to delete record !']);
+                            return response()->json(['status' => 201, 'message' => 'Faild to delete record']);
                     }else{
                         $update = User::where(['id' => $request->id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
                     
                         if($update)
-                            return response()->json(['status' => 200 ,'message' => 'Status change successfully.']);
+                            return response()->json(['status' => 200 ,'message' => 'Record status change successfully']);
                         else
                             return response()->json(['status' => 201, 'message' => 'Faild to update status']);
                     }

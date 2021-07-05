@@ -57,7 +57,8 @@
 
         /** create */
             public function create(Request $request){
-                return view('customers.create');
+                $previous = str_replace(url('/'), '', url()->previous());
+                return view('customers.create', ['previous' => $previous]);
             }
         /** create */
 
@@ -67,30 +68,34 @@
 
                 if(!empty($request->all())){
                     $crud = [
-                            'party_name' => ucfirst($request->party_name),
-                            'billing_name' => $request->billing_name,
-                            'contact_person' => $request->contact_person,
-                            'mobile_number' => $request->mobile_number,
-                            'billing_address' => $request->billing_address,
-                            'delivery_address' => $request->delivery_address,
-                            'electrician' => $request->electrician ?? null,
-                            'electrician_number' => $request->electrician_number ?? null,
-                            'architect' => $request->architect ?? null,
-                            'architect_number' => $request->architect_number ?? null,
-                            'office_contact_person' => $request->office_contact_person ?? null,
-                            'status' => 'active',
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'created_by' => auth()->user()->id,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'party_name' => ucfirst($request->party_name),
+                        'billing_name' => $request->billing_name ?? NULL,
+                        'contact_person' => $request->contact_person ?? NULL,
+                        'mobile_number' => $request->mobile_number ?? NULL,
+                        'billing_address' => $request->billing_address ?? NULL,
+                        'delivery_address' => $request->delivery_address ?? NULL,
+                        'electrician' => $request->electrician ?? null,
+                        'electrician_number' => $request->electrician_number ?? null,
+                        'architect' => $request->architect ?? null,
+                        'architect_number' => $request->architect_number ?? null,
+                        'office_contact_person' => $request->office_contact_person ?? null,
+                        'status' => 'active',
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'created_by' => auth()->user()->id,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     $last_id = Customer::insertGetId($crud);
                     
-                    if($last_id)
-                        return redirect()->route('customers')->with('success', 'Customer created successfully.');
-                    else
-                        return redirect()->back()->with('error', 'Faild to create customer!')->withInput();
+                    if($last_id){
+                        if($request->previous == '/orders/select-customer')
+                            return redirect()->route('orders.create', ['customer_id' => $last_id])->with('success', 'Record added successfully');
+                        else
+                            return redirect()->route('customers')->with('success', 'Record added successfully');
+                    }else{
+                        return redirect()->back()->with('error', 'Faild to add record')->withInput();
+                    }
                 }else{
                     return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
@@ -104,11 +109,11 @@
                 if(!empty($request->all())){
                     $crud = [
                             'party_name' => ucfirst($request->party_name),
-                            'billing_name' => $request->billing_name,
-                            'contact_person' => $request->contact_person,
-                            'mobile_number' => $request->mobile_number,
-                            'billing_address' => $request->billing_address,
-                            'delivery_address' => $request->delivery_address,
+                            'billing_name' => $request->billing_name ?? NULL,
+                            'contact_person' => $request->contact_person ?? NULL,
+                            'mobile_number' => $request->mobile_number ?? NULL,
+                            'billing_address' => $request->billing_address ?? NULL,
+                            'delivery_address' => $request->delivery_address ?? NULL,
                             'electrician' => $request->electrician ?? null,
                             'electrician_number' => $request->electrician_number ?? null,
                             'architect' => $request->architect ?? null,
@@ -159,11 +164,11 @@
                 if(!empty($request->all())){
                     $crud = [
                             'party_name' => ucfirst($request->party_name),
-                            'billing_name' => $request->billing_name,
-                            'contact_person' => $request->contact_person,
-                            'mobile_number' => $request->mobile_number,
-                            'billing_address' => $request->billing_address,
-                            'delivery_address' => $request->delivery_address,
+                            'billing_name' => $request->billing_name ?? NULL,
+                            'contact_person' => $request->contact_person ?? NULL,
+                            'mobile_number' => $request->mobile_number ?? NULL,
+                            'billing_address' => $request->billing_address ?? NULL,
+                            'delivery_address' => $request->delivery_address ?? NULL,
                             'electrician' => $request->electrician ?? null,
                             'electrician_number' => $request->electrician_number ?? null,
                             'architect' => $request->architect ?? null,

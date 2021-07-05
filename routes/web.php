@@ -10,6 +10,11 @@ Route::get('clear', function() {
     return "config, cache, and view cleared successfully";
 });
 
+Route::get('config', function() {
+    Artisan::call('config:cache');
+    return "config cache successfully";
+});
+
 Route::get('key-generate', function() {
     Artisan::call('key:generate');
     return "Key generate successfully";
@@ -108,7 +113,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
 
         /** orders */
             Route::any('orders', 'OrdersController@index')->name('orders');
-            Route::get('orders/create', 'OrdersController@create')->name('orders.create');
+            Route::get('orders/create/{customer_id?}', 'OrdersController@create')->name('orders.create');
             Route::post('orders/insert', 'OrdersController@insert')->name('orders.insert');
             Route::get('orders/view/{id?}', 'OrdersController@view')->name('orders.view');
             Route::get('orders/edit/{id?}', 'OrdersController@edit')->name('orders.edit');
@@ -116,6 +121,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('orders/change-status', 'OrdersController@change_status')->name('orders.change.status');
 
             Route::post('orders/delete-detail', 'OrdersController@delete_detail')->name('orders.delete.detail');
+            Route::get('orders/select-customer', 'OrdersController@select_customer')->name('orders.select.customer');
         /** orders */
 
         /** payment */
@@ -124,6 +130,12 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('payment/import', 'PaymentController@import')->name('payment.import');
             Route::post('payment/assign', 'PaymentController@assign')->name('payment.assign');
         /** payment */
+
+        /** payments-reminder */
+            Route::any('payments-reminder', 'PaymentReminderController@index')->name('payments.reminders');
+            Route::post('payments-reminder/insert', 'PaymentReminderController@insert')->name('payments.reminders.insert');
+            Route::post('payments-reminder/change-status', 'PaymentReminderController@change_status')->name('payments.reminders.change.status');
+        /** payments-reminder */
     });
 
     Route::get("{path}", function(){ return redirect()->route('login'); })->where('path', '.+');

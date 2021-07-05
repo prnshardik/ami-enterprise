@@ -15,9 +15,9 @@
                 $data = Order::select('id', 'name', 'order_date', 'status')->get();
 
                 if($data->isNotEmpty())
-                    return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No orders found']);
+                    return response()->json(['status' => 201, 'message' => 'No records found']);
             }
         /** orders */
 
@@ -26,9 +26,9 @@
                 $data = Order::select('id', 'name', 'order_date', 'status')->where(['status' => 'pending'])->get();
 
                 if($data->isNotEmpty())
-                    return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No orders found']);
+                    return response()->json(['status' => 201, 'message' => 'No records found']);
             }
         /** pending-orders */
 
@@ -37,9 +37,9 @@
                 $data = Order::select('id', 'name', 'order_date', 'status')->where(['status' => 'completed'])->get();
 
                 if($data->isNotEmpty())
-                    return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No orders found']);
+                    return response()->json(['status' => 201, 'message' => 'No records found']);
             }
         /** completed-orders */
 
@@ -48,9 +48,9 @@
                 $data = Order::select('id', 'name', 'order_date', 'status')->where(['status' => 'delivered'])->get();
 
                 if($data->isNotEmpty())
-                    return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No orders found']);
+                    return response()->json(['status' => 201, 'message' => 'No records found']);
             }
         /** completed-delivered */
 
@@ -70,9 +70,9 @@
                     else
                        $data->order_details = collect();
 
-                    return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
                 }else{
-                    return response()->json(['status' => 201, 'message' => 'No order found']);
+                    return response()->json(['status' => 201, 'message' => 'No record found']);
                 }
             }
         /** order */
@@ -80,11 +80,7 @@
         /** insert */
             public function insert(Request $request){
                 $rules = [
-                    'name' => 'required',
-                    'order_date' => 'required',
-                    'product_id' => 'required|array|min:1',
-                    'quantity' => 'required|array|min:1',
-                    'price' => 'required|array|min:1'
+                    'name' => 'required'
                 ];
 
                 $validator = Validator::make($request->all(), $rules);
@@ -94,7 +90,7 @@
 
                 $crud = [
                     'name' => ucfirst($request->name),
-                    'order_date' => $request->order_date,
+                    'order_date' => $request->order_date ?? NULL,
                     'status' => 'pending',
                     'created_at' => date('Y-m-d H:i:s'),
                     'created_by' => auth('sanctum')->user()->id,
@@ -107,27 +103,31 @@
                     $last_id = Order::insertGetId($crud);
                     
                     if($last_id){
-                        $product_id = $request->product_id;
-                        $quantity = $request->quantity;
-                        $price = $request->price;
+                        $product_id = $request->product_id ?? NULL;
+                        $quantity = $request->quantity ?? NULL;
+                        $price = $request->price ?? NULL;
 
-                        for($i=0; $i<count($product_id); $i++){
-                            $order_detail_crud = [
-                                    'order_id' => $last_id,
-                                    'product_id' => $product_id[$i],
-                                    'quantity' => $quantity[$i],
-                                    'price' => $price[$i],
-                                    'created_at' => date('Y-m-d H:i:s'),
-                                    'created_by' => auth('sanctum')->user()->id,
-                                    'updated_at' => date('Y-m-d H:i:s'),
-                                    'updated_by' => auth('sanctum')->user()->id
-                            ];
-
-                            OrderDetails::insertGetId($order_detail_crud);
+                        if($product_id != null){
+                            for($i=0; $i<count($product_id); $i++){
+                                if($product_id[$i] != null){
+                                    $order_detail_crud = [
+                                        'order_id' => $last_id,
+                                        'product_id' => $product_id[$i],
+                                        'quantity' => $quantity[$i],
+                                        'price' => $price[$i],
+                                        'created_at' => date('Y-m-d H:i:s'),
+                                        'created_by' => auth('sanctum')->user()->id,
+                                        'updated_at' => date('Y-m-d H:i:s'),
+                                        'updated_by' => auth('sanctum')->user()->id
+                                    ];
+    
+                                    OrderDetails::insertGetId($order_detail_crud);
+                                }
+                            }
                         }
 
                         DB::commit();
-                        return response()->json(['status' => 200, 'message' => 'Order created successfully']);
+                        return response()->json(['status' => 200, 'message' => 'Record added successfully']);
                     }else{
                         DB::rollback();
                         return response()->json(['status' => 201, 'message' => 'Something went wrong']);
@@ -143,11 +143,7 @@
             public function update(Request $request){
                 $rules = [
                     'id' => 'required',
-                    'name' => 'required',
-                    'order_date' => 'required',
-                    'product_id' => 'required|array|min:1',
-                    'quantity' => 'required|array|min:1',
-                    'price' => 'required|array|min:1'
+                    'name' => 'required'
                 ];
 
                 $validator = Validator::make($request->all(), $rules);
@@ -157,7 +153,7 @@
 
                 $crud = [
                     'name' => ucfirst($request->name),
-                    'order_date' => $request->order_date,
+                    'order_date' => $request->order_date ?? NULL,
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => auth('sanctum')->user()->id
                 ];
@@ -167,45 +163,49 @@
                     $update = Order::where(['id' => $request->id])->update($crud);
                    
                     if($update){
-                        $product_id = $request->product_id;
-                        $quantity = $request->quantity;
-                        $price = $request->price;
+                        $product_id = $request->product_id ?? NULL;
+                        $quantity = $request->quantity ?? NULL;
+                        $price = $request->price ?? NULL;
 
-                        for($i=0; $i<count($product_id); $i++){
-                            $exst_detail = OrderDetails::select('id')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
+                        if($product_id != null){
+                            for($i=0; $i<count($product_id); $i++){
+                                $exst_detail = OrderDetails::select('id')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
 
-                            if(!empty($exst_detail)){
-                                $order_detail_crud = [
-                                    'order_id' => $request->id,
-                                    'product_id' => $product_id[$i],
-                                    'quantity' => $quantity[$i],
-                                    'price' => $price[$i],
-                                    'updated_at' => date('Y-m-d H:i:s'),
-                                    'updated_by' => auth('sanctum')->user()->id
-                                ];
+                                if(!empty($exst_detail)){
+                                    $order_detail_crud = [
+                                        'order_id' => $request->id,
+                                        'product_id' => $product_id[$i],
+                                        'quantity' => $quantity[$i],
+                                        'price' => $price[$i],
+                                        'updated_at' => date('Y-m-d H:i:s'),
+                                        'updated_by' => auth('sanctum')->user()->id
+                                    ];
 
-                                OrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
-                            }else{
-                                $order_detail_crud = [
-                                    'order_id' => $request->id,
-                                    'product_id' => $product_id[$i],
-                                    'quantity' => $quantity[$i],
-                                    'price' => $price[$i],
-                                    'created_at' => date('Y-m-d H:i:s'),
-                                    'created_by' => auth('sanctum')->user()->id,
-                                    'updated_at' => date('Y-m-d H:i:s'),
-                                    'updated_by' => auth('sanctum')->user()->id
-                                ];
-
-                                OrderDetails::insertGetId($order_detail_crud);
+                                    OrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
+                                }else{
+                                    if($product_id[$i] != null){
+                                        $order_detail_crud = [
+                                            'order_id' => $request->id,
+                                            'product_id' => $product_id[$i],
+                                            'quantity' => $quantity[$i],
+                                            'price' => $price[$i],
+                                            'created_at' => date('Y-m-d H:i:s'),
+                                            'created_by' => auth('sanctum')->user()->id,
+                                            'updated_at' => date('Y-m-d H:i:s'),
+                                            'updated_by' => auth('sanctum')->user()->id
+                                        ];
+    
+                                        OrderDetails::insertGetId($order_detail_crud);
+                                    }
+                                }
                             }
                         }
 
                         DB::commit();
-                        return response()->json(['status' => 200, 'message' => 'Order updated successfully']);
+                        return response()->json(['status' => 200, 'message' => 'Record updated successfully']);
                     }else{
                         DB::rollback();
-                        return response()->json(['status' => 201, 'message' => 'Faild to update order']);
+                        return response()->json(['status' => 201, 'message' => 'Faild to update record']);
                     }
                 } catch (\Exception $e) {
                     DB::rollback();
@@ -235,7 +235,7 @@
                         $update = Order::where(['id' => $request->id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
                     
                     if($update){
-                        return response()->json(['status' => 200, 'message' => 'Status changed successfully']);
+                        return response()->json(['status' => 200, 'message' => 'Record status changed successfully']);
                     }else{
                         return response()->json(['status' => 201, 'message' => 'Something went wrong']);
                     }
@@ -262,9 +262,9 @@
                     $delete = OrderDetails::where(['id' => $request->id])->delete();                        
                     
                     if($delete)
-                        return response()->json(['status' => 200, 'message' => 'Order item delete successfully']);
+                        return response()->json(['status' => 200, 'message' => 'Record delete successfully']);
                     else
-                        return response()->json(['status' => 201, 'message' => 'Failed to detele order item']);
+                        return response()->json(['status' => 201, 'message' => 'Failed to detele record']);
                 }else{
                     return response()->json(['status' => 201, 'message' => 'Something went wrong']);
                 }

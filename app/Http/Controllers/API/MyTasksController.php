@@ -8,7 +8,6 @@
     use Auth, DB, Validator, File;
 
     class MyTasksController extends Controller{
-
         /** tasks */
             public function tasks(Request $request){
                 $path = URL('/uploads/task').'/';
@@ -23,9 +22,9 @@
                                 ->get();
 
                 if($data->isNotEmpty())
-                    return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No tasks found']);
+                    return response()->json(['status' => 201, 'message' => 'No records found']);
             }
         /** tasks */
 
@@ -43,9 +42,9 @@
                                 ->first();
 
                 if(!empty($data))
-                    return response()->json(['status' => 200, 'message' => 'success', 'data' => $data]);
+                    return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
                 else
-                    return response()->json(['status' => 201, 'message' => 'No task found']);
+                    return response()->json(['status' => 201, 'message' => 'No records found']);
             }
         /** tasks */
 
@@ -94,9 +93,9 @@
                 if($last_id){
                     if(!empty($request->file('file')))
                         $file->move($folder_to_upload, $filenameToStore);
-                    return response()->json(['status' => 200, 'message' => 'Task added successfully']);
+                    return response()->json(['status' => 200, 'message' => 'Record added successfully']);
                 }else{
-                    return response()->json(['status' => 201, 'message' => 'Something went wrong.']);
+                    return response()->json(['status' => 201, 'message' => 'Something went wrong']);
                 }
             }
         /** insert */
@@ -118,14 +117,14 @@
                 $exst_data = Task::where(['id' => $request->id])->first();
 
                 $crud = [
-                        'title' => ucfirst($request->title),
-                        'user_id' => auth('sanctum')->user()->id,
-                        'description' => $request->description ?? NULL,
-                        'target_date' => $request->target_date,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'created_by' => auth('sanctum')->user()->id,
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'updated_by' => auth('sanctum')->user()->id
+                    'title' => ucfirst($request->title),
+                    'user_id' => auth('sanctum')->user()->id,
+                    'description' => $request->description ?? NULL,
+                    'target_date' => $request->target_date,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => auth('sanctum')->user()->id,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => auth('sanctum')->user()->id
                 ];
 
                 if(!empty($request->file('file'))){
@@ -156,9 +155,9 @@
                             @unlink($exst_file);
                         }
                     }
-                    return response()->json(['status' => 200, 'message' => 'Task updated successfully']);
+                    return response()->json(['status' => 200, 'message' => 'Record updated successfully']);
                 }else{
-                    return response()->json(['status' => 201, 'message' => 'Something went wrong.']);
+                    return response()->json(['status' => 201, 'message' => 'Something went wrong']);
                 }
             }
         /** update */

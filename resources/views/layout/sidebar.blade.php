@@ -41,26 +41,24 @@
                     <span class="nav-label">Orders</span>
                 </a>
             </li>
-            <li class="{{ Request::is('payment*') ? 'active' : '' }}">
+            <li class="{{ (Request::is('payment*') || Request::is('payments.reminders*')) ? 'active' : '' }}">
                 <a href="javascript:;" aria-expanded="false">
                     <i class="sidebar-item-icon fa fa-money"></i>
                     <span class="nav-label">Payments</span>
                     <i class="fa fa-angle-left arrow"></i>
                 </a>
                 <ul class="nav-2-level collapse" aria-expanded="false">
-                    <li class="{{ Request::is('payment*') ? 'active' : '' }}">
-                        <a class="{{ Request::is('payment*') ? 'active' : '' }}" href="{{ route('payment') }}"><i class="sidebar-item-icon fa fa-money"></i>
+                    <li class="{{ (Request::is('payment*') && !Request::is('payments-reminder*')) ? 'active' : '' }}">
+                        <a class="{{ (Request::is('payment*') && !Request::is('payments-reminder*')) ? 'active' : '' }}" href="{{ route('payment') }}"><i class="sidebar-item-icon fa fa-money"></i>
                             <span class="nav-label">Payments</span>
                         </a>
                     </li>
-                </ul>
-                <!-- <ul class="nav-2-level collapse" aria-expanded="false">
-                    <li class="{{ Request::is('payment*') ? 'active' : '' }}">
-                        <a class="{{ Request::is('payment*') ? 'active' : '' }}" href="{{ route('payment.import.file') }}"><i class="sidebar-item-icon fa fa-money"></i>
-                            <span class="nav-label">Payment Import</span>
+                    <li class="{{ Request::is('payments-reminder*') ? 'active' : '' }}">
+                        <a class="{{ Request::is('payments-reminder*') ? 'active' : '' }}" href="{{ route('payments.reminders') }}"><i class="sidebar-item-icon fa fa-money"></i>
+                            <span class="nav-label">Payments Reminders</span>
                         </a>
                     </li>
-                </ul> -->
+                </ul>
             </li>
             <li class="{{ (Request::is('tasks*') || Request::is('mytasks*')) ? 'active' : '' }}">
                 <a href="javascript:;" aria-expanded="false">
