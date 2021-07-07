@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('clear', function() {
+Route::get('command/clear', function() {
     Artisan::call('cache:clear');
     Artisan::call('optimize:clear');
     Artisan::call('config:cache');
@@ -10,17 +10,17 @@ Route::get('clear', function() {
     return "config, cache, and view cleared successfully";
 });
 
-Route::get('config', function() {
+Route::get('command/config', function() {
     Artisan::call('config:cache');
     return "config cache successfully";
 });
 
-Route::get('key-generate', function() {
+Route::get('command/key', function() {
     Artisan::call('key:generate');
     return "Key generate successfully";
 });
 
-Route::get('migrate', function() {
+Route::get('command/migrate', function() {
     Artisan::call('migrate:refresh');
     return "Database migration generated";
 });
