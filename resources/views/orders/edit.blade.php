@@ -51,45 +51,15 @@
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-6">
-                                    <label for="base_product">Product <span class="text-danger"></span></label>
-                                    <select name="base_product" id="base_product" class="form-control">
-                                        <option value="" hidden>Select Product</option>
-                                        @if(isset($products) && $products->isNotEmpty())
-                                            @foreach($products as $row)
-                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <span class="kt-form__help error product_id"></span>
-                                </div>
-                                <div class="form-group col-sm-2">
-                                    <label for="base_quantity">Quantity <span class="text-danger"></span></label>
-                                    <input type="text" name="base_quantity" id="base_quantity" class="form-control digit" placeholder="Plese enter quantity" />
-                                    <span class="kt-form__help error quantity"></span>
-                                </div>
-                                <div class="form-group col-sm-2">
-                                    <label for="base_price">Price <span class="text-danger"></span></label>
-                                    <input type="text" name="base_price" id="base_price" class="form-control digit" placeholder="Plese enter price" />
-                                    <span class="kt-form__help error price"></span>
-                                </div>
-                                <div class="form-group col-sm-2 d-flex align-items-center">
-                                    <button type="button" class="btn btn-md btn-primary mt-4" id="add_product">Add Product</button>
-                                </div>
-                            </div>
-                            @if(isset($data->order_details) && $data->order_details->isNotEmpty())
-                                <div class="row" id="table" style="display:block">
-                            @else
-                                <div class="row" id="table" style="display:none">
-                            @endif
+                    
+                            <div class="row" id="table" >
                                 <div class="col-sm-12">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th style="width:10%">Sr. No</th>
                                                 <th style="width:30%">Product</th>
-                                                <th style="width:25%">Product</th>
+                                                <th style="width:25%">Quantity</th>
                                                 <th style="width:25%">Price</th>
                                                 <th style="width:10%">Action</th>
                                             </tr>
@@ -118,8 +88,15 @@
                                             @endif
                                         </tbody>
                                     </table>
+                                    <div class="form-group col-sm-2 pull-right">
+                                            <button type="button" class="btn btn-md btn-primary mt-4" id="add_product">Add Product</button>
+                                    </div>
                                 </div> 
                             </div>
+                            
+                            <div class="form-group"></div>
+                            <div class="form-group"></div>
+
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <a href="{{ route('orders') }}" class="btn btn-default">Back</a>
@@ -169,6 +146,8 @@
 
                     var clone = clone_div(num);
                     $("#table tbody").append(clone);
+                    $("#product_"+num).select2();
+                    $("#product_"+num).focus();
                 }else{
                     var clone = clone_div(1);
                     $("#table tbody").append(clone);
@@ -178,14 +157,14 @@
             function clone_div(id){
                 return '<tr class="clone" id="clone_'+id+'">'+
                         '<th style="width:10%">'+id+'</th>'+
-                        '<th style="width:30%">'+base_product+
-                            '<input type="hidden" name="product_id[]" id="product_'+id+'" value="'+base_product_id+'">'+
+                        '<th style="width:30%">'+
+                            '<select name="product_id[]" id="product_'+id+'" class="form-control select2_demo_2"> @foreach($products as $row)<option value="{{ $row->id }}">{{ $row->name }}</option>@endforeach </select>'+
                         '</th>'+
                         '<th style="width:25%">'+
-                            '<input type="text" name="quantity[]" id="quantity_'+id+'" value="'+base_quantity+'" class="form-control digit" required>'+
+                            '<input type="text" name="quantity[]" id="quantity_'+id+'" class="form-control " required>'+
                         '</th>'+
                         '<th style="width:25%">'+
-                            '<input type="text" name="price[]" id="price_'+id+'" value="'+base_price+'" class="form-control digit" required>'+
+                            '<input type="text" name="price[]" id="price_'+id+'" class="form-control " required>'+
                         '</th>'+
                         '<th style="width:10%">'+
                             '<button type="button" class="btn btn-danger delete" data-id="'+id+'">Remove</button>'+

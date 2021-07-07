@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->date('order_date')->nullable();
-            $table->enum('status', ['pending', 'completed', 'delivered'])->default('pending');
+            $table->enum('status', ['pending', 'completed', 'delivery'])->default('pending');
             $table->string('file')->nullable();
             $table->timestamps();
             $table->integer('created_by')->nullable();

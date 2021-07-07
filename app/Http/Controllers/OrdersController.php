@@ -32,8 +32,13 @@
                                                                     <i class="fa fa-bars"></i>
                                                                 </a> &nbsp;
                                                                 <ul class="dropdown-menu">
+                                                                    
                                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="pending" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Pending</a></li>
+
+                                                                    <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="delivery" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Delivery</a></li>
+                                                                    
                                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="completed" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Completed</a></li>
+                                                                    
                                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="delete" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Delete</a></li>
                                                                 </ul>
                                                             </div>';
@@ -45,9 +50,9 @@
                                 if($data->status == 'pending')
                                     return '<span class="badge badge-pill badge-info">Pending</span>';
                                 else if($data->status == 'completed')
-                                    return '<span class="badge badge-pill badge-warning">Completed</span>';
-                                else if($data->status == 'delivered')
                                     return '<span class="badge badge-pill badge-success">Completed</span>';
+                                else if($data->status == 'delivery')
+                                    return '<span class="badge badge-pill badge-warning">Out For Delivery</span>';
                                 else
                                     return '-';
                             })
@@ -64,9 +69,9 @@
                                 if($data->status == 'pending')
                                     return '<a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'"><span class="badge badge-pill badge-info">Pending</span></a>';
                                 else if($data->status == 'completed')
-                                    return '<a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'"><span class="badge badge-pill badge-warning">Completed</span></a>';
-                                else if($data->status == 'delivered')
                                     return '<a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'"><span class="badge badge-pill badge-success">Completed</span></a>';
+                                else if($data->status == 'delivery')
+                                    return '<a href="'.route('orders.view', ['id' => base64_encode($data->id)]).'"><span class="badge badge-pill badge-warning">Out For Delivery</span></a>';
                                 else
                                     return '-';
                             })
