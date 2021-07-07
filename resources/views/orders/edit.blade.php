@@ -9,7 +9,7 @@
 
 @section('styles')
     <link href="{{ asset('assets/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
-
+    <link href="{{ asset('assets/vendors/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}" rel="stylesheet" />
     <style>
         .select2-container--default .select2-selection--single{
             height: 35px;
@@ -47,7 +47,11 @@
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="order_date">Order Date <span class="text-danger"></span></label>
-                                    <input type="date" name="order_date" id="order_date" class="form-control" value="{{ @old('order_date', $data->order_date) }}" placeholder="Plese enter order date" />
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                        <input type="text" name="order_date" id="order_date" class="form-control" placeholder="Plese enter order date" value="{{ date('d-m-Y' ,strtotime($data->order_date)) }}" />
+                                    </div>
+                                        <i class="fa fa-calender"></i>
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                             </div>
@@ -112,13 +116,15 @@
 @section('scripts')
     <script src="{{ asset('assets/vendors/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/js/scripts/form-plugins.js') }}"></script>
+    <script src="{{ asset('assets/vendors/bootstrap-datepicker/dist/js/bootstrap-datepicker.js') }}"></script>
     
     <script>
         $(document).ready(function() {
-            $('.digit').keyup(function(e){
-                if (/\D/g.test(this.value)){
-                    this.value = this.value.replace(/\D/g, '');
-                }
+            var date = new Date();
+            var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            $('#order_date').datepicker({
+                format: 'dd-mm-yyyy',
+                autoclose: true
             });
 
             let base_product = '';

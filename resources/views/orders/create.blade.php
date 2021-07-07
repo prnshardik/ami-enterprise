@@ -51,7 +51,11 @@
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="order_date">Order Date <span class="text-danger"></span></label>
-                                    <input type="date" name="order_date" id="order_date" class="form-control" placeholder="Plese enter order date" value="{{ @old('order_date') }}" />
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                        <input type="text" name="order_date" id="order_date" class="form-control" placeholder="Plese enter order date" value="{{ date('d-m-Y') }}" />
+                                    </div>
+                                        <i class="fa fa-calender"></i>
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                             </div>
@@ -200,13 +204,17 @@
 @section('scripts')
     <script src="{{ asset('assets/vendors/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/js/scripts/form-plugins.js') }}"></script>
+    <script src="{{ asset('assets/vendors/bootstrap-datepicker/dist/js/bootstrap-datepicker.js') }}"></script>
 
     <script>
         $(document).ready(function() {
-            $('.digit').keyup(function(e){
-                if (/\D/g.test(this.value)){
-                    this.value = this.value.replace(/\D/g, '');
-                }
+            
+            var date = new Date();
+            var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            $('#order_date').datepicker({
+                format: 'dd-mm-yyyy',
+                date: new Date(),
+                autoclose: true
             });
 
             let base_product = '';

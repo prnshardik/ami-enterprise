@@ -106,7 +106,7 @@
                 if(!empty($request->all())){
                     $crud = [
                         'name' => ucfirst($request->name),
-                        'order_date' => $request->order_date ?? NULL,
+                        'order_date' => Date('Y-m-d' ,strtotime($request->order_date)) ?? NULL,
                         'status' => 'pending',
                         'created_at' => date('Y-m-d H:i:s'),
                         'created_by' => auth()->user()->id,
@@ -222,7 +222,7 @@
                 if(!empty($request->all())){
                     $crud = [
                         'name' => ucfirst($request->name),
-                        'order_date' => $request->order_date ?? NULL,
+                        'order_date' => Date('Y-m-d' ,strtotime($request->order_date)) ?? NULL,
                         'updated_at' => date('Y-m-d H:i:s'),
                         'updated_by' => auth()->user()->id
                     ];
