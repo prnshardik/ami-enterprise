@@ -93,8 +93,10 @@
         /** create */
             public function create(Request $request, $customer_id=''){
                 $products = Product::select('id', 'name')->get();
-                $customers = Customer::select('id', 'party_name')->where(['status' => 'active'])->get();
-
+                $customers = Customer::select('id', 'party_name', 'billing_name', 'contact_person', 'mobile_number', 'billing_address', 'delivery_address', 'office_contact_person')
+                                        ->where(['status' => 'active'])
+                                        ->get();
+                                        
                 return view('orders.create', ['products' => $products, 'customers' => $customers, 'customer_id' => $customer_id]);
             }
         /** create */
@@ -192,7 +194,9 @@
                 $id = base64_decode($id);
 
                 $products = Product::select('id', 'name')->get();
-                $customers = Customer::select('id', 'party_name')->where(['status' => 'active'])->get();
+                $customers = Customer::select('id', 'party_name', 'billing_name', 'contact_person', 'mobile_number', 'billing_address', 'delivery_address', 'office_contact_person')
+                                        ->where(['status' => 'active'])
+                                        ->get();
 
                 $data = Order::select('id', 'name', 'order_date')->where(['id' => $id])->first();
                 

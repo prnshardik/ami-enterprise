@@ -10,7 +10,6 @@
 @section('styles')
     <link href="{{ asset('assets/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
 
-    <link href="{{ asset('assets/css/main.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendors/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet" />
 
@@ -43,7 +42,13 @@
                                         <option></option>
                                         @if(isset($customers) && $customers->isNotEmpty())
                                             @foreach($customers as $row)
-                                                <option value="{{ $row->party_name }}" @if(isset($customer_id) && $customer_id == $row->id) selected @endif >{{ $row->party_name }}</option>
+                                                <option value="{{ $row->party_name }}" @if(isset($customer_id) && $customer_id == $row->id) selected @endif 
+                                                    data-billing_name="{{ $row->billing_name }}" data-contact_person="{{ $row->contact_person }}" 
+                                                    data-mobile_number="{{ $row->mobile_number }}" data-office_contact_person="{{ $row->office_contact_person }}" 
+                                                    data-billing_address="{{ $row->billing_address }}" data-delivery_address="{{ $row->delivery_address }}"
+                                                >
+                                                    {{ $row->party_name }}
+                                                </option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -51,12 +56,34 @@
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="order_date">Order Date <span class="text-danger"></span></label>
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
                                         <input type="text" name="order_date" id="order_date" class="form-control" placeholder="Plese enter order date" value="{{ date('d-m-Y') }}" />
                                     </div>
                                         <i class="fa fa-calender"></i>
                                     <span class="kt-form__help error order_date"></span>
+                                </div>
+                                <div id="customer_detail" class="col-sm-12 mt-2 mb-4" style="display:none" >
+                                    <div class="row">
+                                        <div class="col-sm-4">Billing Name</div>
+                                        <div class="col-sm-4">Contact Person</div>
+                                        <div class="col-sm-4">Mobile Number</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4" id="billing_name"></div>
+                                        <div class="col-sm-4" id="contact_person"></div>
+                                        <div class="col-sm-4" id="mobile_number"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">Office Contact Person</div>
+                                        <div class="col-sm-4">Billing Address</div>
+                                        <div class="col-sm-4">Delivery Name</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4" id="office_contact_person"></div>
+                                        <div class="col-sm-4" id="billing_address"></div>
+                                        <div class="col-sm-4" id="delivery_address"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row" id="table">
@@ -72,10 +99,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="clone" id="clone_'+id+'">
+                                            <tr class="clone" id="clone_1">
                                                 <th style="width:10%">1</th>
                                                 <th style="width:30%">
-                                                    <select class="form-control select2_demo_2" name="product_id[]" id="product_'+id+'">
+                                                    <select class="form-control select2_demo_2" name="product_id[]" id="product_1">
                                                         @if(isset($products) && $products->isNotEmpty())
                                                             <option value="">Select Product</option>
                                                             @foreach($products as $row)
@@ -85,28 +112,21 @@
                                                     </select>
                                                 </th>
                                                 <th style="width:25%">
-                                                    <input type="text" name="quantity[]" id="quantity_'+id+'" class="form-control digit" required>
+                                                    <input type="text" name="quantity[]" id="quantity_1" class="form-control digit" required>
                                                 </th>
                                                 <th style="width:25%">
-                                                    <input type="text" name="price[]" id="price_'+id+'" class="form-control digit" required>
+                                                    <input type="text" name="price[]" id="price_1" class="form-control digit" required>
                                                 </th>
                                                 <th style="width:10%">
-                                                    <button type="button" class="btn btn-danger delete" data-id="'+id+'">Remove</button>
+                                                    <button type="button" class="btn btn-danger delete" style="display:none;" data-id="1">Remove</button>
                                                 </th>
-                                            </tr>'
+                                            </tr>
                                         </tbody>
                                     </table>
-                                    <div class="form-group col-sm-2 pull-right">
-                                            <button type="button" class="btn btn-md btn-primary mt-4" id="add_product">Add Product</button>
-                                    </div>
+                                </div>
+                                <div class="col-sm-2 ml-auto">
+                                    <button type="button" class="btn btn-md btn-primary m-4" id="add_product">Add Product</button>
                                 </div> 
-                            </div>
-                            
-                            <div class="form-group">
-                                
-                            </div>
-                            <div class="form-group">
-                                
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -208,7 +228,6 @@
 
     <script>
         $(document).ready(function() {
-            
             var date = new Date();
             var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             $('#order_date').datepicker({
@@ -222,10 +241,7 @@
             let base_quantity = '';
             let base_price = '';
 
-           
-
-            $('#add_product').click(function(){
-                
+            $('#add_product').click(function(){                
                 base_product = $('#base_product option:selected').text();
                 base_product_id = $('#base_product').val();
                 base_quantity = $('#base_quantity').val();
@@ -343,6 +359,12 @@
                     }
                 });
             });
+
+            // $(document).ready(function () {
+            //     $('#name').on('select2:select', function (e) {
+            //         console.log(e.params.element);
+            //     });
+            // });
         });
     </script>
 @endsection

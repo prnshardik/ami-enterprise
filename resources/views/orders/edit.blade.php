@@ -47,16 +47,15 @@
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="order_date">Order Date <span class="text-danger"></span></label>
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
                                         <input type="text" name="order_date" id="order_date" class="form-control" placeholder="Plese enter order date" value="{{ date('d-m-Y' ,strtotime($data->order_date)) }}" />
                                     </div>
                                         <i class="fa fa-calender"></i>
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                             </div>
-                    
-                            <div class="row" id="table" >
+                            <div class="row" id="table">
                                 <div class="col-sm-12">
                                     <table class="table table-bordered">
                                         <thead>
@@ -69,38 +68,64 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(isset($data->order_details) && $data->order_details->isNotEmpty())
+                                            @if(!empty($data) && $data->order_details->isNotEmpty())
                                                 @php $i=1; @endphp
-                                                @foreach($data->order_details as $row)
+                                                @foreach($data->order_details as $product)
                                                     <tr class="clone" id="clone_{{ $i }}">
-                                                        <th style="width:10%">{{ $i }}</th>
-                                                        <th style="width:30%">{{ $row->product_name }}
-                                                            <input type="hidden" name="product_id[]" id="product_{{ $i }}" value="{{ $row->product_id }}">
+                                                        <th style="width:10%">1</th>
+                                                        <th style="width:30%">
+                                                            <select class="form-control select2_demo_2" name="product_id[]" id="product_{{ $i }}">
+                                                                @if(isset($products) && $products->isNotEmpty())
+                                                                    <option value="">Select Product</option>
+                                                                    @foreach($products as $row)
+                                                                        <option value="{{ $row->id }}" @if($product->product_id == $row->id) selected @endif >{{ $row->name }}</option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
                                                         </th>
                                                         <th style="width:25%">
-                                                            <input type="text" name="quantity[]" id="quantity_{{ $i }}" value="{{ $row->quantity }}" class="form-control digit" required>
+                                                            <input type="text" name="quantity[]" id="quantity_{{ $i }}" value="{{ $product->quantity }}" class="form-control digit" required>
                                                         </th>
                                                         <th style="width:25%">
-                                                            <input type="text" name="price[]" id="price_{{ $i }}" value="{{ $row->price }}" class="form-control digit" required>
+                                                            <input type="text" name="price[]" id="price_{{ $i }}" value="{{ $product->price }}" class="form-control digit" required>
                                                         </th>
                                                         <th style="width:10%">
-                                                            <button type="button" class="btn btn-danger delete" data-detail="{{ $row->id }}" data-id="{{ $i }}">Remove</button>
+                                                            <button type="button" class="btn btn-danger delete" data-detail="{{ $product->id }}" data-id="{{ $i }}">Remove</button>
                                                         </th>
                                                     </tr>
                                                     @php $i++; @endphp
                                                 @endforeach
+                                            @else
+                                                <tr class="clone" id="clone_1">
+                                                    <th style="width:10%">1</th>
+                                                    <th style="width:30%">
+                                                        <select class="form-control select2_demo_2" name="product_id[]" id="product_1">
+                                                            @if(isset($products) && $products->isNotEmpty())
+                                                                <option value="">Select Product</option>
+                                                                @foreach($products as $row)
+                                                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </th>
+                                                    <th style="width:25%">
+                                                        <input type="text" name="quantity[]" id="quantity_1" class="form-control digit" required>
+                                                    </th>
+                                                    <th style="width:25%">
+                                                        <input type="text" name="price[]" id="price_1" class="form-control digit" required>
+                                                    </th>
+                                                    <th style="width:10%">
+                                                        <button type="button" class="btn btn-danger delete" style="display:none;" data-id="1">Remove</button>
+                                                    </th>
+                                                </tr>
                                             @endif
                                         </tbody>
                                     </table>
-                                    <div class="form-group col-sm-2 pull-right">
-                                            <button type="button" class="btn btn-md btn-primary mt-4" id="add_product">Add Product</button>
-                                    </div>
                                 </div> 
+                                <div class="col-sm-2 ml-auto">
+                                    <button type="button" class="btn btn-md btn-primary m-4" id="add_product">Add Product</button>
+                                </div>
                             </div>
-                            
-                            <div class="form-group"></div>
-                            <div class="form-group"></div>
-
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <a href="{{ route('orders') }}" class="btn btn-default">Back</a>
