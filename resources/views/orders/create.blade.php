@@ -9,10 +9,8 @@
 
 @section('styles')
     <link href="{{ asset('assets/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
-
     <link href="{{ asset('assets/vendors/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet" />
-
+    
     <style> 
         .select2-container--default .select2-selection--single{
             height: 35px;
@@ -228,8 +226,6 @@
 
     <script>
         $(document).ready(function() {
-            var date = new Date();
-            var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             $('#order_date').datepicker({
                 format: 'dd-mm-yyyy',
                 date: new Date(),
@@ -360,11 +356,12 @@
                 });
             });
 
-            // $(document).ready(function () {
-            //     $('#name').on('select2:select', function (e) {
-            //         console.log(e.params.element);
-            //     });
-            // });
+            $(document).ready(function () {
+                // $('#name').change('select2:select', function (e) {
+                //     console.log(e.params.element);
+                // });
+                
+            });
         });
     </script>
 @endsection

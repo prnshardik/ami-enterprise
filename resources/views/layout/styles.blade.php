@@ -5,10 +5,12 @@
 <link href="{{ asset('assets/css/main.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/vendors/DataTables/datatables.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/vendors/toastr/toastr.min.css') }}" rel="stylesheet" />
+
 <style>
 	.error{
 		color:red;
 	}
+	
 	.page-footer{
 		position: fixed;
 		top: 600px;
@@ -19,4 +21,5 @@
     	left: 60px; 
 	}
 </style>
+
 @yield('styles')
