@@ -58,7 +58,7 @@
                                         <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
                                         <input type="text" name="order_date" id="order_date" class="form-control" placeholder="Plese enter order date" value="{{ date('d-m-Y') }}" />
                                     </div>
-                                        <i class="fa fa-calender"></i>
+                                    <i class="fa fa-calender"></i>
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                                 <div id="customer_detail" class="col-sm-12 mt-2 mb-4" style="display:none" >
