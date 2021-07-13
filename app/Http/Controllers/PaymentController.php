@@ -131,7 +131,7 @@
                                             <input type='hidden' value='$assign_id' id='assign_id' />
                                             <div class='form-group col-sm-12'>
                                                 <label for='date$data->id'>Date <span class='text-danger'>*</span></label>
-                                                <input type='text' name='date$data->id' id='date$data->id' class='form-control date' value='$date' style='max-width: 90%;'/>
+                                                <input type='date'  style='max-width: 90%;' name='date$data->id' id='date$data->id' class='form-control date' placeholder='Plese enter date' value='$date'/>
                                                 <span class='kt-form__help error date$data->id'></span>
                                             </div>
                                             <div class='form-group col-sm-12'>

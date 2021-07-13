@@ -120,7 +120,6 @@
         /** insert */
             public function insert(OrderRequest $request){
                 if($request->ajax()){ return true; }
-
                 if(!empty($request->all())){
                     $crud = [
                         'name' => ucfirst($request->name),
