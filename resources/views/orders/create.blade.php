@@ -61,28 +61,11 @@
                                     <i class="fa fa-calender"></i>
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
-                                <div id="customer_detail" class="col-sm-12 mt-2 mb-4" style="display:none" >
-                                    <div class="row">
-                                        <div class="col-sm-4">Billing Name</div>
-                                        <div class="col-sm-4">Contact Person</div>
-                                        <div class="col-sm-4">Mobile Number</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-4" id="billing_name"></div>
-                                        <div class="col-sm-4" id="contact_person"></div>
-                                        <div class="col-sm-4" id="mobile_number"></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-4">Office Contact Person</div>
-                                        <div class="col-sm-4">Billing Address</div>
-                                        <div class="col-sm-4">Delivery Name</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-4" id="office_contact_person"></div>
-                                        <div class="col-sm-4" id="billing_address"></div>
-                                        <div class="col-sm-4" id="delivery_address"></div>
-                                    </div>
+
+                                <div class="row" id="customer_details">
+                                    
                                 </div>
+
                             </div>
                             <div class="row" id="table">
                                 <div class="col-sm-12">
@@ -357,9 +340,37 @@
             });
 
             $(document).ready(function () {
-                // $('#name').change('select2:select', function (e) {
-                //     console.log(e.params.element);
-                // });
+                $('#name').change(function () {
+                    var name = $(this).val();
+                    if(name != '' || name != null){
+                        $.ajax({
+                            url : "{{ route('orders.get.customer.details') }}",
+                            type : 'post',
+                            data : { "_token": "{{ csrf_token() }}", "name":name},
+                            dataType: 'json',
+                            async:false,
+                            success : function(json){
+                                $("#customer_details").append(
+                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Name: </span><span>'+json.data.party_name+'</span></div>'+
+                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Name: </span><span>'+json.data.billing_name+'</span></div>'+
+                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Contact Person: </span><span>'+json.data.contact_person+'</span></div>'+
+                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Mobile Number: </span><span>'+json.data.mobile_number+'</span></div>'+
+                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Address: </span><span>'+json.data.billing_address+'</span></div>'+
+                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Delivery Address: </span><span>'+json.data.delivery_address+'</span></div>'+
+                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician: </span><span>'+json.data.electrician+'</span></div>'+
+                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician Number: </span><span>'+json.data.electrician_number+'</span></div>');
+                            },
+                            error: function(json){
+                                if(json.status === 422) {
+                                  alert('error1');
+                                }
+                                  alert('error2');
+                            }
+                        });
+                    }else{
+
+                    }
+                });
                 
             });
         });

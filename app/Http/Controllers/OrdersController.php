@@ -90,6 +90,22 @@
             }
         /** select-customer */
 
+        /** get-customer-details */
+            public function get_customer_details(Request $request){
+                $name = $request->name;
+                if(isset($name) && $name != null && $name != ''){
+                    $data = Customer::where('party_name' , $name)->first();
+                    if($data){
+                        return response()->json(['code' => 200 ,'data' => $data]);
+                    }else{
+                        return response()->json(['code' => 201]);
+                    }
+                }else{
+                    return response()->json(['code' => 201]);
+                }
+            }
+        /** get-customer-details */
+
         /** create */
             public function create(Request $request, $customer_id=''){
                 $products = Product::select('id', 'name')->get();
