@@ -14,12 +14,12 @@
     class PaymentController extends Controller{
         /** index */
             public function index(Request $request){
-                $type = $request->type ?? 'not_assigned';
+                $type = $request->type ?? NULL;
                 $start_date = $request->start_date ?? null;
                 $end_date = $request->end_date ?? null;
 
                 $collection = Payment::select('id', 'party_name', 'bill_date', 'balance_amount', 'mobile_no', DB::Raw("null as note"), DB::Raw("null as reminder"))
-                                ->whereRaw('id IN (select MAX(id) FROM payments GROUP BY party_name)');
+                                        ->whereRaw('id IN (select MAX(id) FROM payments GROUP BY party_name)');
                 
                 if($start_date && $end_date){
                     $collection->whereIn('party_name', function($query) use($start_date, $end_date){
@@ -67,6 +67,19 @@
                         if($remider){
                             $row->note = $remider->note;
                         }
+
+                        $assigned = [];
+
+                        $assignedData = PaymentAssign::select('id', 'note', 'user_id', 'date')->where(['party_name' => $row->party_name])->orderBy('id', 'desc')->first();
+                        
+                        if($assignedData){
+                            $assigned['user_id'] = $assignedData->user_id;
+                            $assigned['note'] = $assignedData->note;
+                            $assigned['date'] = $assignedData->date;
+                            $assigned['assign_id'] = $assignedData->id;
+                        }
+
+                        $row->assigned = $assigned;
                     }
                 }
 
@@ -76,6 +89,20 @@
                     return response()->json(['status' => 201, 'message' => 'No records found']);
             }
         /** index */
+
+        /** detail */
+            public function detail(Request $request, $party_name = ''){
+                if($party_name == '' || $party_name == null)
+                    return response()->json(['status' => 422, 'message' => 'Please pass party name']);
+
+                $data = Payment::select('bill_no', 'bill_date', 'bill_amount')->where(['party_name' => $party_name])->get();
+
+                if($data->isNotEmpty())
+                    return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
+                else
+                    return response()->json(['status' => 201, 'message' => 'No records found']);
+            }
+        /** detail */
 
         /** users */
             public function users(Request $request){
@@ -109,7 +136,7 @@
                             'date' => $request->date, 
                             'note' => $request->note ?? NULL,
                             'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                            'updated_by' => auth('sanctum')->user()->id
                         ];
 
                         $update = PaymentAssign::where(['id' => $request->assign_id])->update($crud);
@@ -125,7 +152,7 @@
                                 'note' => $request->note ?? NULL,
                                 'amount' => NULL,
                                 'updated_at' => date('Y-m-d H:i:s'),
-                                'updated_by' => auth()->user()->id
+                                'updated_by' => auth('sanctum')->user()->id
                             ];
 
                             $remider_update = PaymentReminder::where(['id' => $payment_reminder->id])->update($remider_crud);
@@ -148,9 +175,9 @@
                             'date' => $request->date, 
                             'note' => $request->note ?? NULL,
                             'created_at' => date('Y-m-d H:i:s'),
-                            'created_by' => auth()->user()->id,
+                            'created_by' => auth('sanctum')->user()->id,
                             'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                            'updated_by' => auth('sanctum')->user()->id
                         ];
 
                         $last_id = PaymentAssign::insertGetId($crud);
@@ -172,9 +199,9 @@
                                 'note' => $request->note ?? NULL,
                                 'amount' => NULL,
                                 'created_at' => date('Y-m-d H:i:s'),
-                                'created_by' => auth()->user()->id,
+                                'created_by' => auth('sanctum')->user()->id,
                                 'updated_at' => date('Y-m-d H:i:s'),
-                                'updated_by' => auth()->user()->id
+                                'updated_by' => auth('sanctum')->user()->id
                             ];
 
                             $remider_id = PaymentReminder::insertGetId($remider_crud);

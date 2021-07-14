@@ -85,9 +85,18 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
 
         /** payments */
             Route::get('payments', 'PaymentController@index');
+            Route::get('payments/detail/{party_name?}', 'PaymentController@detail');
             Route::get('payments/users', 'PaymentController@users');
             Route::post('payment/assign', 'PaymentController@assign');
         /** payments */
+
+        /** payments-reminder */
+            Route::get('payments-reminder', 'PaymentReminderController@index');
+            Route::get('payments-reminder/followup-detail/{party_name?}', 'PaymentReminderController@followup_detail');
+            Route::get('payments-reminder/payment-detail/{party_name?}', 'PaymentReminderController@payment_detail');
+            Route::post('payments-reminder/insert', 'PaymentReminderController@insert');
+            Route::post('payments-reminder/change-status', 'PaymentReminderController@change_status');
+        /** payments-reminder */
     });
 });
 
