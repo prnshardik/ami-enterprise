@@ -5,11 +5,11 @@
     use App\Http\Controllers\Controller;
     use Illuminate\Http\Request;
     use App\Models\Order;
+    use App\Models\customer;
     use App\Models\OrderDetails;
     use Auth, DB, Validator, File;
 
     class OrdersController extends Controller{
-
         /** orders */
             public function orders(Request $request){
                 $data = Order::select('id', 'name', 'order_date', 'status')->get();
@@ -89,7 +89,7 @@
                     return response()->json(['status' => 422, 'message' => $validator->errors()]);
 
                 $crud = [
-                    'name' => ucfirst($request->name),
+                    'name' => $request->name,
                     'order_date' => $request->order_date ?? NULL,
                     'status' => 'pending',
                     'created_at' => date('Y-m-d H:i:s'),
@@ -152,7 +152,7 @@
                     return response()->json(['status' => 422, 'message' => $validator->errors()]);
 
                 $crud = [
-                    'name' => ucfirst($request->name),
+                    'name' => $request->name,
                     'order_date' => $request->order_date ?? NULL,
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => auth('sanctum')->user()->id
@@ -320,4 +320,19 @@
                 }
             }
         /** order-deliver */
+
+        /** order-customer */
+            public function customer(Request $request){
+                if(isset($request->name) && $request->name != null && $request->name != ''){
+                    $data = Customer::where(['party_name' => $request->name])->first();
+
+                    if($data)
+                        return response()->json(['code' => 200, 'data' => $data]);
+                    else
+                        return response()->json(['code' => 201]);
+                }else{
+                    return response()->json(['code' => 201]);
+                }
+            }
+        /** order-customer */
     }

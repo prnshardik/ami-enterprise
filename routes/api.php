@@ -63,6 +63,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::post('order/change-status', 'OrdersController@change_status');
             Route::post('order/item-delete', 'OrdersController@item_delete');
             Route::post('order/deliver', 'OrdersController@deliver');
+
+            Route::post('order/customer', 'OrdersController@customer');
         /** order */
 
         /** users */
@@ -80,6 +82,12 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::post('notice/update', 'NoticeController@update');
             Route::post('notice/change-status', 'NoticeController@change_status');
         /** notice */
+
+        /** payments */
+            Route::get('payments', 'PaymentController@index');
+            Route::get('payments/users', 'PaymentController@users');
+            Route::post('payment/assign', 'PaymentController@assign');
+        /** payments */
     });
 });
 

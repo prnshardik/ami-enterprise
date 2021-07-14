@@ -90,7 +90,7 @@
             }
         /** select-customer */
 
-        /** get-customer-details */
+        /** customer-details */
             public function customer_details(Request $request){
                 if(isset($request->name) && $request->name != null && $request->name != ''){
                     $data = Customer::where(['party_name' => $request->name])->first();
@@ -103,7 +103,7 @@
                     return response()->json(['code' => 201]);
                 }
             }
-        /** get-customer-details */
+        /** customer-details */
 
         /** create */
             public function create(Request $request, $customer_id=''){

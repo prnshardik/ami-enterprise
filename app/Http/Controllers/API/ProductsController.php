@@ -8,7 +8,6 @@
     use Auth, DB, Validator, File;
 
     class ProductsController extends Controller{
-
         /** products */
             public function products(Request $request){
                 $data = Product::select('id', 'name', 'quantity', 'unit', 'color', 'price', 'note')->get();

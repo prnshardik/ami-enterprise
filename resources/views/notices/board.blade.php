@@ -139,7 +139,7 @@
 @endsection
 
 @section('content')
-    <ul class="pinboards">
+    <ul class="pinboards mt-3">
         @if(isset($data) && $data->isNotEmpty())
             @foreach($data as $row)
                 <li>
