@@ -15,7 +15,7 @@
                 }
 
                 Task::create([
-                    'title' => "Title $i",
+                    'type' => "Order",
                     'user_id' => rtrim($users, ','),
                     'description' => "Description $i",
                     'target_date' => date('Y-m-d'),

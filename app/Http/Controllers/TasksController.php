@@ -4,16 +4,16 @@
     use Illuminate\Http\Request;
     use App\Models\User;
     use App\Models\Task;
+    use App\Models\Customer;
     use Illuminate\Support\Str;
     use App\Http\Requests\TaskRequest;
     use Auth, Validator, DB, Mail, DataTables, File;
 
     class TasksController extends Controller{
-
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    $data = Task::select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status')
+                    $data = Task::select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.type', 'task.target_date', 'task.created_at', 'task.status')
                                     ->leftjoin('users', 'task.user_id', 'users.id')
                                     ->leftjoin('users as u', 'task.created_by', 'u.id')
                                     ->get();
@@ -84,8 +84,9 @@
         /** create */
             public function create(Request $request){
                 $users = User::select('id', 'name')->where(['status' => 'active', 'is_admin' => 'n'])->get();
+                $customers = Customer::select('id', 'party_name')->where(['status' => 'active'])->get();
 
-                return view('tasks.create')->with('data', $users);
+                return view('tasks.create', ['users' => $users, 'customers' => $customers]);
             }
         /** create */
 
@@ -95,14 +96,15 @@
                 
                 if(!empty($request->all())){
                     $crud = [
-                            'title' => ucfirst($request->title),
-                            'user_id' => implode(',', $request->users) ,
-                            'description' => $request->description ?? NULL,
-                            'target_date' => $request->t_date,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'created_by' => auth()->user()->id,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'type' => $request->type,
+                        'user_id' => implode(',', $request->users),
+                        'customer_id' => $request->customer_id ?? NULL,
+                        'description' => $request->description ?? NULL,
+                        'target_date' => $request->t_date,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'created_by' => auth()->user()->id,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     if(!empty($request->file('file'))){
@@ -146,9 +148,10 @@
 
                 $data = Task::where(['id' => $id])->first();
                 $users = User::select('id', 'name')->where(['status' => 'active', 'is_admin' => 'n'])->get();
+                $customers = Customer::select('id', 'party_name')->where(['status' => 'active'])->get();
                 
                 if($data)
-                    return view('tasks.view')->with(['users' => $users, 'data' => $data]);
+                    return view('tasks.view')->with(['users' => $users, 'customers' => $customers,'data' => $data]);
                 else
                     return redirect()->route('tasks')->with('error', 'No task found');
             }
@@ -163,9 +166,10 @@
 
                 $data = Task::where(['id' => $id])->first();
                 $users = User::select('id', 'name')->where(['status' => 'active', 'is_admin' => 'n'])->get();
+                $customers = Customer::select('id', 'party_name')->where(['status' => 'active'])->get();
                 
                 if($data)
-                    return view('tasks.edit')->with(['data' => $data, 'users' => $users]);
+                    return view('tasks.edit')->with(['data' => $data, 'users' => $users, 'customers' => $customers]);
                 else
                     return redirect()->route('tasks')->with('error', 'No task found');
             }
@@ -179,12 +183,13 @@
                     $exst_data = Task::where(['id' => $request->id])->first();
 
                     $crud = [
-                            'title' => ucfirst($request->title),
-                            'user_id' => implode(',', $request->users) ,
-                            'description' => $request->description ?? NULL,
-                            'target_date' => $request->t_date,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'type' => $request->title,
+                        'user_id' => implode(',', $request->users) ,
+                        'customer_id' => $request->customer_id ?? NULL,
+                        'description' => $request->description ?? NULL,
+                        'target_date' => $request->t_date,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     if(!empty($request->file('file'))){

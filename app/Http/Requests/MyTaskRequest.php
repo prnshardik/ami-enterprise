@@ -12,13 +12,13 @@
         public function rules(){
             if($this->method() == 'PATCH'){
                 return [
-                    'title' => 'required',
+                    'type' => 'required',
                     'description' => 'required',
                     't_date' => 'required'
                 ];
             }else{
                 return [
-                    'title' => 'required',
+                    'type' => 'required',
                     'description' => 'required',
                     't_date' => 'required'
                 ];
@@ -27,7 +27,7 @@
 
         public function messages(){
             return [
-                'title.required' => 'Please enter title',
+                'type.required' => 'Please select type',
                 'description.required' => 'Please enter instruction',
                 't_date.required' => 'Please select date'
             ];

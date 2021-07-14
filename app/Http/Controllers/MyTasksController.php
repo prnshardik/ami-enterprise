@@ -13,7 +13,7 @@
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    $data = Task::select('task.id', 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status')
+                    $data = Task::select('task.id', 'u.name as allocate_from', 'task.type', 'task.target_date', 'task.created_at', 'task.status')
                                     ->leftjoin('users as u', 'task.created_by', 'u.id')
                                     ->whereRaw("find_in_set(".auth()->user()->id.", task.user_id)")
                                     ->get();
@@ -79,14 +79,14 @@
                 
                 if(!empty($request->all())){
                     $crud = [
-                            'title' => ucfirst($request->title),
-                            'user_id' => auth()->user()->id,
-                            'description' => $request->description ?? NULL,
-                            'target_date' => $request->t_date,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'created_by' => auth()->user()->id,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'type' => $request->type,
+                        'user_id' => auth()->user()->id,
+                        'description' => $request->description ?? NULL,
+                        'target_date' => $request->t_date,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'created_by' => auth()->user()->id,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     if(!empty($request->file('file'))){
@@ -162,12 +162,12 @@
                     $exst_data = Task::where(['id' => $request->id])->first();
 
                     $crud = [
-                            'title' => ucfirst($request->title),
-                            'user_id' => auth()->user()->id,
-                            'description' => $request->description ?? NULL,
-                            'target_date' => $request->t_date,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'title' => $request->type,
+                        'user_id' => auth()->user()->id,
+                        'description' => $request->description ?? NULL,
+                        'target_date' => $request->t_date,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     if(!empty($request->file('file'))){

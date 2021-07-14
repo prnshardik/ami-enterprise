@@ -26,15 +26,34 @@
                             @csrf
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label for="title">Title <span class="text-danger">*</span></label>
-                                    <input type="text" name="title" id="title" class="form-control" placeholder="Plese enter title" value="{{ @old('title') }}" />
-                                    <span class="kt-form__help error title"></span>
+                                    <label for="type">Type <span class="text-danger">*</span></label>
+                                    <select name="type" id="type" id="type" class="form-control select2_tag" placeholder="Plese select type">
+                                        <option value="" hidden>Select type</option>
+                                        <option value="order" @if(@old('type') == 'order') selected @endif>Order</option>
+                                        <option value="site_visit" @if(@old('type') == 'site_visit') selected @endif>Site Visit</option>
+                                        <option value="payment" @if(@old('type') == 'payment') selected @endif>Payment</option>
+                                    </select>
+                                    <span class="kt-form__help error type"></span>
                                 </div>
                                 <div class="form-group col-sm-6">
+                                    <div id="customer_div">
+                                        <label for="customer_id">Customer <span class="text-danger"></span></label>
+                                        <select name="customer_id" class="form-control" placeholder="Plese select customer" id="customer_id" >
+                                            @if(isset($customers) && !empty($customers))
+                                                @foreach($customers AS $row)
+                                                    <option value="{{ $row->id }}">{{ $row->party_name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <span class="kt-form__help error customer_id"></span>
+                                    </div>
+                                </div>
+                                <div class="row" id="details"></div>
+                                <div class="form-group col-sm-6">
                                     <label for="users">Allocate To <span class="text-danger">*</span></label>
-                                    <select name="users[]" class="form-control select2" placeholder="Plese Select Users" id="users" multiple>
-                                        @if(isset($data) && !empty($data))
-                                            @foreach($data AS $row)
+                                    <select name="users[]" class="form-control select2_tag" placeholder="Plese select users" id="users" multiple>
+                                        @if(isset($users) && !empty($users))
+                                            @foreach($users AS $row)
                                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
                                             @endforeach
                                         @endif
@@ -84,12 +103,30 @@
                     'error':   'Ooops, something wrong happended.'
                 }
             });
-            var drEvent = $('.dropify').dropify();
-        
+            var drEvent = $('.dropify').dropify();        
 
-        $('#users').select2({
-            placeholder:"Plase Select User"
-        });
+            $('#users').select2({
+                placeholder:"Plase select user"
+            });
+
+            $('#customer_id').select2({
+                placeholder:"Plase select customer"
+            });
+
+            $(".select2_tag").select2({
+                tags: true
+            });
+
+            $('#type').change(function(){
+                var val = $(this).val();
+                if(val == 'order' || val == 'payment' || val == 'site_visit'){
+                    $('#customer_div').show();
+                } else {
+                    $('#customer_div').hide();
+                }
+            });
+
+            $('#customer_div').hide();
         });
     </script>
 

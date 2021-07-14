@@ -11,6 +11,6 @@
 
         protected $table = 'task';
         
-        protected $fillable = ['title', 'user_id', 'description', 'target_date', 'attechment', 'created_by', 'created_at', 'updated_by', 'updated_at'];
+        protected $fillable = ['type', 'user_id', 'customer_id', 'description', 'target_date', 'attechment', 'created_by', 'created_at', 'updated_by', 'updated_at'];
     }
         

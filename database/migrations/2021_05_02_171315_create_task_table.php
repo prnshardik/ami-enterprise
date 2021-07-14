@@ -15,8 +15,9 @@ class CreateTaskTable extends Migration
     {
         Schema::create('task', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
+            $table->string('type')->nullable();
             $table->string('user_id')->nullable();
+            $table->bigInteger('customer_id')->nullable()->unsigned();
             $table->text('description')->nullable();
             $table->date('target_date')->nullable();
             $table->text('attechment')->nullable();
@@ -24,6 +25,8 @@ class CreateTaskTable extends Migration
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
+
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
