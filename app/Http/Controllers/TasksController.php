@@ -24,12 +24,13 @@
                                                     FROM users as u
                                                     WHERE u.id IN($row->user_id)
                                                     GROUP BY 'All'");
-                            if(!empty($u_data[0])){
+
+                            if(!empty($u_data[0]))
                                 $row->allocate_to = $u_data[0]->names;
-                            }                 
+                            else
+                                $row->allocate_to = '';                 
                         }
                     }
-
 
                     return Datatables::of($data)
                             ->addIndexColumn()
