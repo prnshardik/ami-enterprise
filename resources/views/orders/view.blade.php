@@ -37,6 +37,7 @@
                                 <input type="date" name="order_date" id="order_date" class="form-control" value="{{ $data->order_date ?? '' }}" placeholder="Plese enter order date" disabled />
                                 <span class="kt-form__help error order_date"></span>
                             </div>
+                            <div class="row" id="customer_details"></div>
                         </div>
                         @if(isset($data->order_details) && $data->order_details->isNotEmpty())
                             <div class="row" id="table" style="display:block">
@@ -102,6 +103,36 @@
             window.print();
 
             document.body.innerHTML = originalContents;
+        }
+
+        $(document).ready(function () {
+            let exst_name = "{{ $data->name ?? '' }}";
+            
+            if(exst_name != '' || exst_name != null){
+                $("#customer_details").html('');
+                _customer_details(exst_name);
+            }
+        });
+
+        function _customer_details(name){
+            $.ajax({
+                url : "{{ route('orders.customer.details') }}",
+                type : 'post',
+                data : { "_token": "{{ csrf_token() }}", "name": name},
+                dataType: 'json',
+                async: false,
+                success : function(json){
+                    $("#customer_details").append(
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Name: </span><span>'+json.data.party_name+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Name: </span><span>'+json.data.billing_name+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Contact Person: </span><span>'+json.data.contact_person+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Mobile Number: </span><span>'+json.data.mobile_number+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Address: </span><span>'+json.data.billing_address+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Delivery Address: </span><span>'+json.data.delivery_address+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician: </span><span>'+json.data.electrician+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician Number: </span><span>'+json.data.electrician_number+'</span></div>');
+                }
+            });
         }
     </script>
 @endsection

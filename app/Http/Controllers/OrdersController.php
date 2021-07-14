@@ -91,15 +91,14 @@
         /** select-customer */
 
         /** get-customer-details */
-            public function get_customer_details(Request $request){
-                $name = $request->name;
-                if(isset($name) && $name != null && $name != ''){
-                    $data = Customer::where('party_name' , $name)->first();
-                    if($data){
-                        return response()->json(['code' => 200 ,'data' => $data]);
-                    }else{
+            public function customer_details(Request $request){
+                if(isset($request->name) && $request->name != null && $request->name != ''){
+                    $data = Customer::where(['party_name' => $request->name])->first();
+
+                    if($data)
+                        return response()->json(['code' => 200, 'data' => $data]);
+                    else
                         return response()->json(['code' => 201]);
-                    }
                 }else{
                     return response()->json(['code' => 201]);
                 }
@@ -122,8 +121,8 @@
                 if($request->ajax()){ return true; }
                 if(!empty($request->all())){
                     $crud = [
-                        'name' => ucfirst($request->name),
-                        'order_date' => Date('Y-m-d' ,strtotime($request->order_date)) ?? NULL,
+                        'name' => $request->name,
+                        'order_date' => Date('Y-m-d', strtotime($request->order_date)) ?? NULL,
                         'status' => 'pending',
                         'created_at' => date('Y-m-d H:i:s'),
                         'created_by' => auth()->user()->id,
@@ -240,7 +239,7 @@
 
                 if(!empty($request->all())){
                     $crud = [
-                        'name' => ucfirst($request->name),
+                        'name' => $request->name,
                         'order_date' => Date('Y-m-d' ,strtotime($request->order_date)) ?? NULL,
                         'updated_at' => date('Y-m-d H:i:s'),
                         'updated_by' => auth()->user()->id

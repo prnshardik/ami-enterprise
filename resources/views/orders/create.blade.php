@@ -40,13 +40,7 @@
                                         <option></option>
                                         @if(isset($customers) && $customers->isNotEmpty())
                                             @foreach($customers as $row)
-                                                <option value="{{ $row->party_name }}" @if(isset($customer_id) && $customer_id == $row->id) selected @endif 
-                                                    data-billing_name="{{ $row->billing_name }}" data-contact_person="{{ $row->contact_person }}" 
-                                                    data-mobile_number="{{ $row->mobile_number }}" data-office_contact_person="{{ $row->office_contact_person }}" 
-                                                    data-billing_address="{{ $row->billing_address }}" data-delivery_address="{{ $row->delivery_address }}"
-                                                >
-                                                    {{ $row->party_name }}
-                                                </option>
+                                                <option value="{{ $row->party_name }}" @if(isset($customer_id) && $customer_id == $row->id) selected @endif >{{ $row->party_name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -61,11 +55,7 @@
                                     <i class="fa fa-calender"></i>
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
-
-                                <div class="row" id="customer_details">
-                                    
-                                </div>
-
+                                <div class="row" id="customer_details"></div>
                             </div>
                             <div class="row" id="table">
                                 <div class="col-sm-12">
@@ -339,41 +329,35 @@
                 });
             });
 
-            $(document).ready(function () {
-                $('#name').change(function () {
-                    var name = $(this).val();
-                    if(name != '' || name != null){
-                        $.ajax({
-                            url : "{{ route('orders.get.customer.details') }}",
-                            type : 'post',
-                            data : { "_token": "{{ csrf_token() }}", "name":name},
-                            dataType: 'json',
-                            async:false,
-                            success : function(json){
-                                $("#customer_details").append(
-                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Name: </span><span>'+json.data.party_name+'</span></div>'+
-                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Name: </span><span>'+json.data.billing_name+'</span></div>'+
-                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Contact Person: </span><span>'+json.data.contact_person+'</span></div>'+
-                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Mobile Number: </span><span>'+json.data.mobile_number+'</span></div>'+
-                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Address: </span><span>'+json.data.billing_address+'</span></div>'+
-                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Delivery Address: </span><span>'+json.data.delivery_address+'</span></div>'+
-                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician: </span><span>'+json.data.electrician+'</span></div>'+
-                                    '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician Number: </span><span>'+json.data.electrician_number+'</span></div>');
-                            },
-                            error: function(json){
-                                if(json.status === 422) {
-                                  alert('error1');
-                                }
-                                  alert('error2');
-                            }
-                        });
-                    }else{
-
-                    }
-                });
-                
+            $('#name').change(function () {
+                var name = $(this).val();
+                if(name != '' || name != null){
+                    $("#customer_details").html('');
+                    _customer_details(name);
+                }
             });
         });
+
+        function _customer_details(name){
+            $.ajax({
+                url : "{{ route('orders.customer.details') }}",
+                type : 'post',
+                data : { "_token": "{{ csrf_token() }}", "name": name},
+                dataType: 'json',
+                async: false,
+                success : function(json){
+                    $("#customer_details").append(
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Name: </span><span>'+json.data.party_name+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Name: </span><span>'+json.data.billing_name+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Contact Person: </span><span>'+json.data.contact_person+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Mobile Number: </span><span>'+json.data.mobile_number+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Address: </span><span>'+json.data.billing_address+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Delivery Address: </span><span>'+json.data.delivery_address+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician: </span><span>'+json.data.electrician+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician Number: </span><span>'+json.data.electrician_number+'</span></div>');
+                }
+            });
+        }
     </script>
 @endsection
 

@@ -123,7 +123,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('orders/delete-detail', 'OrdersController@delete_detail')->name('orders.delete.detail');
             Route::get('orders/select-customer', 'OrdersController@select_customer')->name('orders.select.customer');
 
-            Route::post('orders/get-customer-details', 'OrdersController@get_customer_details')->name('orders.get.customer.details');
+            Route::post('orders/customer-details', 'OrdersController@customer_details')->name('orders.customer.details');
         /** orders */
 
         /** payment */
