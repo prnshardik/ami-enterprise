@@ -99,6 +99,8 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::get('tasks/edit/{id?}', 'TasksController@edit')->name('tasks.edit');
             Route::patch('tasks/update', 'TasksController@update')->name('tasks.update');
             Route::post('tasks/change-status', 'TasksController@change_status')->name('tasks.change.status');
+
+            Route::post('tasks/customer_details', 'TasksController@customer_details')->name('tasks.customer.details');
         /** Tasks */
 
         /** My-Tasks */

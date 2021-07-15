@@ -17,7 +17,7 @@ class CreateTaskTable extends Migration
             $table->id();
             $table->string('type')->nullable();
             $table->string('user_id')->nullable();
-            $table->bigInteger('customer_id')->nullable()->unsigned();
+            $table->string('party_name')->nullable();
             $table->text('description')->nullable();
             $table->date('target_date')->nullable();
             $table->text('attechment')->nullable();
@@ -25,8 +25,6 @@ class CreateTaskTable extends Migration
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
-
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

@@ -39,9 +39,10 @@
                                     <div id="customer_div">
                                         <label for="customer_id">Customer <span class="text-danger"></span></label>
                                         <select name="customer_id" class="form-control" placeholder="Plese select customer" id="customer_id" >
+                                            <option value="" hidden>Select customer</option>
                                             @if(isset($customers) && !empty($customers))
                                                 @foreach($customers AS $row)
-                                                    <option value="{{ $row->id }}">{{ $row->party_name }}</option>
+                                                    <option value="{{ $row->party_name }}">{{ $row->party_name }}</option>
                                                 @endforeach
                                             @endif
                                         </select>
@@ -95,6 +96,8 @@
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     
     <script>
+        let type = '';
+
         $(document).ready(function(){
             $('.dropify').dropify({
                 messages: {
@@ -118,8 +121,8 @@
             });
 
             $('#type').change(function(){
-                var val = $(this).val();
-                if(val == 'order' || val == 'payment' || val == 'site_visit'){
+                type = $(this).val();
+                if(type == 'order' || type == 'payment' || type == 'site_visit'){
                     $('#customer_div').show();
                 } else {
                     $('#customer_div').hide();
@@ -127,6 +130,29 @@
             });
 
             $('#customer_div').hide();
+
+            $('#customer_id').change(function () {
+                var name = $(this).val();
+                if(name != '' || name != null){
+                    $("#details").html('');
+                    _customer_details(name);
+                }
+            });
+
+            function _customer_details(name){
+                $.ajax({
+                    url : "{{ route('tasks.customer.details') }}",
+                    type : 'post',
+                    data : { "_token": "{{ csrf_token() }}", "name": name, 'type': type},
+                    dataType: 'json',
+                    async: false,
+                    success : function(response){
+                        if(response.code == 200){
+                            $("#details").html(response.data);
+                        }
+                    }
+                });
+            }
         });
     </script>
 

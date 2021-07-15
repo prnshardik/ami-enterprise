@@ -5,6 +5,7 @@
     use App\Models\User;
     use App\Models\Task;
     use App\Models\Customer;
+    use App\Models\Payment;
     use Illuminate\Support\Str;
     use App\Http\Requests\TaskRequest;
     use Auth, Validator, DB, Mail, DataTables, File;
@@ -98,7 +99,7 @@
                     $crud = [
                         'type' => $request->type,
                         'user_id' => implode(',', $request->users),
-                        'customer_id' => $request->customer_id ?? NULL,
+                        'party_name' => $request->customer_id ?? NULL,
                         'description' => $request->description ?? NULL,
                         'target_date' => $request->t_date,
                         'created_at' => date('Y-m-d H:i:s'),
@@ -183,9 +184,9 @@
                     $exst_data = Task::where(['id' => $request->id])->first();
 
                     $crud = [
-                        'type' => $request->title,
+                        'type' => $request->type,
                         'user_id' => implode(',', $request->users) ,
-                        'customer_id' => $request->customer_id ?? NULL,
+                        'party_name' => $request->customer_id ?? NULL,
                         'description' => $request->description ?? NULL,
                         'target_date' => $request->t_date,
                         'updated_at' => date('Y-m-d H:i:s'),
@@ -267,4 +268,43 @@
                 }
             }
         /** change-status */
+
+        /** customer-details */ 
+            public function customer_details(Request $request){
+                $type = $request->type;
+                $name = $request->name;
+
+                $data = '';
+                if($type == 'payment'){
+                    $collection = Payment::select('id', 'party_name', 'bill_date', 'balance_amount', 'mobile_no', DB::Raw("null as note"), DB::Raw("null as reminder"))
+                                        ->whereRaw('id IN (select MAX(id) FROM payments GROUP BY party_name)')
+                                        ->where(['party_name' => $name])
+                                        ->first();
+
+                    if($collection){
+                        $data .= "<div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Name: </span><span> $collection->party_name</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Bill date: </span><span> $collection->bill_date</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Balance amount: </span><span> $collection->balance_amount</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Mobile number: </span><span> $collection->mobile_no</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Note: </span><span> $collection->note</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Reminder: </span><span> $collection->reminder</span></div>";
+                    }
+                }else{
+                    $collection = Customer::where(['party_name' => $name])->first();
+
+                    if($collection){
+                        $data .= "<div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Name: </span><span> $collection->party_name</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Billing name: </span><span> $collection->billing_name</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Contact person: </span><span> $collection->contact_person</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Mobile number: </span><span> $collection->mobile_number</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Billing address: </span><span> $collection->billing_address</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Delivery address: </span><span> $collection->delivery_address</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Electrician: </span><span> $collection->electrician</span></div>
+                                    <div class='form-group col-md-6'><span style='font-weight: bold; padding-left:16px;'>Electrician number: </span><span> $collection->electrician_number</span></div>";
+                    }
+                }
+
+                return response()->json(['code' => 200, 'data' => $data]);
+            }
+        /** customer-details */
     }

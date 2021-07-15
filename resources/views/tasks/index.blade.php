@@ -102,8 +102,8 @@
                             name: 'allocate_to'
                         },
                         {
-                            data: 'title',
-                            name: 'title'
+                            data: 'type',
+                            name: 'type'
                         },
                         {
                             data: 'task_date',
