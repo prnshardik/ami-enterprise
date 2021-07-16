@@ -338,9 +338,18 @@
         /** import */
 
         /** assigned-users */
-            public function assigned_users(){
+            public function assigned_users(Request $request){
+                $options = '<option value="all">All</option><option value="assigned">Assigned</option><option value="not_assigned">Not Assigned</option>';
+                
                 $data = PaymentAssign::select('users.id', 'users.name')->leftjoin('users', 'users.id', 'payment_assign.user_id')->groupBy('payment_assign.user_id')->get();
-                dd($data);
+
+                if($data->isNotEmpty()){
+                    foreach($data as $row){
+                        $options .= "<option value='$row->id'>$row->name</option>";
+                    }
+                }
+
+                return response()->json(['code' => 200, 'data' => $options]);
             }
         /** assigned-users */
     }

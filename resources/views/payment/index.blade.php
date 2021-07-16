@@ -73,6 +73,8 @@
         var datatable;
 
         $(document).ready(function() {
+            _assigned_users();
+            
             if($('#data-table').length > 0){
                 datatable = $('#data-table').DataTable({
                     processing: true,
@@ -196,6 +198,7 @@
                         $('#user'+id+' option').filter(':selected').prop('selected', false);
                         $('#assignModal'+id).modal('hide');
                         toastr.success(response.message, 'Success');
+                        _assigned_users();
                         $('#data-table').DataTable().draw(true);
                     }else{
                         toastr.error(response.message, 'Error');
@@ -211,5 +214,21 @@
                 }
             });
         });
+
+        function _assigned_users(){
+            $.ajax({
+                "url": "{!! route('payment.assigned.users') !!}",
+                "dataType": "json",
+                "type": "get",
+                success: function (response){
+                    $('#type').html('');
+                    $('#type').html(response.data);
+                },
+                error: function(response){
+                    $('#type').html('');
+                    $('#type').html('<option value="all">All</option><option value="assigned">Assigned</option><option value="not_assigned">Not Assigned</option>');
+                }
+            });
+        }
     </script>
 @endsection
