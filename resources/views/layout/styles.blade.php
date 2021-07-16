@@ -26,6 +26,10 @@
 			top: 530px !important;
 		}
 	}
+
+	.ibox{
+		margin: 10px;
+	}
 </style>
 
 @yield('styles')

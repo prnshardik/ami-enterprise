@@ -27,7 +27,7 @@
                             <div class="col-sm-3">
                                 <label for="type" class="font-weight-bold">Type <span class="text-danger"></span></label>
                                 <select name="type" id="type" class="form-control">
-                                    <option value="">Select Type</option>
+                                    <option value="all">All</option>
                                     <option value="assigned">Assigned</option>
                                     <option value="not_assigned">Not Assigned</option>
                                 </select>
@@ -76,7 +76,7 @@
             if($('#data-table').length > 0){
                 datatable = $('#data-table').DataTable({
                     processing: true,
-                    serverSide: false,
+                    serverSide: true,
 
                     "pageLength": 25,
                     // "iDisplayLength": 10,

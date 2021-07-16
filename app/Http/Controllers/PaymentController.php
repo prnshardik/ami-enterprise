@@ -41,6 +41,14 @@
                                                 $query->select('party_name')
                                                     ->from(with(new PaymentAssign)->getTable());
                                             });
+                    }elseif($type && $type == 'all'){
+                        
+                    }else{
+                        $collection->whereIn('party_name', function($query) use ($type){
+                                                $query->select('party_name')
+                                                    ->from(with(new PaymentAssign)->getTable())
+                                                    ->where(['user_id' => $type]);
+                                            });
                     }
 
                     $data = $collection->get();
@@ -328,4 +336,11 @@
                 return redirect()->route('payment');
             }
         /** import */
+
+        /** assigned-users */
+            public function assigned_users(){
+                $data = PaymentAssign::select('users.id', 'users.name')->leftjoin('users', 'users.id', 'payment_assign.user_id')->groupBy('payment_assign.user_id')->get();
+                dd($data);
+            }
+        /** assigned-users */
     }
