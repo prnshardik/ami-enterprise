@@ -30,6 +30,9 @@
                                 $row->allocate_to = $u_data[0]->names;
                             else
                                 $row->allocate_to = '';                 
+                        
+                            if($row->type != '' || $row->type != null)
+                                $row->type = ucfirst(str_replace('_', ' ', $row->type));
                         }
                     }
 
@@ -154,7 +157,7 @@
                 if($data)
                     return view('tasks.view')->with(['users' => $users, 'customers' => $customers,'data' => $data]);
                 else
-                    return redirect()->route('tasks')->with('error', 'No task found');
+                    return redirect()->route('tasks')->with('error', 'No data found');
             }
         /** view */
 

@@ -9,7 +9,7 @@
     use App\Models\Customer;
     use Illuminate\Support\Str;
     use App\Http\Requests\OrderRequest;
-    use Auth, Validator, DB, Mail, DataTables;
+    use Auth, Validator, DB, Mail, DataTables, File;
 
     class OrdersController extends Controller{
         /** index */
@@ -25,20 +25,13 @@
                                                     <i class="fa fa-eye"></i>
                                                 </a> &nbsp;';
                                 if($data->status != 'delivered'){
-                                    $return .= '<a href="'.route('orders.edit', ['id' => base64_encode($data->id)]).'" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-edit"></i>
-                                                </a> &nbsp;';
                                     $return .= '<a href="javascript:;" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                                                     <i class="fa fa-bars"></i>
                                                                 </a> &nbsp;
                                                                 <ul class="dropdown-menu">
-                                                                    
                                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="pending" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Pending</a></li>
-
                                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="delivery" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Delivery</a></li>
-                                                                    
                                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="completed" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Completed</a></li>
-                                                                    
                                                                     <li><a class="dropdown-item" href="javascript:;" onclick="change_status(this);" data-status="delete" data-old_status="'.$data->status.'" data-id="'.base64_encode($data->id).'">Delete</a></li>
                                                                 </ul>
                                                             </div>';
@@ -124,11 +117,27 @@
                         'name' => $request->name,
                         'order_date' => Date('Y-m-d', strtotime($request->order_date)) ?? NULL,
                         'status' => 'pending',
+                        'remark' => $request->remark ?? NULL,
                         'created_at' => date('Y-m-d H:i:s'),
                         'created_by' => auth()->user()->id,
                         'updated_at' => date('Y-m-d H:i:s'),
                         'updated_by' => auth()->user()->id
                     ];
+
+                    if(!empty($request->file('file'))){
+                        $file = $request->file('file');
+                        $filenameWithExtension = $request->file('file')->getClientOriginalName();
+                        $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
+                        $extension = $request->file('file')->getClientOriginalExtension();
+                        $filenameToStore = time()."_".$filename.'.'.$extension;
+
+                        $folder_to_upload = public_path().'/uploads/orders/';
+
+                        if (!File::exists($folder_to_upload))
+                            File::makeDirectory($folder_to_upload, 0777, true, true);
+
+                        $crud["file"] = $filenameToStore;
+                    }
 
                     DB::beginTransaction();
                     try {
@@ -141,20 +150,25 @@
 
                             if($product_id != null){
                                 for($i=0; $i<count($product_id); $i++){
-                                    $order_detail_crud = [
-                                        'order_id' => $last_id,
-                                        'product_id' => $product_id[$i] ?? NULL,
-                                        'quantity' => $quantity[$i] ?? NULL,
-                                        'price' => $price[$i] ?? NULL,
-                                        'created_at' => date('Y-m-d H:i:s'),
-                                        'created_by' => auth()->user()->id,
-                                        'updated_at' => date('Y-m-d H:i:s'),
-                                        'updated_by' => auth()->user()->id
-                                    ];
+                                    if($product_id[$i] != null){
+                                        $order_detail_crud = [
+                                            'order_id' => $last_id,
+                                            'product_id' => $product_id[$i] ?? NULL,
+                                            'quantity' => $quantity[$i] ?? NULL,
+                                            'price' => $price[$i] ?? NULL,
+                                            'created_at' => date('Y-m-d H:i:s'),
+                                            'created_by' => auth()->user()->id,
+                                            'updated_at' => date('Y-m-d H:i:s'),
+                                            'updated_by' => auth()->user()->id
+                                        ];
+                                    }
 
                                     OrderDetails::insertGetId($order_detail_crud);
                                 }
                             }
+
+                            if(!empty($request->file('file')))
+                                $file->move($folder_to_upload, $filenameToStore);
 
                             DB::commit();
                             return redirect()->route('orders')->with('success', 'Order created successfully.');
@@ -179,11 +193,16 @@
 
                 $id = base64_decode($id);
 
-                $data = Order::select('id', 'name', 'order_date')->where(['id' => $id])->first();
+                $products = Product::select('id', 'name')->get();
+                $customers = Customer::select('id', 'party_name', 'billing_name', 'contact_person', 'mobile_number', 'billing_address', 'delivery_address', 'office_contact_person')
+                                        ->where(['status' => 'active'])
+                                        ->get();
+
+                $data = Order::select('id', 'name', 'file', 'remark', 'order_date')->where(['id' => $id])->first();
                 
                 if($data){
                     $order_details = DB::table('orders_details as od')
-                                        ->select('od.product_id', 'od.quantity', 'od.price', 'p.name as product_name')
+                                        ->select('od.id', 'od.product_id', 'od.quantity', 'od.price', 'p.name as product_name')
                                         ->leftjoin('products as p', 'p.id', 'od.product_id')
                                         ->where(['od.order_id' => $data->id])
                                         ->get();
@@ -191,11 +210,11 @@
                     if($order_details->isNotEmpty())
                         $data->order_details = $order_details;
                     else
-                       $data->order_details = collect();
+                        $data->order_details = collect();
                     
-                       return view('orders.view')->with('data', $data);
+                       return view('orders.view', ['products' => $products, 'data' => $data, 'customers' => $customers]);
                 }else{
-                    return redirect()->route('orders')->with('error', 'No order found');
+                    return redirect()->route('orders')->with('error', 'No data found');
                 }
             }
         /** view */ 
@@ -212,7 +231,7 @@
                                         ->where(['status' => 'active'])
                                         ->get();
 
-                $data = Order::select('id', 'name', 'order_date')->where(['id' => $id])->first();
+                $data = Order::select('id', 'name', 'file', 'remark', 'order_date')->where(['id' => $id])->first();
                 
                 if($data){
                     $order_details = DB::table('orders_details as od')
@@ -228,7 +247,7 @@
 
                     return view('orders.edit', ['products' => $products, 'data' => $data, 'customers' => $customers]);
                 }else{
-                    return redirect()->route('orders')->with('error', 'No order found');
+                    return redirect()->route('orders')->with('error', 'No data found');
                 }
             }
         /** edit */ 
@@ -241,9 +260,25 @@
                     $crud = [
                         'name' => $request->name,
                         'order_date' => Date('Y-m-d' ,strtotime($request->order_date)) ?? NULL,
+                        'remark' => $request->remark ?? '',
                         'updated_at' => date('Y-m-d H:i:s'),
                         'updated_by' => auth()->user()->id
                     ];
+
+                    if(!empty($request->file('file'))){
+                        $file = $request->file('file');
+                        $filenameWithExtension = $request->file('file')->getClientOriginalName();
+                        $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
+                        $extension = $request->file('file')->getClientOriginalExtension();
+                        $filenameToStore = time()."_".$filename.'.'.$extension;
+
+                        $folder_to_upload = public_path().'/uploads/orders/';
+
+                        if (!File::exists($folder_to_upload))
+                            File::makeDirectory($folder_to_upload, 0777, true, true);
+
+                        $crud["file"] = $filenameToStore;
+                    }
 
                     DB::beginTransaction();
                     try {
@@ -256,35 +291,40 @@
 
                             if($product_id != null){
                                 for($i=0; $i<count($product_id); $i++){
-                                    $exst_detail = OrderDetails::select('id')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
+                                    if($product_id[$i] != null){
+                                        $exst_detail = OrderDetails::select('id')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
 
-                                    if(!empty($exst_detail)){
-                                        $order_detail_crud = [
-                                            'order_id' => $request->id,
-                                            'product_id' => $product_id[$i] ?? NULL,
-                                            'quantity' => $quantity[$i] ?? NULL,
-                                            'price' => $price[$i] ?? NULL,
-                                            'updated_at' => date('Y-m-d H:i:s'),
-                                            'updated_by' => auth()->user()->id
-                                        ];
+                                        if(!empty($exst_detail)){
+                                            $order_detail_crud = [
+                                                'order_id' => $request->id,
+                                                'product_id' => $product_id[$i] ?? NULL,
+                                                'quantity' => $quantity[$i] ?? NULL,
+                                                'price' => $price[$i] ?? NULL,
+                                                'updated_at' => date('Y-m-d H:i:s'),
+                                                'updated_by' => auth()->user()->id
+                                            ];
 
-                                        OrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
-                                    }else{
-                                        $order_detail_crud = [
-                                            'order_id' => $request->id,
-                                            'product_id' => $product_id[$i] ?? NULL,
-                                            'quantity' => $quantity[$i] ?? NULL,
-                                            'price' => $price[$i] ?? NULL,
-                                            'created_at' => date('Y-m-d H:i:s'),
-                                            'created_by' => auth()->user()->id,
-                                            'updated_at' => date('Y-m-d H:i:s'),
-                                            'updated_by' => auth()->user()->id
-                                        ];
+                                            OrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
+                                        }else{
+                                            $order_detail_crud = [
+                                                'order_id' => $request->id,
+                                                'product_id' => $product_id[$i] ?? NULL,
+                                                'quantity' => $quantity[$i] ?? NULL,
+                                                'price' => $price[$i] ?? NULL,
+                                                'created_at' => date('Y-m-d H:i:s'),
+                                                'created_by' => auth()->user()->id,
+                                                'updated_at' => date('Y-m-d H:i:s'),
+                                                'updated_by' => auth()->user()->id
+                                            ];
 
-                                        OrderDetails::insertGetId($order_detail_crud);
+                                            OrderDetails::insertGetId($order_detail_crud);
+                                        }
                                     }
                                 }
                             }
+
+                            if(!empty($request->file('file')))
+                                $file->move($folder_to_upload, $filenameToStore);
 
                             DB::commit();
                             return redirect()->route('orders')->with('success', 'Order updated successfully.');
