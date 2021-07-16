@@ -11,6 +11,9 @@
     <link href="{{ asset('assets/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendors/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}" rel="stylesheet" />
     
+    <link href="{{ asset('assets/css/dropify.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/sweetalert2.bundle.css') }}" rel="stylesheet">
+
     <style> 
         .select2-container--default .select2-selection--single{
             height: 35px;
@@ -56,23 +59,33 @@
                                     <span class="kt-form__help error order_date"></span>
                                 </div>
                                 <div class="row" id="customer_details"></div>
+                                <div class="form-group col-sm-12">
+                                    <label for="file">Attechment <span class="text-danger"></span></label>
+                                    <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" />
+                                    <span class="kt-form__help error file"></span>
+                                </div>
+                                <div class="form-group col-sm-12">
+                                    <label for="remark">Remark <span class="text-danger"></span></label>
+                                    <textarea name="remark" id="remark" cols="30" rows="3" class="form-control" placeholder="Plese enter remark"></textarea>
+                                    <span class="kt-form__help error remark"></span>
+                                </div>
                             </div>
                             <div class="row" id="table">
                                 <div class="col-sm-12">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th style="width:10%">Sr. No</th>
-                                                <th style="width:30%">Product</th>
-                                                <th style="width:25%">Quantity</th>
-                                                <th style="width:25%">Price</th>
-                                                <th style="width:10%">Action</th>
+                                                <th style="width:05%">Sr. No</th>
+                                                <th style="width:50%">Product</th>
+                                                <th style="width:15%">Quantity</th>
+                                                <th style="width:15%">Price</th>
+                                                <th style="width:15%">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="clone" id="clone_1">
-                                                <th style="width:10%">1</th>
-                                                <th style="width:30%">
+                                                <th style="width:05%">1</th>
+                                                <th style="width:20%">
                                                     <select class="form-control select2_demo_2" name="product_id[]" id="product_1">
                                                         @if(isset($products) && $products->isNotEmpty())
                                                             <option value="">Select Product</option>
@@ -82,13 +95,13 @@
                                                         @endif
                                                     </select>
                                                 </th>
-                                                <th style="width:25%">
-                                                    <input type="text" name="quantity[]" id="quantity_1" class="form-control digit" required>
+                                                <th style="width:15%">
+                                                    <input type="text" name="quantity[]" id="quantity_1" class="form-control digit">
                                                 </th>
-                                                <th style="width:25%">
-                                                    <input type="text" name="price[]" id="price_1" class="form-control digit" required>
+                                                <th style="width:15%">
+                                                    <input type="text" name="price[]" id="price_1" class="form-control digit">
                                                 </th>
-                                                <th style="width:10%">
+                                                <th style="width:15%">
                                                     <button type="button" class="btn btn-danger delete" style="display:none;" data-id="1">Remove</button>
                                                 </th>
                                             </tr>
@@ -197,8 +210,21 @@
     <script src="{{ asset('assets/js/scripts/form-plugins.js') }}"></script>
     <script src="{{ asset('assets/vendors/bootstrap-datepicker/dist/js/bootstrap-datepicker.js') }}"></script>
 
+    <script src="{{ asset('assets/js/dropify.min.js') }}"></script>
+    <script src="{{ asset('assets/js/promise.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sweetalert2.bundle.js') }}"></script>
+    
     <script>
         $(document).ready(function() {
+            $('.dropify').dropify({
+                messages: {
+                    'default': 'Drag and drop file here or click',
+                    'remove':  'Remove',
+                    'error':   'Ooops, something wrong happended.'
+                }
+            });
+            var drEvent = $('.dropify').dropify(); 
+
             $('#order_date').datepicker({
                 format: 'dd-mm-yyyy',
                 date: new Date(),
@@ -229,6 +255,7 @@
                     $("#table tbody").append(clone);
                     $("#product_"+num).select2();
                     $("#product_"+num).focus();
+                    $("#product_"+num).select2('open');
                 }else{
                     var clone = clone_div(1);
                     $("#table tbody").append(clone);
@@ -239,17 +266,17 @@
 
             function clone_div(id){
                 return '<tr class="clone" id="clone_'+id+'">'+
-                        '<th style="width:10%">'+id+'</th>'+
-                        '<th style="width:30%">'+
-                            '<select name="product_id[]" id="product_'+id+'" class="form-control select2_demo_2"> @foreach($products as $row)<option value="{{ $row->id }}">{{ $row->name }}</option>@endforeach </select>'+
+                        '<th style="width:05%">'+id+'</th>'+
+                        '<th style="width:50%">'+
+                            '<select name="product_id[]" id="product_'+id+'" class="form-control select2_demo_2"> <option value="">Select</option> @foreach($products as $row)<option value="{{ $row->id }}">{{ $row->name }}</option>@endforeach </select>'+
                         '</th>'+
-                        '<th style="width:25%">'+
-                            '<input type="text" name="quantity[]" id="quantity_'+id+'"class="form-control" required>'+
+                        '<th style="width:15%">'+
+                            '<input type="text" name="quantity[]" id="quantity_'+id+'"class="form-control">'+
                         '</th>'+
-                        '<th style="width:25%">'+
-                            '<input type="text" name="price[]" id="price_'+id+'" class="form-control " required>'+
+                        '<th style="width:15%">'+
+                            '<input type="text" name="price[]" id="price_'+id+'" class="form-control">'+
                         '</th>'+
-                        '<th style="width:10%">'+
+                        '<th style="width:15%">'+
                             '<button type="button" class="btn btn-danger delete" data-id="'+id+'">Remove</button>'+
                         '</th>'+
                     '</tr>';

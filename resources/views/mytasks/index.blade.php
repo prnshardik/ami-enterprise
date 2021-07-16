@@ -17,9 +17,6 @@
                 <div class="ibox">
                     <div class="ibox-head">
                         <h1 class="ibox-title">My Tasks</h1>
-                        <h1 class="pull-right">
-                            <a class="btn btn-primary pull-right ml-2" style="margin-top: 8px;margin-bottom: 5px" href="{{ route('mytasks.create') }}">Add New</a>
-                        </h1>
                     </div>
 
                     <div class="ibox-body">
@@ -97,8 +94,8 @@
                             name: 'allocate_from'
                         },
                         {
-                            data: 'title',
-                            name: 'title'
+                            data: 'type',
+                            name: 'type'
                         },
                         {
                             data: 'task_date',

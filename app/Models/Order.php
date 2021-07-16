@@ -11,5 +11,5 @@
 
         protected $table = 'orders';
         
-        protected $fillable = ['name', 'order_date', 'created_by', 'created_at', 'updated_by', 'updated_at'];
+        protected $fillable = ['name', 'order_date', 'file', 'remark', 'created_by', 'created_at', 'updated_by', 'updated_at'];
     }

@@ -105,11 +105,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
 
         /** My-Tasks */
             Route::any('mytasks', 'MyTasksController@index')->name('mytasks');
-            Route::get('mytasks/create', 'MyTasksController@create')->name('mytasks.create');
-            Route::post('mytasks/insert', 'MyTasksController@insert')->name('mytasks.insert');
             Route::get('mytasks/view/{id?}', 'MyTasksController@view')->name('mytasks.view');
-            Route::get('mytasks/edit/{id?}', 'MyTasksController@edit')->name('mytasks.edit');
-            Route::patch('mytasks/update', 'MyTasksController@update')->name('mytasks.update');
             Route::post('mytasks/change-status', 'MyTasksController@change_status')->name('mytasks.change.status');
         /** My-Tasks */
 
