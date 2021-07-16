@@ -103,7 +103,7 @@
                             </div> 
                         </div>
                         <div class="form-group">
-                            <a href="{{ route('orders.edit', ['id' => base64_encode($data->id)]) }}" class="btn btn-default hide">Edit</a>
+                            <a href="{{ route('orders.edit', ['id' => base64_encode($data->id)]) }}" class="btn btn-primary hide">Edit</a>
                             <a href="{{ route('orders') }}" class="btn btn-default hide">Back</a>
                         </div>
                     </div>
