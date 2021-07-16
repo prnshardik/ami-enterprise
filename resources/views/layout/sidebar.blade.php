@@ -98,6 +98,11 @@
                     </li>
                 </ul>
             </li>
+            <li class="{{ Request::is('reminders*') ? 'active' : '' }}">
+                <a class="{{ Request::is('reminders*') ? 'active' : '' }}" href="{{ route('reminders') }}"><i class="sidebar-item-icon fa fa-bell"></i>
+                    <span class="nav-label">Reminders</span>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>

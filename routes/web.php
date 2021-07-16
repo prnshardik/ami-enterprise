@@ -87,6 +87,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('notices/change-status', 'NoticesController@change_status')->name('notices.change.status');
         /** Notice */
 
+
         /** Notice-Board */
             Route::get('notice-board', 'NoticesController@notices_board')->name('notice.board');
         /** Notice-Board */ 
@@ -142,6 +143,17 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('payments-reminder/insert', 'PaymentReminderController@insert')->name('payments.reminders.insert');
             Route::post('payments-reminder/change-status', 'PaymentReminderController@change_status')->name('payments.reminders.change.status');
         /** payments-reminder */
+        
+
+        /** Self Reminder */
+            Route::any('reminders', 'ReminderController@index')->name('reminders');
+            Route::get('reminders/create', 'ReminderController@create')->name('reminders.create');
+            Route::post('reminders/insert', 'ReminderController@insert')->name('reminders.insert');
+            Route::get('reminders/view/{id?}', 'ReminderController@view')->name('reminders.view');
+            Route::get('reminders/edit/{id?}', 'ReminderController@edit')->name('reminders.edit');
+            Route::patch('reminders/update', 'ReminderController@update')->name('reminders.update');
+            Route::post('reminders/change-status', 'ReminderController@change_status')->name('reminders.change.status');
+        /** Self Reminder */
     });
 
     Route::get("{path}", function(){ return redirect()->route('login'); })->where('path', '.+');
