@@ -55,10 +55,22 @@
                     processing: true,
                     serverSide: false,
 
-                  
+                    "pageLength": 25,
+                    // "iDisplayLength": 10,
                     "responsive": true,
                     "aaSorting": [],
-                  
+                    // "order": [], //Initial no order.
+                    //     "aLengthMenu": [
+                    //     [5, 10, 25, 50, 100, -1],
+                    //     [5, 10, 25, 50, 100, "All"]
+                    // ],
+
+                    // "scrollX": true,
+                    // "scrollY": '',
+                    // "scrollCollapse": false,
+                    // scrollCollapse: true,
+
+                    // lengthChange: false,
 
                     "ajax":{
                         "url": "{{ route('orders') }}",

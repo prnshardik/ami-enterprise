@@ -55,9 +55,9 @@
             if($('#data-table').length > 0){
                 datatable = $('#data-table').DataTable({
                     processing: true,
-                    serverSide: true,
+                    serverSide: false,
 
-                    // "pageLength": 10,
+                    "pageLength": 25,
                     // "iDisplayLength": 10,
                     "responsive": true,
                     "aaSorting": [],

@@ -20,6 +20,12 @@
 	body:not(.fixed-layout).sidebar-mini .page-footer {
     	left: 60px; 
 	}
+
+	@media only screen and (max-device-width: 1024px) { 
+		.page-footer {
+			top: 530px !important;
+		}
+	}
 </style>
 
 @yield('styles')
