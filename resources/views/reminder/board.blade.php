@@ -146,7 +146,7 @@
                     <div>
                         <small>{{ $row->created_at }}</small>
                         <h4>{{ $row->title }}</h4>
-                        <p style="word-wrap: break-word;">{{ $row->description }}</p>
+                        <p style="word-wrap: break-word;">{{ $row->note }}</p>
                         <span>{{ auth()->user()->name }}</span>
                     </div>
                 </li>

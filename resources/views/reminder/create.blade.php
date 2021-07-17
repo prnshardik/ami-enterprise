@@ -8,7 +8,7 @@
 @endsection
 
 @section('styles')
-<link href="{{ asset('assets/css/bootstrap-dateTimePicker.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/bootstrap-dateTimePicker.css') }}" rel="stylesheet" />
 @endsection
 
 @section('content')
@@ -29,14 +29,11 @@
                                     <input type="text" name="title" id="title" class="form-control" placeholder="Plese enter title" value="{{ @old('title') }}" />
                                     <span class="kt-form__help error title"></span>
                                 </div>
-
                                 <div class="form-group col-sm-6">
                                     <label for="date_time">Date Time <span class="text-danger">*</span></label>
                                     <input type="text"  name="date_time" id="date_time" class="form-control" placeholder="Plese enter date_time" value="{{ @old('date_time') }}" />
                                     <span class="kt-form__help error date_time"></span>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="form-group col-sm-12">
                                     <label for="note">Description <span class="text-danger"></span></label>
                                     <textarea name="note" id="note" class="form-control"  placeholder="Plese enter note" cols="30" rows="10">{{ @old('note') }}</textarea>
@@ -56,16 +53,12 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('assets/js/moment.js') }}"></script>
-<script src="{{ asset('assets/js/bootstrap-dateTimePicker.js') }}"></script>
+    <script src="{{ asset('assets/js/moment.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap-dateTimePicker.js') }}"></script>
+    
     <script>
-
         $(document).ready(function () {
-
-
             $('#date_time').datetimepicker();
-
-
 
             var form = $('#form');
             $('.kt-form__help').html('');

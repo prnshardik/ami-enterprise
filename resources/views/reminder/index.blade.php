@@ -37,7 +37,6 @@
                                 </thead>
                             </table>
                         </div>
-                        <div class="text-center"></div>
                     </div>
                 </div>
             </div>
@@ -138,7 +137,7 @@
                             datatable.ajax.reload();
                             toastr.success('Record status changed successfully.', 'Success');
                         }else{
-                            toastr.error('Failed to delete record.', 'Error');
+                            toastr.error('Failed to change record status', 'Error');
                         }
                     }
                 });

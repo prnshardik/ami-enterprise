@@ -9,11 +9,10 @@
     use Auth, Validator, DB, Mail, DataTables;
 
     class ReminderController extends Controller{
-
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    $data = Reminder::select('id', 'title', 'date_time' ,DB::Raw("SUBSTRING(".'note'.", 1, 30) as note"), 'status')->where('created_by' , auth()->user()->id)->get();
+                    $data = Reminder::select('id', 'title', 'date_time', DB::Raw("SUBSTRING(".'note'.", 1, 30) as note"), 'status')->where(['created_by' => auth()->user()->id])->get();
 
                     return Datatables::of($data)
                             ->addIndexColumn()
@@ -64,10 +63,11 @@
         /** insert */
             public function insert(ReminderRequest $request){
                 if($request->ajax()){ return true; }
+
                 if(!empty($request->all())){
                     $crud = [
                         'title' => ucfirst($request->title),
-                        'date_time' => date('Y-m-d H:i:s' ,strtotime($request->date_time)) ?? NULL,
+                        'date_time' => date('Y-m-d H:i:s', strtotime($request->date_time)) ?? NULL,
                         'note' => $request->note ?? NULL,
                         'status' => 'active',
                         'created_at' => date('Y-m-d H:i:s'),
@@ -79,9 +79,9 @@
                     $last_id = Reminder::insertGetId($crud);
                     
                     if($last_id)
-                        return redirect()->route('reminders')->with('success', 'Reminder created successfully.');
+                        return redirect()->route('reminders')->with('success', 'Record added successfully');
                     else
-                        return redirect()->back()->with('error', 'Faild to create reminder!')->withInput();
+                        return redirect()->back()->with('error', 'Faild to add record')->withInput();
                 }else{
                     return redirect()->back()->with('error', 'Something went wrong')->withInput();
                 }
@@ -95,10 +95,10 @@
 
                 $id = base64_decode($id);
 
-                $data = Reminder::select('id', 'title', 'date_time' ,'note')->where(['id' => $id])->first();
+                $data = Reminder::select('id', 'title', 'date_time', 'note')->where(['id' => $id])->first();
                 
                 if($data)
-                    return view('reminder.view')->with('data', $data);
+                    return view('reminder.view', ['data' => $data]);
                 else
                     return redirect()->route('reminders')->with('error', 'No data found');
             }
@@ -112,10 +112,10 @@
 
                 $id = base64_decode($id);
 
-                $data = Reminder::select('id', 'title', 'date_time' ,'note')->where(['id' => $id])->first();
+                $data = Reminder::select('id', 'title', 'date_time', 'note')->where(['id' => $id])->first();
                 
                 if($data)
-                    return view('reminder.edit')->with('data', $data);
+                    return view('reminder.edit', ['data' => $data]);
                 else
                     return redirect()->route('reminders')->with('error', 'No data found');
             }
@@ -128,7 +128,7 @@
                 if(!empty($request->all())){
                     $crud = [
                         'title' => ucfirst($request->title),
-                        'date_time' => date('Y-m-d H:i:s' ,strtotime($request->date_time)) ?? NULL,
+                        'date_time' => date('Y-m-d H:i:s', strtotime($request->date_time)) ?? NULL,
                         'note' => $request->note ?? NULL,
                         'updated_at' => date('Y-m-d H:i:s'),
                         'updated_by' => auth()->user()->id
@@ -158,7 +158,7 @@
 
                     if(!empty($data)){
                         if($status == 'deleted')
-                            $update = Reminder::where('id',$id)->delete();
+                            $update = Reminder::where(['id' => $id])->delete();
                         else
                             $update = Reminder::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
                         
