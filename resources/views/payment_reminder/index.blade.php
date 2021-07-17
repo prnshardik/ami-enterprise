@@ -91,7 +91,7 @@
             if($('#data-table').length > 0){
                 datatable = $('#data-table').DataTable({
                     processing: true,
-                    serverSide: false,
+                    serverSide: true,
 
                     "pageLength": 25,
                     // "iDisplayLength": 10,

@@ -152,7 +152,7 @@
         });
 
         $('#reset').click(function(){
-            $('#type').val('');
+            $("#type").val("all").attr("selected", "selected");
             $('#start_date').val('');
             $('#end_date').val('');
             $('#data-table').DataTable().draw(true);            
@@ -161,6 +161,8 @@
         $('.date').change(function(){
             let startDate = $('#start_date').val();
             let endDate = $('#end_date').val();
+
+            $("#type").val("assigned").attr("selected", "selected");
 
             if(startDate && endDate){
                 $('#data-table').DataTable().draw(true);            

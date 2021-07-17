@@ -136,7 +136,7 @@
 
                                 $form = "<div class='row'>
                                             <input type='hidden' value='$data->party_name' id='party_name$data->id' />
-                                            <input type='hidden' value='$assign_id' id='assign_id' />
+                                            <input type='hidden' value='$assign_id' name='assign_id' id='assign_id$data->id' />
                                             <div class='form-group col-sm-12'>
                                                 <label for='date$data->id'>Date <span class='text-danger'>*</span></label>
                                                 <input type='date'  style='max-width: 90%;' name='date$data->id' id='date$data->id' class='form-control date' placeholder='Plese enter date' value='$date'/>
@@ -225,6 +225,8 @@
                     DB::beginTransaction();
                     try {
                         if($request->assign_id != '' ||  $request->assign_id != null){
+                            $exst_assign = PaymentAssign::where(['id' => $request->assign_id])->first();
+
                             $crud = [
                                 'user_id' => $request->user, 
                                 'date' => $request->date, 
@@ -236,7 +238,7 @@
                             $update = PaymentAssign::where(['id' => $request->assign_id])->update($crud);
 
                             if($update){
-                                $payment_reminder = PaymentReminder::select('id')->where(['party_name' => $request->party_name])->orderBy('id', 'desc')->first();
+                                $payment_reminder = PaymentReminder::select('id')->where(['party_name' => $request->party_name, 'user_id' => $exst_assign->user_id])->first();
 
                                 $remider_crud = [
                                     'user_id' => $request->user, 
@@ -290,6 +292,7 @@
                                     'date' => date('Y-m-d H:i:s'), 
                                     'next_date' => $request->date ?? date('Y-m-d H:i:s'), 
                                     'next_time' => '00:00', 
+                                    'is_last' => 'y',
                                     'note' => $request->note ?? NULL,
                                     'amount' => NULL,
                                     'created_at' => date('Y-m-d H:i:s'),

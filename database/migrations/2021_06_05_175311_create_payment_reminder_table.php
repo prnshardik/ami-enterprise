@@ -22,6 +22,7 @@ class CreatePaymentReminderTable extends Migration
             $table->date('date')->nullable();
             $table->date('next_date')->nullable();
             $table->time('next_time')->nullable();
+            $table->enum('is_last', ['y', 'n'])->default('y');
             $table->string('amount')->nullable();
             $table->timestamps();
             $table->integer('created_by')->nullable();
