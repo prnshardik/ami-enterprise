@@ -70,15 +70,17 @@
 
 @section('scripts')
     <script type="text/javascript">
+        let serverSide = false;
         var datatable;
 
         $(document).ready(function() {
             _assigned_users();
             
             if($('#data-table').length > 0){
+                console.log(serverSide);
                 datatable = $('#data-table').DataTable({
                     processing: true,
-                    serverSide: true,
+                    serverSide: serverSide,
 
                     "pageLength": 25,
                     // "iDisplayLength": 10,
@@ -148,14 +150,18 @@
         }); 
 
         $('#type').change(function(){
-            $('#data-table').DataTable().draw(true);            
+            serverSide = true;
+            datatable.ajax.reload();
+            serverSide = false;
         });
 
         $('#reset').click(function(){
+            serverSide = true;
             $("#type").val("all").attr("selected", "selected");
             $('#start_date').val('');
             $('#end_date').val('');
-            $('#data-table').DataTable().draw(true);            
+            datatable.ajax.reload();         
+            serverSide = false;
         });
 
         $('.date').change(function(){
@@ -165,12 +171,16 @@
             $("#type").val("assigned").attr("selected", "selected");
 
             if(startDate && endDate){
-                $('#data-table').DataTable().draw(true);            
+                serverSide = true;
+                // $('#data-table').DataTable().draw(true);            
+                datatable.ajax.reload();
+                serverSide = false;
             }
         });
 
         $(document).on("submit", ".form", function(e){
             e.preventDefault();
+            serverSide = true;
             $('.error').html('');
 
             let id = $(this).attr('id');
@@ -199,9 +209,14 @@
                         $('#note'+id).val('');
                         $('#user'+id+' option').filter(':selected').prop('selected', false);
                         $('#assignModal'+id).modal('hide');
+
                         toastr.success(response.message, 'Success');
+                        
                         _assigned_users();
-                        $('#data-table').DataTable().draw(true);
+                        
+                        datatable.ajax.reload();
+                        
+                        serverSide = false;
                     }else{
                         toastr.error(response.message, 'Error');
                     }
