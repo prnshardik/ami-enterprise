@@ -10,7 +10,7 @@
         public function run(){
             for($i=1; $i<=5; $i++){
                 Task::create([
-                    'type' => "Order",
+                    'type' => "order",
                     'user_id' => $i,
                     'description' => "Description $i",
                     'target_date' => date('Y-m-d'),
