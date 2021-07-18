@@ -47,8 +47,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
         /** my-tasks */
             Route::get('mytasks', 'MyTasksController@tasks');
             Route::get('mytask/{id}', 'MyTasksController@task');
-            Route::post('mytask/insert', 'MyTasksController@insert');
-            Route::post('mytask/update', 'MyTasksController@update');
             Route::post('mytask/change-status', 'MyTasksController@change_status');
         /** my-tasks */
 

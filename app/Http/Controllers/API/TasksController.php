@@ -8,17 +8,20 @@
     use Auth, DB, Validator, File;
 
     class TasksController extends Controller{
-
         /** tasks */
             public function tasks(Request $request){
                 $path = URL('/uploads/task').'/';
-                $data = Task::select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status',
+                $data = Task::select('task.id', 'task.user_id', 'u.name as allocate_from', 'task.type', 'task.target_date', 'task.created_at', 'task.status',
                                         DB::Raw("CASE
                                             WHEN ".'attechment'." != '' THEN CONCAT("."'".$path."'".", ".'attechment'.")
                                             ELSE 'null'
-                                        END as attechment")
+                                        END as attechment"), 
+                                        'task.description',
+                                        'customers.id as customer_id', 'customers.party_name', 'customers.billing_name', 'customers.contact_person', 'customers.mobile_number',
+                                        'customers.billing_address', 'customers.delivery_address', 'customers.electrician', 'customers.electrician_number', 'customers.office_contact_person'
                                     )
                                 ->leftjoin('users', 'task.user_id', 'users.id')
+                                ->leftjoin('customers', 'customers.party_name', 'task.party_name')
                                 ->leftjoin('users as u', 'task.created_by', 'u.id')
                                 ->get();
 
@@ -28,9 +31,14 @@
                                                 FROM users as u
                                                 WHERE u.id IN($row->user_id)
                                                 GROUP BY 'All'");
-                        if(!empty($u_data[0])){
+
+                        if(!empty($u_data[0]))
                             $row->allocate_to = $u_data[0]->names;
-                        }                 
+                        else
+                            $row->allocate_to = '';                 
+                    
+                        if($row->type != '' || $row->type != null)
+                            $row->type = ucfirst(str_replace('_', ' ', $row->type));
                     }
                 }
 
@@ -44,25 +52,34 @@
         /** task */
             public function task(Request $request, $id){
                 $path = URL('/uploads/task').'/';
-                $data = Task::select('task.id', 'task.user_id' , 'u.name as allocate_from', 'task.title', 'task.target_date', 'task.created_at', 'task.status',
+                $data = Task::select('task.id', 'task.user_id', 'u.name as allocate_from', 'task.type', 'task.target_date', 'task.created_at', 'task.status',
                                         DB::Raw("CASE
                                             WHEN ".'attechment'." != '' THEN CONCAT("."'".$path."'".", ".'attechment'.")
                                             ELSE 'null'
-                                        END as attechment")
+                                        END as attechment"), 
+                                        'task.description',
+                                        'customers.id as customer_id', 'customers.party_name', 'customers.billing_name', 'customers.contact_person', 'customers.mobile_number',
+                                        'customers.billing_address', 'customers.delivery_address', 'customers.electrician', 'customers.electrician_number', 'customers.office_contact_person'
                                     )
                                 ->leftjoin('users', 'task.user_id', 'users.id')
+                                ->leftjoin('customers', 'customers.party_name', 'task.party_name')
                                 ->leftjoin('users as u', 'task.created_by', 'u.id')
                                 ->where(['task.id' => $id])
                                 ->first();
 
                 if(!empty($data)){
                     $u_data = DB::select("SELECT GROUP_CONCAT(u.name SEPARATOR ', ') as names
-                                            FROM users as u
-                                            WHERE u.id IN($data->user_id)
-                                            GROUP BY 'All'");
-                    if(!empty($u_data[0])){
+                                                FROM users as u
+                                                WHERE u.id IN($data->user_id)
+                                                GROUP BY 'All'");
+
+                    if(!empty($u_data[0]))
                         $data->allocate_to = $u_data[0]->names;
-                    }   
+                    else
+                        $data->allocate_to = '';                 
+                
+                    if($data->type != '' || $data->type != null)
+                        $data->type = ucfirst(str_replace('_', ' ', $data->type));
                 }
 
                 if(!empty($data))
@@ -75,9 +92,8 @@
         /** insert */
             public function insert(Request $request){
                 $rules = [
-                    'title' => 'required',
+                    'type' => 'required',
                     'user_id' => 'required',
-                    'description' => 'required',
                     'target_date' => 'required',
                 ];
 
@@ -87,14 +103,15 @@
                     return response()->json(['status' => 422, 'message' => $validator->errors()]);
 
                 $crud = [
-                        'title' => ucfirst($request->title),
-                        'user_id' => $request->user_id,
-                        'description' => $request->description ?? NULL,
-                        'target_date' => $request->target_date,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'created_by' => auth('sanctum')->user()->id,
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'updated_by' => auth('sanctum')->user()->id
+                    'type' => $request->type,
+                    'user_id' => $request->user_id,
+                    'party_name' => $request->party_name ?? NULL,
+                    'description' => $request->description ?? NULL,
+                    'target_date' => $request->target_date,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => auth('sanctum')->user()->id,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => auth('sanctum')->user()->id
                 ];
 
                 if(!empty($request->file('file'))){
@@ -129,9 +146,8 @@
             public function update(Request $request){
                 $rules = [
                     'id' => 'required',
-                    'title' => 'required',
+                    'type' => 'required',
                     'user_id' => 'required',
-                    'description' => 'required',
                     'target_date' => 'required',
                 ];
 
@@ -143,14 +159,15 @@
                 $exst_data = Task::where(['id' => $request->id])->first();
 
                 $crud = [
-                        'title' => ucfirst($request->title),
-                        'user_id' => $request->user_id,
-                        'description' => $request->description ?? NULL,
-                        'target_date' => $request->target_date,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'created_by' => auth('sanctum')->user()->id,
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'updated_by' => auth('sanctum')->user()->id
+                    'type' => $request->type,
+                    'user_id' => $request->user_id,
+                    'description' => $request->description ?? NULL,
+                    'party_name' => $request->party_name ?? NULL,
+                    'target_date' => $request->target_date,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => auth('sanctum')->user()->id,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => auth('sanctum')->user()->id
                 ];
 
                 if(!empty($request->file('file'))){
