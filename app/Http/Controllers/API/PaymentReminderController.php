@@ -28,14 +28,13 @@
 
                 if($date == 'past'){
                     $collection->whereDate('payment_reminder.next_date', '<', date('Y-m-d'));
-                    $collection->whereRaw('payment_reminder.id IN (select MAX(id) FROM payment_reminder where DATE(next_date) < "'.date('Y-m-d').'" GROUP BY party_name)');
                 }elseif($date == 'future'){
                     $collection->whereDate('payment_reminder.next_date', '>', date('Y-m-d'));
-                    $collection->whereRaw('payment_reminder.id IN (select MAX(id) FROM payment_reminder where DATE(next_date) > "'.date('Y-m-d').'" GROUP BY party_name)');
                 }else{
                     $collection->whereDate('payment_reminder.next_date', '=', date('Y-m-d'));
-                    $collection->whereRaw('payment_reminder.id IN (select MAX(id) FROM payment_reminder where DATE(next_date) = "'.date('Y-m-d').'" GROUP BY party_name)');
                 }
+                
+                $collection->where(['payment_reminder.is_last' => 'y']);
                 
                 $data = $collection->get();
 
@@ -91,29 +90,42 @@
                 if($validator->fails())
                     return response()->json(['status' => 422, 'message' => $validator->errors()]);
 
-                if(!empty($request->all())){
-                    $crud = [
-                        'user_id' => auth('sanctum')->user()->id,
-                        'party_name' => $request->party_name,
-                        'note' => $request->note ?? NULL,
-                        'mobile_no' => $request->mobile_no ?? NULL,
-                        'date' => date('Y-m-d'),
-                        'next_date' => $request->next_date,
-                        'next_time' => $request->next_time,
-                        'amount' => $request->amount ?? NULL,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'created_by' => auth('sanctum')->user()->id,
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'updated_by' => auth('sanctum')->user()->id
-                    ];
+                DB::beginTransaction();
+                try {
+                    $update = PaymentReminder::where(['party_name' => $request->party_name])->update(['is_last' => 'n']);
 
-                    $last_id = PaymentReminder::insertGetId($crud);
+                    if($update){
+                        $crud = [
+                            'user_id' => auth()->user()->id,
+                            'party_name' => $request->party_name,
+                            'note' => $request->note ?? NULL,
+                            'mobile_no' => $request->mobile_no ?? NULL,
+                            'date' => date('Y-m-d'),
+                            'next_date' => $request->next_date,
+                            'next_time' => $request->next_time,
+                            'is_last' => 'y',
+                            'amount' => $request->amount ?? NULL,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'created_by' => auth()->user()->id,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            'updated_by' => auth()->user()->id
+                        ];
 
-                    if($last_id)
-                        return response()->json(['status' => 200, 'message' => 'Record added successfully']);
-                    else
+                        $last_id = PaymentReminder::insertGetId($crud);
+                        
+                        if($last_id){
+                            DB::commit();
+                            return response()->json(['status' => 200, 'message' => 'Record added successfully']);
+                        }else{
+                            DB::rollback();
+                            return response()->json(['status' => 201, 'message' => 'Failed to add record']);
+                        }
+                    }else{
+                        DB::rollback();
                         return response()->json(['status' => 201, 'message' => 'Failed to add record']);
-                }else{
+                    }
+                }catch (\Exception $e) {
+                    DB::rollback();
                     return response()->json(['status' => 201, 'message' => 'Something went wrong']);
                 }
             }

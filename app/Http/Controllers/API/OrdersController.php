@@ -12,7 +12,14 @@
     class OrdersController extends Controller{
         /** orders */
             public function orders(Request $request){
-                $data = Order::select('id', 'name', 'order_date', 'status')->get();
+                $path = URL('/uploads/orders').'/';
+
+                $data = Order::select('id', 'name', 'order_date', 'remark', 'status',
+                                    DB::Raw("CASE
+                                        WHEN ".'file'." != '' THEN CONCAT("."'".$path."'".", ".'file'.")
+                                        ELSE 'null'
+                                    END as file"))
+                                ->get();
 
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
@@ -23,7 +30,15 @@
 
         /** pending-orders */
             public function pending_orders(Request $request){
-                $data = Order::select('id', 'name', 'order_date', 'status')->where(['status' => 'pending'])->get();
+                $path = URL('/uploads/orders').'/';
+
+                $data = Order::select('id', 'name', 'order_date', 'remark', 'status',
+                                    DB::Raw("CASE
+                                        WHEN ".'file'." != '' THEN CONCAT("."'".$path."'".", ".'file'.")
+                                        ELSE 'null'
+                                    END as file"))
+                                ->where(['status' => 'pending'])
+                                ->get();
 
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
@@ -34,7 +49,15 @@
 
         /** completed-orders */
             public function completed_orders(Request $request){
-                $data = Order::select('id', 'name', 'order_date', 'status')->where(['status' => 'completed'])->get();
+                $path = URL('/uploads/orders').'/';
+
+                $data = Order::select('id', 'name', 'order_date', 'remark', 'status',
+                                    DB::Raw("CASE
+                                        WHEN ".'file'." != '' THEN CONCAT("."'".$path."'".", ".'file'.")
+                                        ELSE 'null'
+                                    END as file"))
+                                ->where(['status' => 'completed'])
+                                ->get();
 
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
@@ -45,7 +68,15 @@
 
         /** completed-delivered */
             public function delivered_orders(Request $request){
-                $data = Order::select('id', 'name', 'order_date', 'status')->where(['status' => 'delivered'])->get();
+                $path = URL('/uploads/orders').'/';
+
+                $data = Order::select('id', 'name', 'order_date', 'remark', 'status',
+                                    DB::Raw("CASE
+                                        WHEN ".'file'." != '' THEN CONCAT("."'".$path."'".", ".'file'.")
+                                        ELSE 'null'
+                                    END as file"))
+                                ->where(['status' => 'delivered'])
+                                ->get();
 
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
@@ -56,7 +87,15 @@
 
         /** order */
             public function order(Request $request, $id){
-                $data = Order::select('id', 'name', 'order_date', 'status')->where(['id' => $id])->first();
+                $path = URL('/uploads/orders').'/';
+
+                $data = Order::select('id', 'name', 'order_date', 'remark', 'status',
+                                    DB::Raw("CASE
+                                        WHEN ".'file'." != '' THEN CONCAT("."'".$path."'".", ".'file'.")
+                                        ELSE 'null'
+                                    END as file"))
+                                ->where(['id' => $id])
+                                ->first();
 
                 if(!empty($data)){
                     $order_details = DB::table('orders_details as od')
@@ -92,11 +131,27 @@
                     'name' => $request->name,
                     'order_date' => $request->order_date ?? NULL,
                     'status' => 'pending',
+                    'remark' => $request->remark ?? NULL,
                     'created_at' => date('Y-m-d H:i:s'),
                     'created_by' => auth('sanctum')->user()->id,
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => auth('sanctum')->user()->id
                 ];
+
+                if(!empty($request->file('file'))){
+                    $file = $request->file('file');
+                    $filenameWithExtension = $request->file('file')->getClientOriginalName();
+                    $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
+                    $extension = $request->file('file')->getClientOriginalExtension();
+                    $filenameToStore = time()."_".$filename.'.'.$extension;
+
+                    $folder_to_upload = public_path().'/uploads/orders/';
+
+                    if (!File::exists($folder_to_upload))
+                        File::makeDirectory($folder_to_upload, 0777, true, true);
+
+                    $crud["file"] = $filenameToStore;
+                }
 
                 DB::beginTransaction();
                 try {
@@ -112,9 +167,9 @@
                                 if($product_id[$i] != null){
                                     $order_detail_crud = [
                                         'order_id' => $last_id,
-                                        'product_id' => $product_id[$i],
-                                        'quantity' => $quantity[$i],
-                                        'price' => $price[$i],
+                                        'product_id' => $product_id[$i] ?? NULL,
+                                        'quantity' => $quantity[$i] ?? NULL,
+                                        'price' => $price[$i] ?? NULL,
                                         'created_at' => date('Y-m-d H:i:s'),
                                         'created_by' => auth('sanctum')->user()->id,
                                         'updated_at' => date('Y-m-d H:i:s'),
@@ -125,6 +180,9 @@
                                 }
                             }
                         }
+
+                        if(!empty($request->file('file')))
+                            $file->move($folder_to_upload, $filenameToStore);
 
                         DB::commit();
                         return response()->json(['status' => 200, 'message' => 'Record added successfully']);
@@ -154,9 +212,25 @@
                 $crud = [
                     'name' => $request->name,
                     'order_date' => $request->order_date ?? NULL,
+                    'remark' => $request->remark ?? '',
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => auth('sanctum')->user()->id
                 ];
+
+                if(!empty($request->file('file'))){
+                    $file = $request->file('file');
+                    $filenameWithExtension = $request->file('file')->getClientOriginalName();
+                    $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
+                    $extension = $request->file('file')->getClientOriginalExtension();
+                    $filenameToStore = time()."_".$filename.'.'.$extension;
+
+                    $folder_to_upload = public_path().'/uploads/orders/';
+
+                    if (!File::exists($folder_to_upload))
+                        File::makeDirectory($folder_to_upload, 0777, true, true);
+
+                    $crud["file"] = $filenameToStore;
+                }
 
                 DB::beginTransaction();
                 try {
@@ -169,37 +243,42 @@
 
                         if($product_id != null){
                             for($i=0; $i<count($product_id); $i++){
-                                $exst_detail = OrderDetails::select('id')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
+                                if($product_id[$i] != null){
+                                    $exst_detail = OrderDetails::select('id')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
 
-                                if(!empty($exst_detail)){
-                                    $order_detail_crud = [
-                                        'order_id' => $request->id,
-                                        'product_id' => $product_id[$i],
-                                        'quantity' => $quantity[$i],
-                                        'price' => $price[$i],
-                                        'updated_at' => date('Y-m-d H:i:s'),
-                                        'updated_by' => auth('sanctum')->user()->id
-                                    ];
-
-                                    OrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
-                                }else{
-                                    if($product_id[$i] != null){
+                                    if(!empty($exst_detail)){
                                         $order_detail_crud = [
                                             'order_id' => $request->id,
                                             'product_id' => $product_id[$i],
                                             'quantity' => $quantity[$i],
                                             'price' => $price[$i],
-                                            'created_at' => date('Y-m-d H:i:s'),
-                                            'created_by' => auth('sanctum')->user()->id,
                                             'updated_at' => date('Y-m-d H:i:s'),
                                             'updated_by' => auth('sanctum')->user()->id
                                         ];
-    
-                                        OrderDetails::insertGetId($order_detail_crud);
+
+                                        OrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
+                                    }else{
+                                        if($product_id[$i] != null){
+                                            $order_detail_crud = [
+                                                'order_id' => $request->id,
+                                                'product_id' => $product_id[$i],
+                                                'quantity' => $quantity[$i],
+                                                'price' => $price[$i],
+                                                'created_at' => date('Y-m-d H:i:s'),
+                                                'created_by' => auth('sanctum')->user()->id,
+                                                'updated_at' => date('Y-m-d H:i:s'),
+                                                'updated_by' => auth('sanctum')->user()->id
+                                            ];
+        
+                                            OrderDetails::insertGetId($order_detail_crud);
+                                        }
                                     }
                                 }
                             }
                         }
+
+                        if(!empty($request->file('file')))
+                            $file->move($folder_to_upload, $filenameToStore);
 
                         DB::commit();
                         return response()->json(['status' => 200, 'message' => 'Record updated successfully']);

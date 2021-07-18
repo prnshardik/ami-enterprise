@@ -39,6 +39,14 @@
                                             $query->select('party_name')
                                                 ->from(with(new PaymentAssign)->getTable());
                                         });
+                }elseif($type && $type == 'all'){
+                    
+                }else{
+                    $collection->whereIn('party_name', function($query) use ($type){
+                                            $query->select('party_name')
+                                                ->from(with(new PaymentAssign)->getTable())
+                                                ->where(['user_id' => $type]);
+                                        });
                 }
 
                 $data = $collection->get();
@@ -196,6 +204,7 @@
                                 'date' => date('Y-m-d H:i:s'), 
                                 'next_date' => $request->date ?? date('Y-m-d H:i:s'), 
                                 'next_time' => '00:00', 
+                                'is_last' => 'y',
                                 'note' => $request->note ?? NULL,
                                 'amount' => NULL,
                                 'created_at' => date('Y-m-d H:i:s'),
