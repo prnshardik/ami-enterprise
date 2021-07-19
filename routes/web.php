@@ -124,6 +124,20 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('orders/customer-details', 'OrdersController@customer_details')->name('orders.customer.details');
         /** orders */
 
+
+        /** Purchase Order */
+            Route::any('purchase_orders', 'PurchaseOrderController@index')->name('purchase_orders');
+            Route::get('purchase_orders/create/{customer_id?}', 'PurchaseOrderController@create')->name('purchase_orders.create');
+            Route::post('purchase_orders/insert', 'PurchaseOrderController@insert')->name('purchase_orders.insert');
+            Route::get('purchase_orders/view/{id?}', 'PurchaseOrderController@view')->name('purchase_orders.view');
+            Route::get('purchase_orders/edit/{id?}', 'PurchaseOrderController@edit')->name('purchase_orders.edit');
+            Route::patch('purchase_orders/update', 'PurchaseOrderController@update')->name('purchase_orders.update');
+            Route::post('purchase_orders/change-status', 'PurchaseOrderController@change_status')->name('purchase_orders.change.status');
+
+            Route::post('purchase_orders/delete-detail', 'PurchaseOrderController@delete_detail')->name('purchase_orders.delete.detail');
+           
+        /** Purchase Order */
+
         /** payment */
             Route::any('payments', 'PaymentController@index')->name('payment');
             Route::get('payment/import', 'PaymentController@file_import')->name('payment.import.file');

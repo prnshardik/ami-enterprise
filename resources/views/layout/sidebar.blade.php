@@ -41,6 +41,11 @@
                     <span class="nav-label">Orders</span>
                 </a>
             </li>
+            <li class="{{ Request::is('purchase_orders*') ? 'active' : '' }}">
+                <a class="{{ Request::is('purchase_orders*') ? 'active' : '' }}" href="{{ route('purchase_orders') }}"><i class="sidebar-item-icon fa fa-shopping-basket"></i>
+                    <span class="nav-label">Purchase Orders</span>
+                </a>
+            </li>
             <li class="{{ (Request::is('payment*') || Request::is('payments.reminders*')) ? 'active' : '' }}">
                 <a href="javascript:;" aria-expanded="false">
                     <i class="sidebar-item-icon fa fa-money"></i>
