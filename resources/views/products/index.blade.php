@@ -29,9 +29,8 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Quantity</th>
+                                        <th>Product Code</th>
                                         <th>Unit</th>
-                                        <th>Color</th>
                                         <th>Price</th>
                                         <th>Action</th>
                                     </tr>
@@ -97,16 +96,12 @@
                             name: 'name'
                         },
                         {
-                            data: 'quantity',
-                            name: 'quantity'
+                            data: 'code',
+                            name: 'code'
                         },
                         {
                             data: 'unit',
                             name: 'unit'
-                        },
-                        {
-                            data: 'color',
-                            name: 'color'
                         },
                         {
                             data: 'price',

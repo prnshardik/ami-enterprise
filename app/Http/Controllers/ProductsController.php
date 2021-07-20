@@ -14,7 +14,7 @@
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    $data = Product::select('id', 'name', 'quantity', 'unit', 'color', 'price')->get();
+                    $data = Product::select('id', 'name','code' , 'unit', 'price')->get();
 
                     return Datatables::of($data)
                             ->addIndexColumn()
@@ -43,7 +43,15 @@
                                     return '-';
                             })
 
-                            ->rawColumns(['action', 'status'])
+                            ->editColumn('code' ,function($data){
+                                if($data->code == '' || $data->code == null){
+                                    return '-';
+                                }else{
+                                    return $data->code ;
+                                }
+                            })
+
+                            ->rawColumns(['action', 'status' ,'code'])
                             ->make(true);
                 }
 
@@ -65,6 +73,7 @@
                     $crud = [
                             'name' => ucfirst($request->name),
                             'quantity' => $request->quantity ?? NULL, 
+                            'code' => $request->code ?? NULL, 
                             'unit' => $request->unit ?? NULL, 
                             'color' => $request->color ?? NULL, 
                             'price' => $request->price ?? NULL, 
@@ -94,7 +103,7 @@
 
                 $id = base64_decode($id);
 
-                $data = Product::select('id', 'name', 'quantity', 'unit', 'color', 'price', 'note')->where(['id' => $id])->first();
+                $data = Product::select('id', 'name', 'code' , 'unit', 'price', 'note')->where(['id' => $id])->first();
                 
                 if($data)
                     return view('products.edit')->with('data', $data);
@@ -111,6 +120,7 @@
                     $crud = [
                         'name' => ucfirst($request->name),
                         'quantity' => $request->quantity ?? NULL, 
+                        'code' => $request->code ?? NULL, 
                         'unit' => $request->unit ?? NULL, 
                         'color' => $request->color ?? NULL, 
                         'price' => $request->price ?? NULL, 
@@ -138,7 +148,7 @@
 
                 $id = base64_decode($id);
 
-                $data = Product::select('id', 'name', 'quantity', 'unit', 'color', 'price', 'note')->where(['id' => $id])->first();
+                $data = Product::select('id', 'name', 'code' ,'unit', 'price', 'note')->where(['id' => $id])->first();
                 
                 if($data)
                     return view('products.view')->with('data', $data);

@@ -31,21 +31,19 @@
                                     <input type="text" name="name" id="name" class="form-control" value="{{ @old('name', $data->name) }}" placeholder="Plese enter name" />
                                     <span class="kt-form__help error name"></span>
                                 </div>
+                                
                                 <div class="form-group col-sm-6">
-                                    <label for="quantity">Quantity <span class="text-danger"></span></label>
-                                    <input type="text" name="quantity" id="quantity" class="form-control digits" value="{{ @old('quantity', $data->quantity) }}" placeholder="Plese enter quantity" />
-                                    <span class="kt-form__help error quantity"></span>
+                                    <label for="code">Product Code <span class="text-danger"></span></label>
+                                    <input type="text" name="code" id="code" class="form-control" value="{{ @old('code', $data->code) }}" placeholder="Plese enter product code" />
+                                    <span class="kt-form__help error code"></span>
                                 </div>
+
                                 <div class="form-group col-sm-6">
                                     <label for="unit">Unit <span class="text-danger"></span></label>
                                     <input type="text" name="unit" id="unit" class="form-control" value="{{ @old('unit', $data->unit) }}" placeholder="Plese enter unit" />
                                     <span class="kt-form__help error unit"></span>
                                 </div>
-                                <div class="form-group col-sm-6">
-                                    <label for="color">Color <span class="text-danger"></span></label>
-                                    <input type="text" name="color" id="color" class="form-control" value="{{ @old('color', $data->color) }}" placeholder="Plese enter color" />
-                                    <span class="kt-form__help error color"></span>
-                                </div>
+                                
                                 <div class="form-group col-sm-6">
                                     <label for="price">Price <span class="text-danger"></span></label>
                                     <input type="text" name="price" id="price" class="form-control digits" value="{{ @old('price', $data->price) }}" placeholder="Plese enter price" />
