@@ -78,20 +78,20 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('customers/insert-ajax', 'CustomerController@insert_ajax')->name('customers.insert.ajax');
         /** customers */
 
-        /** Notice */
+        /** notice */
             Route::any('notices', 'NoticesController@index')->name('notices');
             Route::get('notices/create', 'NoticesController@create')->name('notices.create');
             Route::post('notices/insert', 'NoticesController@insert')->name('notices.insert');
             Route::get('notices/edit/{id?}', 'NoticesController@edit')->name('notices.edit');
             Route::patch('notices/update', 'NoticesController@update')->name('notices.update');
             Route::post('notices/change-status', 'NoticesController@change_status')->name('notices.change.status');
-        /** Notice */
+        /** notice */
 
-        /** Notice-Board */
+        /** notice-board */
             Route::get('notice-board', 'NoticesController@notices_board')->name('notice.board');
-        /** Notice-Board */ 
+        /** notice-board */ 
 
-        /** Tasks */
+        /** tasks */
             Route::any('tasks', 'TasksController@index')->name('tasks');
             Route::get('tasks/create', 'TasksController@create')->name('tasks.create');
             Route::post('tasks/insert', 'TasksController@insert')->name('tasks.insert');
@@ -101,13 +101,13 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('tasks/change-status', 'TasksController@change_status')->name('tasks.change.status');
 
             Route::post('tasks/customer_details', 'TasksController@customer_details')->name('tasks.customer.details');
-        /** Tasks */
+        /** tasks */
 
-        /** My-Tasks */
+        /** my-tasks */
             Route::any('mytasks', 'MyTasksController@index')->name('mytasks');
             Route::get('mytasks/view/{id?}', 'MyTasksController@view')->name('mytasks.view');
             Route::post('mytasks/change-status', 'MyTasksController@change_status')->name('mytasks.change.status');
-        /** My-Tasks */
+        /** my-tasks */
 
         /** orders */
             Route::any('orders', 'OrdersController@index')->name('orders');
@@ -124,8 +124,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('orders/customer-details', 'OrdersController@customer_details')->name('orders.customer.details');
         /** orders */
 
-
-        /** Purchase Order */
+        /** purchase-order */
             Route::any('purchase_orders', 'PurchaseOrderController@index')->name('purchase_orders');
             Route::get('purchase_orders/create/{customer_id?}', 'PurchaseOrderController@create')->name('purchase_orders.create');
             Route::post('purchase_orders/insert', 'PurchaseOrderController@insert')->name('purchase_orders.insert');
@@ -136,7 +135,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
 
             Route::post('purchase_orders/delete-detail', 'PurchaseOrderController@delete_detail')->name('purchase_orders.delete.detail');
            
-        /** Purchase Order */
+        /** purchase-order */
 
         /** payment */
             Route::any('payments', 'PaymentController@index')->name('payment');
