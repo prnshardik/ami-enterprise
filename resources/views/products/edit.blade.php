@@ -31,19 +31,16 @@
                                     <input type="text" name="name" id="name" class="form-control" value="{{ @old('name', $data->name) }}" placeholder="Plese enter name" />
                                     <span class="kt-form__help error name"></span>
                                 </div>
-                                
                                 <div class="form-group col-sm-6">
                                     <label for="code">Product Code <span class="text-danger"></span></label>
                                     <input type="text" name="code" id="code" class="form-control" value="{{ @old('code', $data->code) }}" placeholder="Plese enter product code" />
                                     <span class="kt-form__help error code"></span>
                                 </div>
-
                                 <div class="form-group col-sm-6">
                                     <label for="unit">Unit <span class="text-danger"></span></label>
                                     <input type="text" name="unit" id="unit" class="form-control" value="{{ @old('unit', $data->unit) }}" placeholder="Plese enter unit" />
                                     <span class="kt-form__help error unit"></span>
                                 </div>
-                                
                                 <div class="form-group col-sm-6">
                                     <label for="price">Price <span class="text-danger"></span></label>
                                     <input type="text" name="price" id="price" class="form-control digits" value="{{ @old('price', $data->price) }}" placeholder="Plese enter price" />

@@ -10,11 +10,10 @@
     use Auth, Validator, DB, Mail, DataTables;
 
     class ProductsController extends Controller{
-
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    $data = Product::select('id', 'name','code' , 'unit', 'price')->get();
+                    $data = Product::select('id', 'name', 'code', 'unit', 'price')->get();
 
                     return Datatables::of($data)
                             ->addIndexColumn()
@@ -71,17 +70,16 @@
 
                 if(!empty($request->all())){
                     $crud = [
-                            'name' => ucfirst($request->name),
-                            'quantity' => $request->quantity ?? NULL, 
-                            'code' => $request->code ?? NULL, 
-                            'unit' => $request->unit ?? NULL, 
-                            'color' => $request->color ?? NULL, 
-                            'price' => $request->price ?? NULL, 
-                            'note' => $request->note ?? NULL,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'created_by' => auth()->user()->id,
-                            'updated_at' => date('Y-m-d H:i:s'),
-                            'updated_by' => auth()->user()->id
+                        'name' => ucfirst($request->name),
+                        'quantity' => 0, 
+                        'code' => $request->code ?? NULL, 
+                        'unit' => $request->unit ?? NULL, 
+                        'price' => $request->price ?? NULL, 
+                        'note' => $request->note ?? NULL,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'created_by' => auth()->user()->id,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
                     ];
 
                     $last_id = Product::insertGetId($crud);
@@ -103,7 +101,7 @@
 
                 $id = base64_decode($id);
 
-                $data = Product::select('id', 'name', 'code' , 'unit', 'price', 'note')->where(['id' => $id])->first();
+                $data = Product::select('id', 'name', 'code', 'unit', 'price', 'note')->where(['id' => $id])->first();
                 
                 if($data)
                     return view('products.edit')->with('data', $data);
@@ -119,10 +117,8 @@
                 if(!empty($request->all())){
                     $crud = [
                         'name' => ucfirst($request->name),
-                        'quantity' => $request->quantity ?? NULL, 
                         'code' => $request->code ?? NULL, 
                         'unit' => $request->unit ?? NULL, 
-                        'color' => $request->color ?? NULL, 
                         'price' => $request->price ?? NULL, 
                         'note' => $request->note ?? NULL,
                         'updated_at' => date('Y-m-d H:i:s'),
@@ -148,7 +144,7 @@
 
                 $id = base64_decode($id);
 
-                $data = Product::select('id', 'name', 'code' ,'unit', 'price', 'note')->where(['id' => $id])->first();
+                $data = Product::select('id', 'name', 'code', 'unit', 'price', 'note')->where(['id' => $id])->first();
                 
                 if($data)
                     return view('products.view')->with('data', $data);

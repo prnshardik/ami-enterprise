@@ -10,7 +10,7 @@
     class ProductsController extends Controller{
         /** products */
             public function products(Request $request){
-                $data = Product::select('id', 'name', 'quantity', 'unit', 'color', 'price', 'note')->get();
+                $data = Product::select('id', 'name', 'unit', 'code', 'price', 'note')->get();
 
                 if($data->isNotEmpty())
                     return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
@@ -21,7 +21,7 @@
 
         /** product */
             public function product(Request $request, $id){
-                $data = Product::select('id', 'name', 'quantity', 'unit', 'color', 'price', 'note')->where(['id' => $id])->first();
+                $data = Product::select('id', 'name', 'unit', 'code', 'price', 'note')->where(['id' => $id])->first();
 
                 if(!empty($data))
                     return response()->json(['status' => 200, 'message' => 'Data found', 'data' => $data]);
@@ -43,9 +43,9 @@
 
                 $crud = [
                     'name' => ucfirst($request->name),
-                    'quantity' => $request->quantity ?? NULL, 
+                    'quantity' => 0, 
                     'unit' => $request->unit ?? NULL, 
-                    'color' => $request->color ?? NULL, 
+                    'code' => $request->code ?? NULL, 
                     'price' => $request->price ?? NULL, 
                     'note' => $request->note ?? NULL,
                     'created_at' => date('Y-m-d H:i:s'),
@@ -79,9 +79,8 @@
 
                 $crud = [
                     'name' => ucfirst($request->name),
-                    'quantity' => $request->quantity ?? NULL, 
                     'unit' => $request->unit ?? NULL, 
-                    'color' => $request->color ?? NULL, 
+                    'code' => $request->code ?? NULL, 
                     'price' => $request->price ?? NULL, 
                     'note' => $request->note ?? NULL,
                     'updated_at' => date('Y-m-d H:i:s'),

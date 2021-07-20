@@ -124,7 +124,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('orders/customer-details', 'OrdersController@customer_details')->name('orders.customer.details');
         /** orders */
 
-        /** purchase-order */
+        /** purchase-orders */
             Route::any('purchase_orders', 'PurchaseOrderController@index')->name('purchase_orders');
             Route::get('purchase_orders/create/{customer_id?}', 'PurchaseOrderController@create')->name('purchase_orders.create');
             Route::post('purchase_orders/insert', 'PurchaseOrderController@insert')->name('purchase_orders.insert');
@@ -135,7 +135,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
 
             Route::post('purchase_orders/delete-detail', 'PurchaseOrderController@delete_detail')->name('purchase_orders.delete.detail');
            
-        /** purchase-order */
+        /** purchase-orders */
 
         /** payment */
             Route::any('payments', 'PaymentController@index')->name('payment');

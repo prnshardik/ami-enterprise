@@ -28,19 +28,16 @@
                                     <input type="text" name="name" id="name" class="form-control" placeholder="Plese enter name" value="{{ @old('name') }}" />
                                     <span class="kt-form__help error name"></span>
                                 </div>
-                                
                                 <div class="form-group col-sm-6">
                                     <label for="code">Product Code <span class="text-danger"></span></label>
                                     <input type="text" name="code" id="code" class="form-control" placeholder="Plese enter product code" value="{{ @old('code') }}" />
                                     <span class="kt-form__help error code"></span>
                                 </div>
-
                                 <div class="form-group col-sm-6">
                                     <label for="unit">Unit <span class="text-danger"></span></label>
                                     <input type="text" name="unit" id="unit" class="form-control" placeholder="Plese enter unit" value="{{ @old('unit') }}" />
                                     <span class="kt-form__help error unit"></span>
                                 </div>
-                                
                                 <div class="form-group col-sm-6">
                                     <label for="price">Price <span class="text-danger"></span></label>
                                     <input type="text" name="price" id="price" class="form-control digits" placeholder="Plese enter price" value="{{ @old('price') }}" />

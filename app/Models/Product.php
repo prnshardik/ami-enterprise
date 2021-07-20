@@ -11,5 +11,5 @@
 
         protected $table = 'products';
         
-        protected $fillable = ['name', 'quantity', 'unit', 'color', 'price', 'note', 'created_by', 'created_at', 'updated_by', 'updated_at'];
+        protected $fillable = ['name', 'quantity', 'unit', 'price', 'note', 'created_by', 'created_at', 'updated_by', 'updated_at'];
     }
