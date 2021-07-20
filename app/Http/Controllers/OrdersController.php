@@ -98,6 +98,21 @@
             }
         /** customer-details */
 
+        /** product-price */
+            public function product_price(Request $request){
+                if(isset($request->id) && $request->id != null && $request->id != ''){
+                    $data = Product::select('price')->where(['id' => $request->id])->first();
+
+                    if($data)
+                        return response()->json(['code' => 200, 'data' => $data]);
+                    else
+                        return response()->json(['code' => 201]);
+                }else{
+                    return response()->json(['code' => 201]);
+                }
+            }
+        /** product-price */
+
         /** create */
             public function create(Request $request, $customer_id=''){
                 $products = Product::select('id', 'name')->get();

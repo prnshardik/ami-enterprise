@@ -79,7 +79,7 @@
                                                     <tr class="clone" id="clone_{{ $i }}">
                                                         <th style="width:05%">1</th>
                                                         <th style="width:50%">
-                                                            <select class="form-control select2_demo_2" name="product_id[]" id="product_{{ $i }}">
+                                                            <select class="form-control select2_demo_2 product_id" name="product_id[]" id="product_{{ $i }}" data-id="{{ $i }}">
                                                                 @if(isset($products) && $products->isNotEmpty())
                                                                     <option value="">Select Product</option>
                                                                     @foreach($products as $row)
@@ -104,7 +104,7 @@
                                                 <tr class="clone" id="clone_1">
                                                     <th style="width:05%">1</th>
                                                     <th style="width:50%">
-                                                        <select class="form-control select2_demo_2" name="product_id[]" id="product_1">
+                                                        <select class="form-control select2_demo_2 product_id" name="product_id[]" id="product_1" data-id="1">
                                                             @if(isset($products) && $products->isNotEmpty())
                                                                 <option value="">Select Product</option>
                                                                 @foreach($products as $row)
@@ -222,10 +222,10 @@
                 return '<tr class="clone" id="clone_'+id+'">'+
                         '<th style="width:05%">'+id+'</th>'+
                         '<th style="width:50%">'+
-                            '<select name="product_id[]" id="product_'+id+'" class="form-control select2_demo_2"> <option value="">Select</option> @foreach($products as $row)<option value="{{ $row->id }}">{{ $row->name }}</option>@endforeach </select>'+
+                            '<select name="product_id[]" id="product_'+id+'" data-id="'+id+'" class="form-control select2_demo_2 product_id"> <option value="">Select</option> @foreach($products as $row)<option value="{{ $row->id }}">{{ $row->name }}</option>@endforeach </select>'+
                         '</th>'+
                         '<th style="width:15%">'+
-                            '<input type="text" name="quantity[]" id="quantity_'+id+'" class="form-control">'+
+                            '<input type="text" name="quantity[]" id="quantity_'+id+'"class="form-control">'+
                         '</th>'+
                         '<th style="width:15%">'+
                             '<input type="text" name="price[]" id="price_'+id+'" class="form-control">'+
@@ -267,9 +267,7 @@
                 }
             })
         });
-    </script>
 
-    <script>
         $(document).ready(function () {
             var form = $('#form');
             $('.kt-form__help').html('');
@@ -282,13 +280,13 @@
                     data : form.serialize(),
                     dataType: 'json',
                     async:false,
-                    success : function(json){
+                    success : function(response){
                         return true;
                     },
-                    error: function(json){
-                        if(json.status === 422) {
+                    error: function(response){
+                        if(response.status === 422) {
                             e.preventDefault();
-                            var errors_ = json.responseJSON;
+                            var errors_ = response.responseJSON;
                             $('.kt-form__help').html('');
                             $.each(errors_.errors, function (key, value) {
                                 $('.'+key).html(value);
@@ -297,7 +295,9 @@
                     }
                 });
             });
+        });
 
+        $(document).ready(function () {
             $('#name').change(function () {
                 var name = $(this).val();
                 if(name != '' || name != null){
@@ -307,11 +307,20 @@
             });
 
             let exst_name = "{{ $data->name ?? '' }}";
-            
+            console.log(exst_name);
             if(exst_name != '' || exst_name != null){
                 $("#customer_details").html('');
                 _customer_details(exst_name);
             }
+
+            $(document).on('change', ".product_id", function () {
+                var id = $(this).val();
+                var div_id = $(this).data('id');
+                
+                if(id != '' || id != null){
+                    _product_price(id, div_id);
+                }
+            });
         });
 
         function _customer_details(name){
@@ -321,16 +330,31 @@
                 data : { "_token": "{{ csrf_token() }}", "name": name},
                 dataType: 'json',
                 async: false,
-                success : function(json){
+                success : function(response){
                     $("#customer_details").append(
-                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Name: </span><span>'+json.data.party_name+'</span></div>'+
-                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Name: </span><span>'+json.data.billing_name+'</span></div>'+
-                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Contact Person: </span><span>'+json.data.contact_person+'</span></div>'+
-                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Mobile Number: </span><span>'+json.data.mobile_number+'</span></div>'+
-                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Address: </span><span>'+json.data.billing_address+'</span></div>'+
-                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Delivery Address: </span><span>'+json.data.delivery_address+'</span></div>'+
-                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician: </span><span>'+json.data.electrician+'</span></div>'+
-                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician Number: </span><span>'+json.data.electrician_number+'</span></div>');
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Name: </span><span>'+response.data.party_name+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Name: </span><span>'+response.data.billing_name+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Contact Person: </span><span>'+response.data.contact_person+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Mobile Number: </span><span>'+response.data.mobile_number+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Billing Address: </span><span>'+response.data.billing_address+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Delivery Address: </span><span>'+response.data.delivery_address+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician: </span><span>'+response.data.electrician+'</span></div>'+
+                        '<div class="form-group col-md-6"><span style="font-weight: bold; padding-left:16px;">Electrician Number: </span><span>'+response.data.electrician_number+'</span></div>');
+                }
+            });
+        }
+
+        function _product_price(id, div_id){
+            $.ajax({
+                url : "{{ route('orders.product.price') }}",
+                type : 'post',
+                data : { "_token": "{{ csrf_token() }}", "id": id},
+                dataType: 'json',
+                async: false,
+                success : function(response){
+                    if(response.code == 200){
+                        $('#price_'+div_id).val(response.data.price);
+                    }
                 }
             });
         }

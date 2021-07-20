@@ -122,6 +122,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::get('orders/select-customer', 'OrdersController@select_customer')->name('orders.select.customer');
 
             Route::post('orders/customer-details', 'OrdersController@customer_details')->name('orders.customer.details');
+            Route::post('orders/product-price', 'OrdersController@product_price')->name('orders.product.price');
         /** orders */
 
         /** purchase-orders */
