@@ -15,7 +15,7 @@
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
-                    $data = Order::select('id', 'name', 'order_date', 'status')->get();
+                    $data = Order::select('id', 'name', 'order_date', 'status')->orderByRaw("FIELD(status, 'delivery', 'pending', 'completed')")->get();
 
                     return Datatables::of($data)
                             ->addIndexColumn()
