@@ -56,17 +56,17 @@
                                         <thead>
                                             <tr>
                                                 <th style="width:05%">Sr. No</th>
-                                                <th style="width:50%">Product</th>
+                                                <th style="width:48%">Product</th>
                                                 <th style="width:15%">Quantity</th>
                                                 <th style="width:15%">Price</th>
-                                                <th style="width:15%">Action</th>
+                                                <th style="width:17%">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="clone" id="clone_1">
                                                 <th style="width:05%">1</th>
-                                                <th style="width:20%">
-                                                    <select class="form-control select2_demo_2" name="product_id[]" id="product_1">
+                                                <th style="width:48%">
+                                                    <select class="form-control select2_demo_2 product_id" name="product_id[]" id="product_1" data-id="1">
                                                         @if(isset($products) && $products->isNotEmpty())
                                                             <option value="">Select Product</option>
                                                             @foreach($products as $row)
@@ -81,8 +81,30 @@
                                                 <th style="width:15%">
                                                     <input type="text" name="price[]" id="price_1" class="form-control digit">
                                                 </th>
-                                                <th style="width:15%">
+                                                <th style="width:17%">
                                                     <button type="button" class="btn btn-danger delete" style="display:none;" data-id="1">Remove</button>
+                                                    <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#detail_1">
+                                                        <i class="fa fa-info"></i>
+                                                    </button>
+                                                    <div class="modal fade" id="detail_1" tabindex="-1" role="dialog" aria-labelledby="detail_1_Label" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    Product Quantity Detail
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row" id="product_detail_1">
+                                                                        <div class="col-sm-12">
+                                                                            <h5 class="text-center">Please select product.</h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </th>
                                             </tr>
                                         </tbody>
@@ -177,8 +199,8 @@
             function clone_div(id){
                 return '<tr class="clone" id="clone_'+id+'">'+
                         '<th style="width:05%">'+id+'</th>'+
-                        '<th style="width:50%">'+
-                            '<select name="product_id[]" id="product_'+id+'" class="form-control select2_demo_2"> <option value="">Select</option> @foreach($products as $row)<option value="{{ $row->id }}">{{ $row->name }}</option>@endforeach </select>'+
+                        '<th style="width:48%">'+
+                            '<select name="product_id[]" id="product_'+id+'" data-id="'+id+'" class="form-control select2_demo_2 product_id"> <option value="">Select</option> @foreach($products as $row)<option value="{{ $row->id }}">{{ $row->name }}</option>@endforeach </select>'+
                         '</th>'+
                         '<th style="width:15%">'+
                             '<input type="text" name="quantity[]" id="quantity_'+id+'"class="form-control">'+
@@ -186,8 +208,30 @@
                         '<th style="width:15%">'+
                             '<input type="text" name="price[]" id="price_'+id+'" class="form-control">'+
                         '</th>'+
-                        '<th style="width:15%">'+
+                        '<th style="width:17%">'+
                             '<button type="button" class="btn btn-danger delete" data-id="'+id+'">Remove</button>'+
+                            '<button type="button" class="btn btn-primary ml-2" data-toggle="modal" id="#detail_model_'+id+'" data-target="#detail_'+id+'">'+
+                                '<i class="fa fa-info"></i>'+
+                            '</button>'+
+                            '<div class="modal fade" id="detail_'+id+'" tabindex="-1" role="dialog" aria-labelledby="detail_'+id+'_Label" aria-hidden="true">'+
+                                '<div class="modal-dialog" role="document">'+
+                                    '<div class="modal-content">'+
+                                        '<div class="modal-header">'+
+                                            'Product Quantity Detail'+
+                                        '</div>'+
+                                        '<div class="modal-body">'+
+                                            '<div class="row" id="product_detail_'+id+'">'+
+                                                '<div class="col-sm-12">'+
+                                                    '<h5 class="text-center">Please select product.</h5>'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="modal-footer">'+
+                                            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
                         '</th>'+
                     '</tr>';
             }
@@ -199,11 +243,9 @@
                 if (con) {
                     $('#clone_'+id).remove();
                 }
-            })
+            });
         });
-    </script>
 
-    <script>
         $(document).ready(function () {
             var form = $('#form');
             $('.kt-form__help').html('');
@@ -264,10 +306,44 @@
                         }
                     }
                 });
-            });
-
-           
+            });           
         });
+        
+        $(document).on('change', ".product_id", function () {
+            var id = $(this).val();
+            var div_id = $(this).data('id');
+
+            if(id != '' || id != null){
+                _detail(id, div_id);
+            }
+        });
+
+        function _detail(id, div_id){
+            $.ajax({
+                url : "{{ route('purchase_orders.product.detail') }}",
+                type : 'post',
+                data : { "_token": "{{ csrf_token() }}", "id": id},
+                dataType: 'json',
+                async: false,
+                success : function(response){
+                    if(response.code == 200){
+                        let quantity = parseInt(response.data.quantity);
+                        let required_quantity = parseInt(response.data.required_quantity);
+
+                        let max = (quantity > required_quantity) ? quantity - required_quantity  : required_quantity - quantity;
+
+                        let div =   '<div class="col-sm-6">Available Quantity</div>'+
+                                    '<div class="col-sm-6">'+quantity+'</div>'+
+                                    '<div class="col-sm-6">Orders Quantity</div>'+
+                                    '<div class="col-sm-6">'+required_quantity+'</div>'+
+                                    '<div class="col-sm-6">Required Quantity</div>'+
+                                    '<div class="col-sm-6">'+max+'</div>';
+                                    
+                        $('#product_detail_'+div_id).html(div);
+                    }
+                }
+            });
+        }
     </script>
 @endsection
 

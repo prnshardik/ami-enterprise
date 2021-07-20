@@ -135,7 +135,7 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::post('purchase_orders/change-status', 'PurchaseOrderController@change_status')->name('purchase_orders.change.status');
 
             Route::post('purchase_orders/delete-detail', 'PurchaseOrderController@delete_detail')->name('purchase_orders.delete.detail');
-           
+            Route::post('purchase_orders/product-detail', 'PurchaseOrderController@product_detail')->name('purchase_orders.product.detail');
         /** purchase-orders */
 
         /** payment */

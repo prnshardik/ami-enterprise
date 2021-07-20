@@ -7,6 +7,8 @@
     use App\Models\PurchaseOrderDetails;
     use App\Models\Product;
     use App\Models\Customer;
+    use App\Models\Order;
+    use App\Models\OrderDetails;
     use Illuminate\Support\Str;
     use App\Http\Requests\PurchaseOrderRequest;
     use Auth, Validator, DB, Mail, DataTables, File;
@@ -76,7 +78,6 @@
                 return view('purchase_orders.index');
             }
         /** index */
-
 
         /** create */
             public function create(Request $request, $customer_id=''){
@@ -375,4 +376,33 @@
                 }
             }
         /** delete-detail */
+
+        /** product-detail */
+            public function product_detail(Request $request){
+                if(isset($request->id) && $request->id != null && $request->id != ''){
+                    $product = Product::select('quantity')->where(['id' => $request->id])->first();
+
+                    if($product){
+                        $quantity = $product->quantity;
+                        $required_quantity = 0;
+
+                        $orders_ids = [];
+                        $orders = Order::select('orders.id')->where(['orders.status' => 'pending'])->get()->toArray();
+                        
+                        if(!empty($orders)){
+                            $orders_ids = array_map(function($row){return $row['id']; }, $orders);
+
+                            $orders_details = OrderDetails::select(DB::Raw("SUM(".'quantity'.") as quantity"))->where(['product_id' => $request->id])->whereIn('order_id', $orders_ids)->first();
+                            $required_quantity = $orders_details->quantity;
+                        }
+
+                        return response()->json(['code' => 200, 'data' => ['quantity' => $quantity, 'required_quantity' => $required_quantity]]);
+                    }else{
+                        return response()->json(['code' => 201]);
+                    }
+                }else{
+                    return response()->json(['code' => 201]);
+                }
+            }
+        /** product-detail */
     }
