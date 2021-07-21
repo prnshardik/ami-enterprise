@@ -11,21 +11,21 @@
 		color:red;
 	}
 	
-	.page-footer{
+	/* .page-footer{
 		position: fixed;
 		top: 600px;
 		left: 222px;
-	}
+	} */
 
-	body:not(.fixed-layout).sidebar-mini .page-footer {
+	/* body:not(.fixed-layout).sidebar-mini .page-footer {
     	left: 60px; 
-	}
+	} */
 
-	@media only screen and (max-device-width: 1024px) { 
+	/* @media only screen and (max-device-width: 1024px) { 
 		.page-footer {
 			top: 530px !important;
 		}
-	}
+	} */
 
 	.ibox{
 		margin: 10px;

@@ -3101,9 +3101,8 @@ body.fixed-layout.sidebar-mini .content-wrapper {
   margin-left: 0; }
 
 .page-footer {
-  position: fixed;
-  top: 600px;
-  left: 222px;
+  position: absolute;
+  left: 0;
   bottom: 0;
   width: 100%;
   display: -webkit-box;
@@ -3137,7 +3136,7 @@ body.fixed-layout.sidebar-mini .content-wrapper {
   -webkit-transition: margin .2s ease-in-out;
   -o-transition: margin .2s ease-in-out;
   transition: margin .2s ease-in-out;
-  min-height: 1200px; }
+  min-height: 100vh; }
 
 .page-header {
   padding-top: 35px;
