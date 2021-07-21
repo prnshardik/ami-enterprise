@@ -366,17 +366,60 @@
                     $status = $request->status;
 
                     $data = Order::where(['id' => $id])->first();
+                    $orders = OrderDetails::where(['order_id' => $id])->get();
 
                     if(!empty($data)){
-                        if($status == 'delete')
-                            $update = Order::where('id',$id)->delete();
-                        else
-                            $update = Order::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
+                        DB::beginTransaction();
+                        try {
+                            if($status == 'delete'){
+                                $update = Order::where('id',$id)->delete();
+                            }else{
+                                $update = Order::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
+
+                                if($data->status == 'pending' && ($status == 'completed' || $status == 'delivery')){
+                                    if($orders->isNotEmpty()){
+                                        foreach($orders as $order){
+                                            $product = Product::select('quantity')->where(['id' => $order->product_id])->first();
+                                       
+                                            $qty = $product->quantity - $order->quantity;
+    
+                                            $product_update = Product::where(['id' => $order->product_id])->update(['quantity' => $qty, 'updated_at' => date('Y-m-d H:i:s')]);
+    
+                                            if(!$product_update){
+                                                DB::rollback();
+                                                return response()->json(['code' => 201]);
+                                            }
+                                        }
+                                    }
+                                }elseif(($data->status == 'completed' || $data->status == 'delivery') && $status == 'pending'){
+                                    if($orders->isNotEmpty()){
+                                        foreach($orders as $order){
+                                            $product = Product::select('quantity')->where(['id' => $order->product_id])->first();
+                                       
+                                            $qty = $product->quantity + $order->quantity;
+    
+                                            $product_update = Product::where(['id' => $order->product_id])->update(['quantity' => $qty, 'updated_at' => date('Y-m-d H:i:s')]);
+    
+                                            if(!$product_update){
+                                                DB::rollback();
+                                                return response()->json(['code' => 201]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         
-                        if($update)
-                            return response()->json(['code' => 200]);
-                        else
+                            if($update){
+                                DB::commit();
+                                return response()->json(['code' => 200]);
+                            }else{
+                                DB::rollback();
+                                return response()->json(['code' => 201]);
+                            }
+                        }catch (\Exception $e) {
+                            DB::rollback();
                             return response()->json(['code' => 201]);
+                        }
                     }else{
                         return response()->json(['code' => 201]);
                     }

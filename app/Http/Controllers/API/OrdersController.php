@@ -306,16 +306,58 @@
                     return response()->json(['status' => 422, 'message' => $validator->errors()]);
 
                 $data = Order::where(['id' => $request->id])->first();
+                $orders = OrderDetails::where(['order_id' => $id])->get();
 
                 if(!empty($data)){
-                    if($request->status == 'deleted')
-                        $update = Order::where(['id' => $request->id])->delete();
-                    else
-                        $update = Order::where(['id' => $request->id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
-                    
-                    if($update){
-                        return response()->json(['status' => 200, 'message' => 'Record status changed successfully']);
-                    }else{
+                    DB::beginTransaction();
+                    try {
+                        if($request->status == 'deleted'){
+                            $update = Order::where(['id' => $request->id])->delete();
+                        }else{
+                            $update = Order::where(['id' => $request->id])->update(['status' => $request->status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth('sanctum')->user()->id]);
+
+                            if($data->status == 'pending' && ($status == 'completed' || $status == 'delivery')){
+                                if($orders->isNotEmpty()){
+                                    foreach($orders as $order){
+                                        $product = Product::select('quantity')->where(['id' => $order->product_id])->first();
+                                   
+                                        $qty = $product->quantity - $order->quantity;
+
+                                        $product_update = Product::where(['id' => $order->product_id])->update(['quantity' => $qty, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                                        if(!$product_update){
+                                            DB::rollback();
+                                            return response()->json(['status' => 201, 'message' => 'Something went wrong']);
+                                        }
+                                    }
+                                }
+                            }elseif(($data->status == 'completed' || $data->status == 'delivery') && $status == 'pending'){
+                                if($orders->isNotEmpty()){
+                                    foreach($orders as $order){
+                                        $product = Product::select('quantity')->where(['id' => $order->product_id])->first();
+                                   
+                                        $qty = $product->quantity + $order->quantity;
+
+                                        $product_update = Product::where(['id' => $order->product_id])->update(['quantity' => $qty, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                                        if(!$product_update){
+                                            DB::rollback();
+                                            return response()->json(['status' => 201, 'message' => 'Something went wrong']);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if($update){
+                            DB::commit();
+                            return response()->json(['status' => 200, 'message' => 'Record status changed successfully']);
+                        }else{
+                            DB::rollback();
+                            return response()->json(['status' => 201, 'message' => 'Something went wrong']);
+                        }
+                    }catch (\Exception $e) {
+                        DB::rollback();
                         return response()->json(['status' => 201, 'message' => 'Something went wrong']);
                     }
                 }else{

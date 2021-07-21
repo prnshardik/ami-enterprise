@@ -386,17 +386,43 @@
                     $status = $request->status;
 
                     $data = PurchaseOrder::where(['id' => $id])->first();
+                    $orders = PurchaseOrderDetails::where(['order_id' => $id])->get();
 
                     if(!empty($data)){
-                        if($status == 'delete')
-                            $update = PurchaseOrder::where('id',$id)->delete();
-                        else
-                            $update = PurchaseOrder::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
-                        
-                        if($update)
-                            return response()->json(['code' => 200]);
-                        else
+                        DB::beginTransaction();
+                        try {
+                            if($status == 'delete'){
+                                $update = PurchaseOrder::where(['id' => $id])->delete();
+
+                                if($orders->isNotEmpty()){
+                                    foreach($orders as $order){
+                                        $product = Product::select('quantity')->where(['id' => $order->product_id])->first();
+                                   
+                                        $qty = $product->quantity + $order->quantity;
+
+                                        $product_update = Product::where(['id' => $order->product_id])->update(['quantity' => $qty, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                                        if(!$product_update){
+                                            DB::rollback();
+                                            return response()->json(['code' => 201]);
+                                        }
+                                    }
+                                }
+                            }else{
+                                $update = PurchaseOrder::where(['id' => $id])->update(['status' => $status, 'updated_at' => date('Y-m-d H:i:s'), 'updated_by' => auth()->user()->id]);
+                            }
+
+                            if($update){
+                                DB::commit();
+                                return response()->json(['code' => 200]);
+                            }else{
+                                DB::rollback();
+                                return response()->json(['code' => 201]);
+                            }
+                        } catch (\Exception $e) {
+                            DB::rollback();
                             return response()->json(['code' => 201]);
+                        }
                     }else{
                         return response()->json(['code' => 201]);
                     }
