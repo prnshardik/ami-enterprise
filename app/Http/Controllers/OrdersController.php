@@ -176,9 +176,9 @@
                                             'updated_at' => date('Y-m-d H:i:s'),
                                             'updated_by' => auth()->user()->id
                                         ];
+                                     
+                                        OrderDetails::insertGetId($order_detail_crud);
                                     }
-
-                                    OrderDetails::insertGetId($order_detail_crud);
                                 }
                             }
 

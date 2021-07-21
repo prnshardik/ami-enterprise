@@ -142,9 +142,27 @@
                                             'updated_at' => date('Y-m-d H:i:s'),
                                             'updated_by' => auth()->user()->id
                                         ];
-                                    }
 
-                                    PurchaseOrderDetails::insertGetId($order_detail_crud);
+                                        $order_detail_id = PurchaseOrderDetails::insertGetId($order_detail_crud);
+
+                                        if($order_detail_id){
+                                            if($quantity[$i] != null){
+                                                $product = Product::select('quantity')->where(['id' => $product_id[$i]])->first();
+
+                                                $qty = $product->quantity + $quantity[$i];
+
+                                                $product_update = Product::where(['id' => $product_id[$i]])->update(['quantity' => $qty, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                                                if(!$product_update){
+                                                    DB::rollback();
+                                                    return redirect()->back()->with('error', 'Quantity update failed, please try again later')->withInput();
+                                                }
+                                            }
+                                        }else{
+                                            DB::rollback();
+                                            return redirect()->back()->with('error', 'Product detail insertion failed, please try again later')->withInput();
+                                        }
+                                    }
                                 }
                             }
 
@@ -152,14 +170,14 @@
                                 $file->move($folder_to_upload, $filenameToStore);
 
                             DB::commit();
-                            return redirect()->route('purchase_orders')->with('success', 'Order created successfully.');
+                            return redirect()->route('purchase_orders')->with('success', 'Order created successfully');
                         }else{
                             DB::rollback();
-                            return redirect()->back()->with('error', 'Faild to create order!')->withInput();
+                            return redirect()->back()->with('error', 'Faild to create order')->withInput();
                         }
                     } catch (\Exception $e) {
                         DB::rollback();
-                        return redirect()->back()->with('error', 'Faild to create order!')->withInput();
+                        return redirect()->back()->with('error', 'Faild to create order')->withInput();
                     }
                 }else{
                     return redirect()->back()->with('error', 'Something went wrong')->withInput();
@@ -273,7 +291,7 @@
                             if($product_id != null){
                                 for($i=0; $i<count($product_id); $i++){
                                     if($product_id[$i] != null){
-                                        $exst_detail = PurchaseOrderDetails::select('id')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
+                                        $exst_detail = PurchaseOrderDetails::select('id', 'quantity')->where(['order_id' => $request->id, 'product_id' => $product_id[$i]])->first();
 
                                         if(!empty($exst_detail)){
                                             $order_detail_crud = [
@@ -285,7 +303,25 @@
                                                 'updated_by' => auth()->user()->id
                                             ];
 
-                                            PurchaseOrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
+                                            $order_detail = PurchaseOrderDetails::where(['id' => $exst_detail->id])->update($order_detail_crud);
+
+                                            if($order_detail){
+                                                if($quantity[$i] != null){
+                                                    $product = Product::select('quantity')->where(['id' => $product_id[$i]])->first();
+
+                                                    $qty = $product->quantity + $quantity[$i] - $exst_detail->quantity;
+
+                                                    $product_update = Product::where(['id' => $product_id[$i]])->update(['quantity' => $qty, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                                                    if(!$product_update){
+                                                        DB::rollback();
+                                                        return redirect()->back()->with('error', 'Quantity update failed, please try again later')->withInput();
+                                                    }
+                                                }
+                                            }else{
+                                                DB::rollback();
+                                                return redirect()->back()->with('error', 'Product detail insertion failed, please try again later')->withInput();
+                                            }
                                         }else{
                                             $order_detail_crud = [
                                                 'order_id' => $request->id,
@@ -298,7 +334,25 @@
                                                 'updated_by' => auth()->user()->id
                                             ];
 
-                                            PurchaseOrderDetails::insertGetId($order_detail_crud);
+                                            $order_detail_id = PurchaseOrderDetails::insertGetId($order_detail_crud);
+
+                                            if($order_detail_id){
+                                                if($quantity[$i] != null){
+                                                    $product = Product::select('quantity')->where(['id' => $product_id[$i]])->first();
+
+                                                    $qty = $product->quantity + $quantity[$i];
+
+                                                    $product_update = Product::where(['id' => $product_id[$i]])->update(['quantity' => $qty, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                                                    if(!$product_update){
+                                                        DB::rollback();
+                                                        return redirect()->back()->with('error', 'Quantity update failed, please try again later')->withInput();
+                                                    }
+                                                }
+                                            }else{
+                                                DB::rollback();
+                                                return redirect()->back()->with('error', 'Product detail insertion failed, please try again later')->withInput();
+                                            }
                                         }
                                     }
                                 }
