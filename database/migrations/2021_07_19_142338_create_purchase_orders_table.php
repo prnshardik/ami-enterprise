@@ -19,7 +19,7 @@ class CreatePurchaseOrdersTable extends Migration
             $table->date('order_date')->nullable();
             $table->enum('status', ['pending', 'completed', 'delivery'])->default('pending');
             $table->string('file')->nullable();
-            $table->string('remark')->nullable();
+            $table->text('remark')->nullable();
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

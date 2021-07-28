@@ -30,6 +30,7 @@
                         <div class="ibox-title">Create Order</div>
                         <h1 class="pull-right">
                             <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#customerModal">New Customer</button>
+                            <button type="button" class="btn btn-sm btn-primary ml-2" data-toggle="modal" data-target="#productModal">New Product</button>
                         </h1>
                     </div>
                     <div class="ibox-body">
@@ -67,15 +68,16 @@
                                             <tr>
                                                 <th style="width:05%">Sr. No</th>
                                                 <th style="width:50%">Product</th>
-                                                <th style="width:15%">Quantity</th>
-                                                <th style="width:15%">Price</th>
+                                                <th style="width:10%">Quantity</th>
+                                                <th style="width:10%">Price</th>
+                                                <th style="width:10%">Remark</th>
                                                 <th style="width:15%">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="clone" id="clone_1">
                                                 <th style="width:05%">1</th>
-                                                <th style="width:20%">
+                                                <th style="width:50%">
                                                     <select class="form-control select2_demo_2 product_id" name="product_id[]" id="product_1" data-id="1">
                                                         @if(isset($products) && $products->isNotEmpty())
                                                             <option value="">Select Product</option>
@@ -85,11 +87,14 @@
                                                         @endif
                                                     </select>
                                                 </th>
-                                                <th style="width:15%">
+                                                <th style="width:10%">
                                                     <input type="text" name="quantity[]" id="quantity_1" class="form-control digit">
                                                 </th>
-                                                <th style="width:15%">
+                                                <th style="width:10%">
                                                     <input type="text" name="price[]" id="price_1" class="form-control digit">
+                                                </th>
+                                                <th style="width:10%">
+                                                    <textarea name="remarks[]" id="remarks_1" cols="1" rows="1" class="form-control"></textarea>
                                                 </th>
                                                 <th style="width:15%">
                                                     <button type="button" class="btn btn-danger delete" style="display:none;" data-id="1">Remove</button>
@@ -102,16 +107,16 @@
                                     <button type="button" class="btn btn-md btn-primary m-4" id="add_product">Add Product</button>
                                 </div> 
                             </div>
-                                <div class="form-group col-sm-12">
-                                    <label for="file">Attechment <span class="text-danger"></span></label>
-                                    <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" />
-                                    <span class="kt-form__help error file"></span>
-                                </div>
-                                <div class="form-group col-sm-12">
-                                    <label for="remark">Remark <span class="text-danger"></span></label>
-                                    <textarea name="remark" id="remark" cols="30" rows="3" class="form-control" placeholder="Plese enter remark"></textarea>
-                                    <span class="kt-form__help error remark"></span>
-                                </div>
+                            <div class="form-group col-sm-12">
+                                <label for="remark">Remark <span class="text-danger"></span></label>
+                                <textarea name="remark" id="remark" cols="30" rows="3" class="form-control" placeholder="Plese enter remark"></textarea>
+                                <span class="kt-form__help error remark"></span>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label for="file">Attechment <span class="text-danger"></span></label>
+                                <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" />
+                                <span class="kt-form__help error file"></span>
+                            </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <a href="{{ route('orders') }}" class="btn btn-default">Back</a>
@@ -203,6 +208,57 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">New Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form name="customerform" action="{{ route('products.insert.ajax') }}" id="productform" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        @csrf
+                        <input type="hidden" name="product" value="product">
+                        
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="name">Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Plese enter name" value="{{ @old('name') }}" />
+                                <span class="kt-form__help error name"></span>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="code">Product Code <span class="text-danger"></span></label>
+                                <input type="text" name="code" id="code" class="form-control" placeholder="Plese enter product code" value="{{ @old('code') }}" />
+                                <span class="kt-form__help error code"></span>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="unit">Unit <span class="text-danger"></span></label>
+                                <input type="text" name="unit" id="unit" class="form-control" placeholder="Plese enter unit" value="{{ @old('unit') }}" />
+                                <span class="kt-form__help error unit"></span>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="price">Price <span class="text-danger"></span></label>
+                                <input type="text" name="price" id="price" class="form-control digits" placeholder="Plese enter price" value="{{ @old('price') }}" />
+                                <span class="kt-form__help error price"></span>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="note">Note <span class="text-danger"></span></label>
+                                <input type="text" name="note" id="note" class="form-control" placeholder="Plese enter note" value="{{ @old('note') }}" />
+                                <span class="kt-form__help error note"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -270,11 +326,14 @@
                         '<th style="width:50%">'+
                             '<select name="product_id[]" id="product_'+id+'" data-id="'+id+'" class="form-control select2_demo_2 product_id"> <option value="">Select</option> @foreach($products as $row)<option value="{{ $row->id }}">{{ $row->name }}</option>@endforeach </select>'+
                         '</th>'+
-                        '<th style="width:15%">'+
+                        '<th style="width:10%">'+
                             '<input type="text" name="quantity[]" id="quantity_'+id+'"class="form-control">'+
                         '</th>'+
-                        '<th style="width:15%">'+
+                        '<th style="width:10%">'+
                             '<input type="text" name="price[]" id="price_'+id+'" class="form-control">'+
+                        '</th>'+
+                        '<th style="width:10%">'+
+                            '<textarea name="remarks[]" id="remarks_'+id+'" cols="1" rows="1" class="form-control"></textarea>'+
                         '</th>'+
                         '<th style="width:15%">'+
                             '<button type="button" class="btn btn-danger delete" data-id="'+id+'">Remove</button>'+
@@ -337,6 +396,40 @@
                     success : function(response){
                         if(response.code == 200){
                             toastr.success(success, 'Customer added successfully');
+                            setTimeout(function(){ location.reload(); }, 3000);
+                        } else {
+                            toastr.success(success, 'Something went wrong, please try again later');
+                        }
+                    },
+                    error: function(response){
+                        if(response.status === 422) {
+                            var errors_ = response.responseJSON;
+                            $('.kt-form__help').html('');
+                            $.each(errors_.errors, function (key, value) {
+                                $('.'+key).html(value);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            var form = $('#productform');
+            $('.kt-form__help').html('');
+            form.submit(function(e) {
+                e.preventDefault();
+                $('.help-block').html('');
+                $('.m-form__help').html('');
+                $.ajax({
+                    url : form.attr('action'),
+                    type : form.attr('method'),
+                    data : form.serialize(),
+                    dataType: 'json',
+                    async:false,
+                    success : function(response){
+                        if(response.code == 200){
+                            toastr.success(success, 'Product added successfully');
                             setTimeout(function(){ location.reload(); }, 3000);
                         } else {
                             toastr.success(success, 'Something went wrong, please try again later');

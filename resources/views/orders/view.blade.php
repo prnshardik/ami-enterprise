@@ -49,6 +49,11 @@
                             </div>
                             <div class="row" id="customer_details"></div>
                             <div class="form-group col-sm-12">
+                                <label for="remark">Remark <span class="text-danger"></span></label>
+                                <textarea name="remark" id="remark" cols="30" rows="5" class="form-control" placeholder="Plese enter remark" disabled>{{ $data->remark ?? '' }}</textarea>
+                                <span class="kt-form__help error remark"></span>
+                            </div>
+                            <div class="form-group col-sm-12">
                                 @if(isset($data->file) && !empty($data->file))
                                     @php $file = url('/uploads/orders/').'/'.$data->file; @endphp
                                 @else
@@ -57,11 +62,6 @@
                                 <label for="file">Attechment <span class="text-danger"></span></label>
                                 <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" data-default-file="{{ $file }}" data-show-remove="false" />
                                 <span class="kt-form__help error file"></span>
-                            </div>
-                            <div class="form-group col-sm-12">
-                                <label for="remark">Remark <span class="text-danger"></span></label>
-                                <textarea name="remark" id="remark" cols="30" rows="5" class="form-control" placeholder="Plese enter remark" disabled>{{ $data->remark ?? '' }}</textarea>
-                                <span class="kt-form__help error remark"></span>
                             </div>
                         </div>
                         @if(isset($data->order_details) && $data->order_details->isNotEmpty())
@@ -74,9 +74,10 @@
                                     <thead>
                                         <tr>
                                             <th style="width:05%">Sr. No</th>
-                                            <th style="width:65%">Product</th>
+                                            <th style="width:45%">Product</th>
                                             <th style="width:15%">Quantity</th>
                                             <th style="width:15%">Price</th>
+                                            <th style="width:20%">Remark</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -85,7 +86,7 @@
                                             @foreach($data->order_details as $row)
                                                 <tr class="clone" id="clone_{{ $i }}">
                                                     <th style="width:05%">{{ $i }}</th>
-                                                    <th style="width:65%">{{ $row->product_name }}
+                                                    <th style="width:45%">{{ $row->product_name }}
                                                         <input type="hidden" name="product_id[]" id="product_{{ $i }}" value="{{ $row->product_id }}">
                                                     </th>
                                                     <th style="width:15%">
@@ -93,6 +94,9 @@
                                                     </th>
                                                     <th style="width:15%">
                                                         <input type="text" name="price[]" id="price_{{ $i }}" value="{{ $row->price }}" class="form-control digit" disabled>
+                                                    </th>
+                                                    <th style="width:20%">
+                                                        <textarea name="remarks[]" id="remarks_{{ $i }}" disabled >{{ $row->remark ?? '' }}</textarea>
                                                     </th>
                                                 </tr>
                                                 @php $i++; @endphp

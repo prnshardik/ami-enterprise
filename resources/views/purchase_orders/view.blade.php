@@ -49,6 +49,11 @@
                             </div>
                             <div class="row" id="customer_details"></div>
                             <div class="form-group col-sm-12">
+                                <label for="remark">Remark <span class="text-danger"></span></label>
+                                <textarea name="remark" id="remark" cols="30" rows="5" class="form-control" placeholder="Plese enter remark" disabled>{{ $data->remark ?? '' }}</textarea>
+                                <span class="kt-form__help error remark"></span>
+                            </div>
+                            <div class="form-group col-sm-12">
                                 @if(isset($data->file) && !empty($data->file))
                                     @php $file = url('/uploads/purchase_orders/').'/'.$data->file; @endphp
                                 @else
@@ -57,11 +62,6 @@
                                 <label for="file">Attechment <span class="text-danger"></span></label>
                                 <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" data-default-file="{{ $file }}" data-show-remove="false" />
                                 <span class="kt-form__help error file"></span>
-                            </div>
-                            <div class="form-group col-sm-12">
-                                <label for="remark">Remark <span class="text-danger"></span></label>
-                                <textarea name="remark" id="remark" cols="30" rows="5" class="form-control" placeholder="Plese enter remark" disabled>{{ $data->remark ?? '' }}</textarea>
-                                <span class="kt-form__help error remark"></span>
                             </div>
                         </div>
                         @if(isset($data->order_details) && $data->order_details->isNotEmpty())

@@ -26,7 +26,10 @@
             <div class="col-lg-12">
                 <div class="ibox">
                     <div class="ibox-head">
-                        <h1 class="ibox-title">Payments Reminders</h1>
+                        <div class="ibox-title">Payments Reminders</div>
+                        <h1 class="pull-right">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#report">Report </button>
+                        </h1>
                     </div>
 
                     <div class="ibox-body">
@@ -63,6 +66,41 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="reportTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Report</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">Sr.No</th>
+                                        <th width="25%">User Name</th>
+                                        <th width="25%">Party Name</th>
+                                        <th width="15%">Next Date</th>
+                                        <th width="30%">Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report_datatable"></tbody>
+                            </table>
+                            <div id="report_pagination"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -244,6 +282,33 @@
                     }
                 });
             }
+        }
+
+        $(document).ready(function(){
+            _reports(0);
+            
+            $(document).on('click', '#report_pagination .pagination a', function(event){
+                event.preventDefault(); 
+                var page = $(this).attr('href').split('page=')[1];
+                _reports(page);
+            });
+        });
+
+
+        function _reports(page){
+            $.ajax({
+                "url": "{!! route('payments.reminders.reports') !!}"+"?page="+page,
+                "dataType": "json",
+                "type": "Get",
+                success: function (response){
+                    $('#report_datatable').html(response.data);
+                    $('#report_pagination').html(response.pagination);
+                },
+                error: function(response){
+                    $('#report_datatable').html('<td colspan="5" class="text-center"><h3>No data found</h3></td>');
+                    $('#report_pagination').html('');
+                }
+            });
         }
     </script>
 @endsection

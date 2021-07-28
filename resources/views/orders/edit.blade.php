@@ -67,8 +67,9 @@
                                             <tr>
                                                 <th style="width:05%">Sr. No</th>
                                                 <th style="width:50%">Product</th>
-                                                <th style="width:15%">Quantity</th>
-                                                <th style="width:15%">Price</th>
+                                                <th style="width:10%">Quantity</th>
+                                                <th style="width:10%">Price</th>
+                                                <th style="width:10%">Remark</th>
                                                 <th style="width:15%">Action</th>
                                             </tr>
                                         </thead>
@@ -88,11 +89,14 @@
                                                                 @endif
                                                             </select>
                                                         </th>
-                                                        <th style="width:15%">
+                                                        <th style="width:10%">
                                                             <input type="text" name="quantity[]" id="quantity_{{ $i }}" value="{{ $product->quantity }}" class="form-control digit">
                                                         </th>
-                                                        <th style="width:15%">
+                                                        <th style="width:10%">
                                                             <input type="text" name="price[]" id="price_{{ $i }}" value="{{ $product->price }}" class="form-control digit">
+                                                        </th>
+                                                        <th style="width:10%">
+                                                            <textarea name="remarks[]" id="remarks_{{ $i }}" cols="1" rows="1" class="form-control">{{ $product->remark ?? '' }}</textarea>
                                                         </th>
                                                         <th style="width:15%">
                                                             <button type="button" class="btn btn-danger delete" data-detail="{{ $product->id }}" data-id="{{ $i }}">Remove</button>
@@ -113,11 +117,14 @@
                                                             @endif
                                                         </select>
                                                     </th>
-                                                    <th style="width:15%">
+                                                    <th style="width:10%">
                                                         <input type="text" name="quantity[]" id="quantity_1" class="form-control digit">
                                                     </th>
-                                                    <th style="width:15%">
+                                                    <th style="width:10%">
                                                         <input type="text" name="price[]" id="price_1" class="form-control digit">
+                                                    </th>
+                                                    <th style="width:10%">
+                                                        <textarea name="remarks[]" id="remarks_1" cols="1" rows="1" class="form-control"></textarea>
                                                     </th>
                                                     <th style="width:15%">
                                                         <button type="button" class="btn btn-danger delete" style="display:none;" data-id="1">Remove</button>
@@ -131,22 +138,21 @@
                                     <button type="button" class="btn btn-md btn-primary m-4" id="add_product">Add Product</button>
                                 </div>
                             </div>
-
                             <div class="form-group col-sm-12">
-                                    @if(isset($data->file) && !empty($data->file))
-                                        @php $file = url('/uploads/orders/').'/'.$data->file; @endphp
-                                    @else
-                                        @php $file = ''; @endphp
-                                    @endif
-                                    <label for="file">Attechment <span class="text-danger"></span></label>
-                                    <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" data-default-file="{{ $file }}" data-show-remove="false" />
-                                    <span class="kt-form__help error file"></span>
-                                </div>
-                                <div class="form-group col-sm-12">
-                                    <label for="remark">Remark <span class="text-danger"></span></label>
-                                    <textarea name="remark" id="remark" cols="30" rows="5" class="form-control" placeholder="Plese enter remark">{{ $data->remark ?? '' }}</textarea>
-                                    <span class="kt-form__help error remark"></span>
-                                </div>
+                                <label for="remark">Remark <span class="text-danger"></span></label>
+                                <textarea name="remark" id="remark" cols="30" rows="5" class="form-control" placeholder="Plese enter remark">{{ $data->remark ?? '' }}</textarea>
+                                <span class="kt-form__help error remark"></span>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                @if(isset($data->file) && !empty($data->file))
+                                    @php $file = url('/uploads/orders/').'/'.$data->file; @endphp
+                                @else
+                                    @php $file = ''; @endphp
+                                @endif
+                                <label for="file">Attechment <span class="text-danger"></span></label>
+                                <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" data-default-file="{{ $file }}" data-show-remove="false" />
+                                <span class="kt-form__help error file"></span>
+                            </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <a href="{{ route('orders') }}" class="btn btn-default">Back</a>
@@ -224,11 +230,14 @@
                         '<th style="width:50%">'+
                             '<select name="product_id[]" id="product_'+id+'" data-id="'+id+'" class="form-control select2_demo_2 product_id"> <option value="">Select</option> @foreach($products as $row)<option value="{{ $row->id }}">{{ $row->name }}</option>@endforeach </select>'+
                         '</th>'+
-                        '<th style="width:15%">'+
+                        '<th style="width:10%">'+
                             '<input type="text" name="quantity[]" id="quantity_'+id+'"class="form-control">'+
                         '</th>'+
-                        '<th style="width:15%">'+
+                        '<th style="width:10%">'+
                             '<input type="text" name="price[]" id="price_'+id+'" class="form-control">'+
+                        '</th>'+
+                        '<th style="width:10%">'+
+                            '<textarea name="remarks[]" id="remarks_'+id+'" cols="1" rows="1" class="form-control"></textarea>'+
                         '</th>'+
                         '<th style="width:15%">'+
                             '<button type="button" class="btn btn-danger delete" data-id="'+id+'">Remove</button>'+

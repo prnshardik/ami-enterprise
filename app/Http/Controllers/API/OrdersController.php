@@ -99,7 +99,7 @@
 
                 if(!empty($data)){
                     $order_details = DB::table('orders_details as od')
-                                        ->select('od.id', 'od.product_id', 'od.quantity', 'od.price', 'p.name as product_name')
+                                        ->select('od.id', 'od.product_id', 'od.quantity', 'od.price', 'od.remark', 'p.name as product_name')
                                         ->leftjoin('products as p', 'p.id', 'od.product_id')
                                         ->where(['od.order_id' => $data->id])
                                         ->get();
@@ -161,6 +161,7 @@
                         $product_id = $request->product_id ?? NULL;
                         $quantity = $request->quantity ?? NULL;
                         $price = $request->price ?? NULL;
+                        $remarks = $request->remarks ?? NULL;
 
                         if($product_id != null){
                             for($i=0; $i<count($product_id); $i++){
@@ -170,6 +171,7 @@
                                         'product_id' => $product_id[$i] ?? NULL,
                                         'quantity' => $quantity[$i] ?? NULL,
                                         'price' => $price[$i] ?? NULL,
+                                        'remark' => $remarks[$i] ?? NULL,
                                         'created_at' => date('Y-m-d H:i:s'),
                                         'created_by' => auth('sanctum')->user()->id,
                                         'updated_at' => date('Y-m-d H:i:s'),
@@ -240,6 +242,7 @@
                         $product_id = $request->product_id ?? NULL;
                         $quantity = $request->quantity ?? NULL;
                         $price = $request->price ?? NULL;
+                        $remarks = $request->remarks ?? NULL;
 
                         if($product_id != null){
                             for($i=0; $i<count($product_id); $i++){
@@ -252,6 +255,7 @@
                                             'product_id' => $product_id[$i],
                                             'quantity' => $quantity[$i],
                                             'price' => $price[$i],
+                                            'remark' => $remarks[$i],
                                             'updated_at' => date('Y-m-d H:i:s'),
                                             'updated_by' => auth('sanctum')->user()->id
                                         ];
@@ -264,6 +268,7 @@
                                                 'product_id' => $product_id[$i],
                                                 'quantity' => $quantity[$i],
                                                 'price' => $price[$i],
+                                                'remark' => $remarks[$i],
                                                 'created_at' => date('Y-m-d H:i:s'),
                                                 'created_by' => auth('sanctum')->user()->id,
                                                 'updated_at' => date('Y-m-d H:i:s'),

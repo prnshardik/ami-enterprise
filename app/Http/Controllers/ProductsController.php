@@ -165,4 +165,34 @@
                     return redirect()->route('products')->with('error', 'Faild to delete product !');
             }
         /** delete */
+
+        /** insert-ajax */
+            public function insert_ajax(ProductsRequest $request){
+                if(!$request->ajax()){ return true; }
+
+                if(!empty($request->all())){
+                    $crud = [
+                        'name' => ucfirst($request->name),
+                        'quantity' => 0, 
+                        'code' => $request->code ?? NULL, 
+                        'unit' => $request->unit ?? NULL, 
+                        'price' => $request->price ?? NULL, 
+                        'note' => $request->note ?? NULL,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'created_by' => auth()->user()->id,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => auth()->user()->id
+                    ];
+
+                    $last_id = Product::insertGetId($crud);
+                    
+                    if($last_id)
+                        return response()->json(['code' => 200]);
+                    else
+                        return response()->json(['code' => 201]);
+                }else{
+                    return response()->json(['code' => 201]);
+                }
+            }
+        /** insert-ajax */
     }

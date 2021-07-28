@@ -168,22 +168,21 @@
                                     <button type="button" class="btn btn-md btn-primary m-4" id="add_product">Add Product</button>
                                 </div>
                             </div>
-
                             <div class="form-group col-sm-12">
-                                    @if(isset($data->file) && !empty($data->file))
-                                        @php $file = url('/uploads/purchase_orders/').'/'.$data->file; @endphp
-                                    @else
-                                        @php $file = ''; @endphp
-                                    @endif
-                                    <label for="file">Attechment <span class="text-danger"></span></label>
-                                    <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" data-default-file="{{ $file }}" data-show-remove="false" />
-                                    <span class="kt-form__help error file"></span>
-                                </div>
-                                <div class="form-group col-sm-12">
-                                    <label for="remark">Remark <span class="text-danger"></span></label>
-                                    <textarea name="remark" id="remark" cols="30" rows="5" class="form-control" placeholder="Plese enter remark">{{ $data->remark ?? '' }}</textarea>
-                                    <span class="kt-form__help error remark"></span>
-                                </div>
+                                <label for="remark">Remark <span class="text-danger"></span></label>
+                                <textarea name="remark" id="remark" cols="30" rows="5" class="form-control" placeholder="Plese enter remark">{{ $data->remark ?? '' }}</textarea>
+                                <span class="kt-form__help error remark"></span>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                @if(isset($data->file) && !empty($data->file))
+                                    @php $file = url('/uploads/purchase_orders/').'/'.$data->file; @endphp
+                                @else
+                                    @php $file = ''; @endphp
+                                @endif
+                                <label for="file">Attechment <span class="text-danger"></span></label>
+                                <input type="file" name="file" id="file" class="form-control dropify" placeholder="Plese select attachment" data-default-file="{{ $file }}" data-show-remove="false" />
+                                <span class="kt-form__help error file"></span>
+                            </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <a href="{{ route('purchase_orders') }}" class="btn btn-default">Back</a>

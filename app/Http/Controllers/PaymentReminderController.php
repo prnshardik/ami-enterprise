@@ -315,4 +315,17 @@
                 }
             }
         /** change-status */
+
+        /** reports */
+            public function reports(Request $request){
+                $data = PaymentReminder::select('payment_reminder.id', 'payment_reminder.party_name', DB::Raw("SUBSTRING(".'payment_reminder.note'.", 1, 30) as note"), 'payment_reminder.next_date', 'u.name as user_name')
+                                        ->leftjoin('users as u', 'u.id', 'payment_reminder.user_id')
+                                        ->paginate(10);
+
+                $view = view('payment_reminder.report', compact('data'))->render();
+                $pagination = view('payment_reminder.report_pagination', compact('data'))->render();
+                
+                return response()->json(['success' => true, 'data' => $view, 'pagination' => $pagination]);
+            }
+        /** reports */
     }

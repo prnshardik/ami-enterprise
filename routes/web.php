@@ -64,6 +64,8 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::get('products/edit/{id?}', 'ProductsController@edit')->name('products.edit');
             Route::patch('products/update', 'ProductsController@update')->name('products.update');
             Route::get('products/delete/{id?}', 'ProductsController@delete')->name('products.delete');
+
+            Route::post('products/insert-ajax', 'ProductsController@insert_ajax')->name('products.insert.ajax');
         /** products */
 
         /** customers */
@@ -151,6 +153,8 @@ Route::group(['middleware' => ['prevent-back-history']], function(){
             Route::any('payments-reminder', 'PaymentReminderController@index')->name('payments.reminders');
             Route::post('payments-reminder/insert', 'PaymentReminderController@insert')->name('payments.reminders.insert');
             Route::post('payments-reminder/change-status', 'PaymentReminderController@change_status')->name('payments.reminders.change.status');
+
+            Route::get('payments-reminder/reports', 'PaymentReminderController@reports')->name('payments.reminders.reports');
         /** payments-reminder */
         
         /** reminder */

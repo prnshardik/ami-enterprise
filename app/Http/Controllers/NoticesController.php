@@ -9,7 +9,6 @@
     use Auth, Validator, DB, Mail, DataTables;
 
     class NoticesController extends Controller{
-
         /** index */
             public function index(Request $request){
                 if($request->ajax()){
