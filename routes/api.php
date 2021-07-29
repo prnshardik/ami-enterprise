@@ -61,9 +61,18 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::post('order/change-status', 'OrdersController@change_status');
             Route::post('order/item-delete', 'OrdersController@item_delete');
             Route::post('order/deliver', 'OrdersController@deliver');
-
             Route::post('order/customer', 'OrdersController@customer');
         /** order */
+
+        /** purchase - order */
+            Route::get('purchase_orders', 'PurchaseOrdersController@orders');
+            Route::post('purchase_orders', 'PurchaseOrdersController@order');
+            Route::post('purchase_orders/insert', 'PurchaseOrdersController@insert');
+            Route::post('purchase_orders/update', 'PurchaseOrdersController@update');
+            Route::post('purchase_orders/change-status', 'PurchaseOrdersController@change_status');
+            Route::post('purchase_orders/item-delete', 'PurchaseOrdersController@item_delete');
+            Route::post('purchase_orders/product-details', 'PurchaseOrdersController@product_details');
+        /** purchase - order */
 
         /** users */
             Route::get('users', 'UsersController@users');
@@ -80,6 +89,14 @@ Route::group(['middleware' => 'api', 'namespace' => 'API'], function () {
             Route::post('notice/update', 'NoticeController@update');
             Route::post('notice/change-status', 'NoticeController@change_status');
         /** notice */
+
+        /** reminder */
+            Route::any('reminders', 'ReminderController@index');
+            Route::post('reminders/insert', 'ReminderController@insert');
+            Route::post('reminders/view', 'ReminderController@view');
+            Route::post('reminders/update', 'ReminderController@update');
+            Route::post('reminders/change-status', 'ReminderController@change_status');
+        /** reminder */
 
         /** payments */
             Route::get('payments', 'PaymentController@index');
