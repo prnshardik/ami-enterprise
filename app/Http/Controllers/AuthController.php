@@ -75,7 +75,7 @@
                 return redirect()->route('login')->with('success', 'please check your email and follow steps for reset password');
             }catch(\Exception $e){
                 DB::table('password_resets')->where(['email' => $request->email])->delete();
-                return redirect()->route('login')->with('success', 'something went wrong, please try again later');
+                return redirect()->route('login')->with('error', 'something went wrong, please try again later');
             }
         }
 
